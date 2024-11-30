@@ -1,3 +1,5 @@
+import DetallesTrabajos from 'src/pages/DetallesTrabajos.vue'
+
 const routes = [
   {
     path: '/',
@@ -5,6 +7,12 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Empresas.vue') }
     ]
+  },
+  {
+    path: '/his.trabajo/:id', // Ruta con parámetro dinámico
+    name: 'TrabajoDetalle',
+    component: DetallesTrabajos,
+    props: true // Para pasar el parámetro como prop al componente
   },
   {
     path: '/login',

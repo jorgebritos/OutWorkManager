@@ -28,6 +28,7 @@
     </q-toolbar>
   </div>
 
+
   <!-- Sidebar / Drawer -->
   <div class="Drawer">
     <q-toolbar class="bg-grey-3">
@@ -274,7 +275,7 @@
 <script setup>
 import { provide, ref } from 'vue'
 import { computed } from 'vue';
-import 'emoji-picker-element'; // Importa el selector de emojis
+import 'emoji-picker-element' ; // Importa el selector de emojis
 
 const conversations = ref([
   {

@@ -87,80 +87,20 @@
                
                       <!-- Documentos -->
                       
-                        <div>
-                          <q-btn
-                            class="q-mx-auto"
-                            style="background-color: white;"
-                            @click="()=>openDialog(item)"
-                          >
-                            <q-icon name="description" size="30px"></q-icon>
-                          </q-btn>
+                      <q-btn
+                      class="q-mx-auto"
+                      style="background-color: white;"
+                      @click="()=> $router.push(`/his.trabajo/${item.id}`)"
+                    >
+                      <q-icon name="description" size="30px"></q-icon>
+                    </q-btn>
 
-                         
-                        </div>
                       
           </q-item-section>
         </q-item>
       </q-list>
     </div>
-     <!-- Q-Dialog para mostrar los detalles -->
-     <q-dialog v-model="showDialog" persistent>
-                            <q-card style="min-width: 90%; min-height: 90%; display: flex;">
-                              <div class="col-6" style="width: 60%;">
-                              <q-card-section class="col-6">
-                                <div class="text-h6">Empresa: {{ trabajo.nombre }}</div> <!-- Nombre de la empresa -->
-                                <div class="text-subtitle1">Trabajo a realizar: {{ trabajo.trabajo }}</div> <!-- Trabajo a realizar -->
-                               
-                              </q-card-section>
-
-                              <q-separator />
-
-                              <q-card-section>
-                                <div class="text-body1">
-                                  <strong>Fechas:</strong>
-                               </div>
-                               <div v-for="(fecha, fechaIndex) in trabajo.fechas" :key="fechaIndex">{{ fecha }}</div>
-                               <!--  <div v-for="(fecha, index) in item.Fechas" :key="index">
-                                  {{ fecha.formattedDate }} - Entrada: {{ fecha.horaEntrada }} | Salida: {{ fecha.horaSalida }}
-                                </div>-->
-                              </q-card-section>
-
-                              <q-separator />
-
-                              <q-card-section>
-                                <div class="text-body1">
-                                  <strong>Confirmación:</strong>
-                                </div>
-                                <p>Prevencionista: {{ formatConfirmation(trabajo.confirmacionPREV) }}</p>
-                                <p>Empresa: {{ formatConfirmation(trabajo.confirmacionEmpresa) }}</p>
-                               
-                              </q-card-section>
-
-                              <q-separator />
-                            </div>
-                            <div class="col-6">
-                              <q-card-section class="col-12" style="width: 40%; height: 90%;">
-                                <div class="text-body1">
-                                  <strong>Documentos:</strong>
-                                </div>
-                                <div v-for="(documento, index) in trabajo.Documentos" :key="index">
-                                  <q-btn
-                                    flat
-                                    color="primary"
-                                    @click="expandDocument(documento)"
-                                  >
-                                    {{ documento.titulo }}
-                                  </q-btn>
-                                </div>
-                              </q-card-section>
-
-                              <q-separator />
-                            </div>
-                              <q-card-actions style="align-items: right; align-content: flex-end; ">
-                                <q-btn flat label="Cerrar" color="primary" @click="closeDialog" />
-                              </q-card-actions>
-                            </q-card>
-                          </q-dialog>
+     
   </q-page>
 </template>
 
@@ -172,6 +112,7 @@ import { api } from "src/boot/axios";
 import { useUserStore } from 'src/store/user.store';
 
 
+
 //constantes
 
 
@@ -180,7 +121,7 @@ const token = userStore.token;
 const enterpriseStore = useEnterpriseStore()
 const item = ref([]);
 const horas = ref([]);
-const dialogVisible = ref(false);
+
 const timeE = ref("");
 const timeS = ref("");
 const step = ref(0);
@@ -295,13 +236,8 @@ function formatConfirmation(value) {
   return value === 1 ? 'Sí' : 'No';
 }
 
-function closeDialog() {
-  showDialog.value = false;
-}
-function expandDocument(documento) {
-  // Abre el documento en una nueva pestaña o como modal, según prefieras
-  window.open(documento.url, '_blank');
-}
+
+
 function stepmas() {
   if (step.value < 2) {
     step.value++
