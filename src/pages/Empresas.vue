@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-toolbar class="column" overlay>
+    <q-toolbar class="column">
       <q-input
         style="width: 100%"
         filled
@@ -15,36 +15,33 @@
 
       <q-toolbar class="row justify-between">
         <div>
-          <q-btn flat bordered @click="filter_is_valid = null"> Todos </q-btn>
-          <q-btn flat bordered @click="filter_is_valid = true">
+          <q-btn flat bordered @click="filter(null)"> Todos </q-btn>
+          <q-btn flat bordered @click="filter(true)">
             <q-avatar icon="mdi-check" class="bg-green text-white" />Validados
           </q-btn>
-          <q-btn flat bordered @click="filter_is_valid = false">
+          <q-btn flat bordered @click="filter(false)">
             <q-avatar icon="mdi-close" class="bg-red text-white" />No Validados
           </q-btn>
         </div>
 
         <div>
-          <q-btn flat bordered @click="enterpriseCreate = true">
+          <q-btn flat bordered @click="enterpriseCreateMenu = true">
             <q-avatar icon="mdi-plus-circle-outline" />
           </q-btn>
           <create-empresa
-            v-if="enterpriseCreate"
-            :show="enterpriseCreate"
-            @handleCloseCreateEnterprise="handleCloseCreateEnterprise"
+            v-if="enterpriseCreateMenu"
+            :show="enterpriseCreateMenu"
+            @handleCloseCreateEnterprise="handleCloseEnterpriseCreateMenu"
           />
         </div>
       </q-toolbar>
     </q-toolbar>
 
     <div v-if="!isLoading" class="q-pa-md row justify-center">
-      <div v-for="empresa in empresas" :key="empresa.id">
-        <div v-if="empresa.nombre.toLowerCase().includes(search.toLowerCase())">
-          <card-empresas
-            v-if="
-              filter_is_valid === null || empresa.is_valid === filter_is_valid
-            "
-            :empresa="empresa"
+      <div v-for="enterprise in enterprises" :key="enterprise.id">
+        <div v-if="enterprise.name.toLowerCase().includes(search.toLowerCase())" class="q-mx-sm">
+          <card-enterprise
+            :enterprise="enterprise"
           />
         </div>
       </div>
@@ -54,43 +51,40 @@
 </template>
 
 <script>
-import CardEmpresas from "src/components/CardEmpresas.vue";
-import CreateEmpresa from "src/components/CreateEmpresa.vue";
-import { useEnterpriseStore } from "src/store/enterprise.store";
-import { api } from "src/boot/axios";
-import { ref, computed } from "vue";
+import CardEnterprise from "src/components/enterprises/CardEnterprise.vue";
+import CreateEmpresa from "src/components/enterprises/CreateEnterprise.vue";
+import { useEnterprises } from "src/hooks/api/enterprises.hooks"
+import { ref } from "vue";
 
 export default {
   components: {
-    CardEmpresas,
+    CardEnterprise,
     CreateEmpresa,
   },
   setup() {
-    const enterpriseStore = useEnterpriseStore();
+    const { isLoading, enterprises, refetch } = useEnterprises() 
     const search = ref("");
+    let filter_tag = true;
 
-    const filter_is_valid = ref(true);
+    const filter = async (filter=null) => {
+      refetch(filter);
+      filter_tag = filter
+    }
 
-    const enterpriseCreate = ref(false);
-    const isLoading = ref(true);
-    const empresas = computed(() => enterpriseStore.enterprises);
+    const enterpriseCreateMenu = ref(false);
 
-    const handleCloseCreateEnterprise = () => {
-      enterpriseCreate.value = false;
+    const handleCloseEnterpriseCreateMenu = () => {
+      enterpriseCreateMenu.value = false;
+      refetch(filter_tag)
     };
-
-    api.get("enterprises").then((response) => {
-      isLoading.value = false;
-      enterpriseStore.setEnterprises(response.data);
-    });
 
     return {
       isLoading,
-      empresas,
+      enterprises,
       search,
-      enterpriseCreate,
-      filter_is_valid,
-      handleCloseCreateEnterprise,
+      enterpriseCreateMenu,
+      filter,
+      handleCloseEnterpriseCreateMenu,
     };
   },
 };

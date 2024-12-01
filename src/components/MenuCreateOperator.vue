@@ -18,7 +18,7 @@
             :key="index"
             class="q-mt-sm"
           >
-            <span style="2px;" class="q-pa-xs bg-negative text-white">
+            <span  class="q-pa-xs bg-negative text-white">
               {{ error }}
             </span>
           </div>
@@ -34,7 +34,7 @@
             :key="index"
             class="q-mt-sm"
           >
-            <span style="2px;" class="q-pa-xs bg-negative text-white">
+            <span  class="q-pa-xs bg-negative text-white">
               {{ error }}
             </span>
           </div>
@@ -55,7 +55,7 @@
             :key="index"
             class="q-mt-sm"
           >
-            <span style="2px;" class="q-pa-xs bg-negative text-white">
+            <span  class="q-pa-xs bg-negative text-white">
               {{ error }}
             </span>
           </div>
@@ -106,7 +106,6 @@ export default {
       emit("handleCloseCreateOperator");
     };
 
-    console.log(params.slug)
     const handleCreateOperator = () => {
       api
         .post(
