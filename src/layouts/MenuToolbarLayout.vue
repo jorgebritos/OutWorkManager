@@ -26,6 +26,35 @@
         </q-btn>
     </div>    
     </q-toolbar>
+     <q-drawer
+      v-model="ver_menu"
+      overlay
+      :width="200"
+      :breakpoint="500"
+      bordered
+     class="menu"
+    >
+      <q-scroll-area class="fit">
+        <q-list>
+          <template v-for="(menuItem, index) in menuList" :key="index">
+            <q-item
+              clickable
+              v-ripple
+              class="text-white separador"
+              :to="{ name: menuItem.href }"
+            >
+              <q-item-section avatar>
+                <q-icon :name="menuItem.icon" class="icono"/>
+              </q-item-section>
+              <q-item-section>
+                {{ menuItem.label }}
+              </q-item-section>
+            </q-item>
+            <q-separator :key="'sep' + index" v-if="menuItem.separator"  />
+          </template>
+        </q-list>
+      </q-scroll-area>
+    </q-drawer>
     <slot/>
   </q-page>
  <!--<div class="q-pa-md">
@@ -69,35 +98,7 @@
       </div>
     </q-header>
     
-    <q-drawer
-      v-model="ver_menu"
-      overlay
-      :width="200"
-      :breakpoint="500"
-      bordered
-     class="menu"
-    >
-      <q-scroll-area class="fit">
-        <q-list>
-          <template v-for="(menuItem, index) in menuList" :key="index">
-            <q-item
-              clickable
-              v-ripple
-              class="text-white separador"
-              :to="{ name: menuItem.href }"
-            >
-              <q-item-section avatar>
-                <q-icon :name="menuItem.icon" class="icono"/>
-              </q-item-section>
-              <q-item-section>
-                {{ menuItem.label }}
-              </q-item-section>
-            </q-item>
-            <q-separator :key="'sep' + index" v-if="menuItem.separator"  />
-          </template>
-        </q-list>
-      </q-scroll-area>
-    </q-drawer>
+   
     <q-page-container>
       <q-page class="q-mx-auto" style="max-width: 2000px;">
         <slot/>
