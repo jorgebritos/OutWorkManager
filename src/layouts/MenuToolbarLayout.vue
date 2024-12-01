@@ -114,6 +114,7 @@ import notificaciones from 'src/components/Notificaciones.vue'
 import Notificaciones2 from 'src/components/Notificaciones2.vue';
 const ver_menu=inject("ver_menu")
 const search = ref("");
+
 const menuList = [
   {
     icon: "business_center",
@@ -121,13 +122,7 @@ const menuList = [
     href: "enterprises",
     separator: false,
       },
-      {
-        icon: "mdi-account",
-        label: "Usuarios",
-        href: "users",
-        separator: false,
-      },
-      {
+     {
         label: "His. trabajo",
         icon: "mdi-folder-multiple",
         href: "his.trabajo",

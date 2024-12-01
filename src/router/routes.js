@@ -50,17 +50,6 @@ const routes = [
     ],
   },
   {
-    path: "/usuarios/",
-    component: () => import("layouts/MainLayout.vue"),
-    children: [
-      {
-        path: "",
-        component: () => import("src/pages/Users.vue"),
-        name: "users",
-      },
-    ],
-  },
-  {
     path: "/trabajos",
     component: () => import("layouts/MainLayout.vue"),
     children: [
