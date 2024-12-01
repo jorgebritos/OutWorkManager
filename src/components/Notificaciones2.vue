@@ -1,6 +1,6 @@
 <template>
     <!-- Botón para abrir la ventana emergente de notificaciones -->
-    <q-btn flat   icon="mdi-bell" @click="showNotifications = true"/>
+    <q-btn flat   icon="mdi-bell" @click="showNotifications = true" color="white" class="q-mr-md"/>
   
     <!-- Ventana emergente de notificaciones -->
     <q-dialog v-model="showNotifications" persistent>

@@ -1,5 +1,34 @@
 <template>
-  <div class="q-pa-md">
+  <q-page>
+    <q-toolbar class="titulo row items-center">
+        <q-btn flat @click="ver_menu = !ver_menu" round dense icon="menu" color="white"/>
+           <img
+          src="src/assets/LogoCamcel.jpg"
+          alt="Logo Camcel"
+          width="287"
+          height="65"
+          class="q-ml-xl"
+        />
+    <div  class="botones">
+    <Notificaciones2/>
+    <chat/>
+      <q-btn flat icon="person" color="white" class="q-mr-md">
+          <q-menu>
+            <q-list>
+              <q-item clickable v-close-popup to="/Configuracion">
+                <q-item-section>Configuracion</q-item-section>
+              </q-item>
+              <q-item clickable @click="handleLogout" v-close-popup>
+                <q-item-section >Cerrar Sesion</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
+    </div>    
+    </q-toolbar>
+    <slot/>
+  </q-page>
+ <!--<div class="q-pa-md">
 
     <q-header
       elevated
@@ -74,7 +103,7 @@
         <slot/>
       </q-page>
     </q-page-container>
-  </div>
+  </div>-->
 </template>
 
 <script setup>
@@ -123,6 +152,11 @@ q-scrollarea__container scroll relative-position fit hide-scrollbar
 .titulo{
   box-shadow: 1px 1px 1px rgb(73, 73, 73),2px 2px 2px rgb(245, 245, 245),
         3px 3px 3px rgb(255, 255, 255),4px 4px 2px rgb(217, 217, 217),5px 5px 2px rgb(15, 15, 15);
+  background-color: #085d71;
+}
+.botones{
+  position: absolute;
+  right: 0;
 }
 ::v-deep(aside){
   background-color: transparent !important;
@@ -155,7 +189,22 @@ q-scrollarea__container scroll relative-position fit hide-scrollbar
     width: 80%;
    }
 }
-
+@media screen and (min-width: 0) and (max-width:600px) {
+  ::v-deep(.botones){
+    position: fixed;
+    width: 100%;
+    height: 64px;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #085d71;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+  }
+  
+}
 /*
  .fit{
     background-color: transparent !important;
