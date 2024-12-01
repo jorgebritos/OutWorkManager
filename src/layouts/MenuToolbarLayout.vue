@@ -122,6 +122,12 @@ const menuList = [
     href: "enterprises",
     separator: false,
       },
+      {
+        icon: "mdi-account",
+        label: "Usuarios",
+        href: "users",
+        separator: false,
+      },
      {
         label: "His. trabajo",
         icon: "mdi-folder-multiple",
