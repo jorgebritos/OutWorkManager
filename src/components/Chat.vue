@@ -191,6 +191,7 @@
 }
 
 .messages-area {
+  margin-top: 45px ;
   height: 100%;
   padding: 10px;
   overflow-y: auto;
