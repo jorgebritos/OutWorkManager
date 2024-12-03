@@ -1,186 +1,168 @@
 <template>
-  <div>
-    <valid-delete-enterprise-menu
-      v-if="showDeleteMenu"
-      :show="showDeleteMenu"
-      @handleDeleteMenuClose="handleDeleteMenuClose"
-      @handleDeleteMenuAccept="handleDeleteMenuAccept"
-    />
+  <q-layout>
+    <q-page-container>
+      <q-page>
+        <!-- Contenedor principal -->
+        <q-card
+          v-if="trabajo"
+          style="margin: auto; padding: 16px; display: flex; flex-direction: column;"
+          flat
+          bordered
+        >
+          <!-- Botón para regresar -->
+          <q-card-section>
+            <q-btn flat color="primary" icon="arrow_back" label="Volver" @click="volver" />
+          </q-card-section>
 
-    <div v-if="!isLoading" class="q-mx-auto" style="max-width: 1000px">
-      <q-img
-        :src="`${api_base_backend}/${enterprise.image}`"
-        alt="esta enterprise no pose imagen"
-        style="height: 350px"
-        :fit="cover"
-      >
-        <template v-slot:error>
-          <div class="absolute-full text-subtitle2 flex flex-center">
-            <h4 class="text-h4">
-              {{ enterprise.name }}
-            </h4>
+          <q-separator />
+
+          <!-- Contenido principal -->
+          <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px;">
+            <!-- Sección izquierda (Ahora ocupa toda la página dividida en dos) -->
+            <div class="col-12 col-md-8" style="flex: 1; width: 50%;">
+              <!-- Sección 1: Empresa y Trabajo -->
+              <q-card-section>
+                <div class="text-h6">
+                  <q-icon name="business" color="primary" /> Empresa: {{ trabajo?.enterprise_id }}
+                </div>
+                <div class="text-subtitle1">
+                  <q-icon name="work" color="primary" /> Trabajo a realizar: {{ trabajo?.trabajo }}
+                </div>
+              </q-card-section>
+
+              <q-separator />
+
+              <!-- Sección 3: Confirmación -->
+              <q-card-section>
+                <div class="text-body1">
+                  <q-icon name="check_circle" color="primary" /> <strong>Confirmación:</strong>
+                </div>
+                <q-list>
+                  <q-item dense>
+                    <q-item-section>
+                      Prevencionista:
+                      <q-chip
+                        :color="trabajo?.confirmacion_prevencionista ? 'positive' : 'negative'"
+                        outline
+                        dense
+                        style="max-width: 10%;"
+                      >
+                        {{ trabajo?.confirmacion_prevencionista ? 'Sí' : 'No' }}
+                      </q-chip>
+                    </q-item-section>
+                  </q-item>
+                  <q-item dense>
+                    <q-item-section>
+                      Empresa:
+                      <q-chip
+                        :color="trabajo?.confirmacion_empresa ? 'positive' : 'negative'"
+                        outline
+                        dense
+                        style="max-width: 10%;"
+                      >
+                        {{ trabajo?.confirmacion_empresa ? 'Sí' : 'No' }}
+                      </q-chip>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card-section>
+              <q-separator />
+            </div>
+
+            <!-- Sección derecha (Fechas) -->
+            <div style="flex: 1; width: 50%;" class="col-12 col-md-4">
+              <q-card-section>
+                <div class="text-body1">
+                  <q-icon name="event" color="primary" /> <strong>Fechas:</strong>
+                </div>
+                <q-list>
+                  <q-item
+                    v-for="(fecha, index) in trabajo?.fechas"
+                    :key="index"
+                    class="q-pa-xs"
+                    dense
+                  >
+                    <q-item-section>
+                      <div>{{ fecha.fecha }}</div>
+                      <small>Entrada: {{ fecha.horaEntrada }} | Salida: {{ fecha.horaSalida }}</small>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card-section>
+            </div>
+
+            <!-- Sección derecha (Documentos al final) -->
+            <div class="col-12 col-md-12" style="width: 100%;">
+              <q-card-section>
+                <!-- Lista de documentos solo se muestra si hay documentos -->
+                <table-documents
+                  v-if="trabajo?.documentos"
+                  :documents="trabajo?.documentos"
+                  :isOperator="true"
+                  @refetch="reloadDocuments"
+                />
+                <!-- Botones adicionales para documentos -->
+                <q-list v-if="!trabajo?.documentos?.length">
+                  <q-item
+                    v-for="(documento, index) in trabajo?.documentos"
+                    :key="index"
+                    clickable
+                    @click="expandDocument(documento)"
+                    class="q-pa-xs"
+                    dense
+                  >
+                    <q-item-section avatar>
+                      <q-icon name="insert_drive_file" color="primary" />
+                    </q-item-section>
+                    <q-item-section>
+                      {{ documento.titulo }}
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card-section>
+            </div>
           </div>
-        </template>
-        <div class="absolute-full text-subtitle2 flex flex-center">
-          <h4 class="text-h4">
-            {{ enterprise.name }}
-          </h4>
-        </div>
-      </q-img>
-      <div class="row justify-between">
-        <div class="text-caption">
-          <div class="text-grey row items-center">
-            {{ enterprise.is_valid ? "Verificado" : "No verificado" }}
-            <q-icon
-              :name="enterprise.is_valid ? 'check_circle' : 'cancel'"
-              :color="enterprise.is_valid ? 'green' : 'red'"
-              size="30px"
-            />
-            <q-card-section class="q-pt-none q-px-none q-ml-sm">
-              <div class="flex justify-left items-center q-mt-md w-full">
-                <q-btn
-                  label="Editar"
-                  type="button"
-                  class="q-mr-sm"
-                  color="primary"
-                  @click="enterpriseEditMenu = true"
-                />
-                <edit-enterprise
-                  v-if="enterpriseEditMenu"
-                  :enterprise="enterprise"
-                  :show="enterpriseEditMenu"
-                  @handleCloseMenuEditEnterprise="handleCloseMenuEditEnterprise"
-                />
-
-                <q-btn
-                  v-if="enterprise.is_valid"
-                  label="Desvalidar"
-                  type="button"
-                  color="negative"
-                  @click="handleNotValidEnterprise"
-                />
-
-                <q-btn
-                  v-else
-                  label="Validar"
-                  type="button"
-                  color="secondary"
-                  @click="handleValidEnterprise"
-                />
-
-                <q-btn
-                  type="button"
-                  class="text-lg text-negative q-ml-md"
-                  @click="()=>{showDeleteMenu=true}"
-                >
-                  Eliminar <span class="mdi mdi-trash-can"></span>
-                </q-btn>
-              </div>
-            </q-card-section>
-          </div>
-        </div>
-        <div style="width: 400px" v-if="enterprise.user">
-          <h5 class="text-h5 q-my-none">Encargado de la enterprise</h5>
-          <q-card>
-            <q-card-section>
-              Nombre: {{ enterprise.user.name }}
-            </q-card-section>
-            <q-card-section>
-              Email: {{ enterprise.user.email }}
-            </q-card-section>
-          </q-card>
-        </div>
-      </div>
-      <operators-list :enterprise="enterprise.slug" />
-      <table-documents :documents="documents"/>
-    </div>
-
-    <div v-if="isLoading" class="text-center">Cargando...</div>
-    <div v-if="enterpriseNoExiste" class="row justify-center">
-      <h4 class="text-h4 column">
-        no existe esta enterprise
-        <q-icon name="warning" size="50px" color="warning" />
-      </h4>
-    </div>
-  </div>
+        </q-card>
+      </q-page>
+    </q-page-container>
+  </q-layout>
 </template>
 
-<script>
-import EditEnterprise from "src/components/enterprises/EditEnterprise.vue";
-import OperatorsList from "src/components/operators/OperatorsList.vue";
-import MenuCreateOperator from "src/components/MenuCreateOperator.vue";
-import { useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
-import { api_base_backend } from "../helpers.js";
+<script setup>
+import { ref, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { api } from 'src/boot/axios';
 import TableDocuments from "../components/documents/TableDocuments.vue";
-import {
-  useEnterprise,
-  useValidEnterprise,
-  useNotValidEnterprise,
-  useDeleteEnterprise,
-} from "src/hooks/api/enterprises.hooks";
-import { useDocuments } from "src/hooks/api/documents.hooks";
-import ValidDeleteEnterpriseMenu from "src/components/ValidDeleteMenu.vue";
 
-export default {
-  components: {
-    EditEnterprise,
-    MenuCreateOperator,
-    TableDocuments,
-    OperatorsList,
-    ValidDeleteEnterpriseMenu,
-  },
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
-    const { params } = route;
-    const { enterprise, isLoading, refetch } = useEnterprise(params.slug);
-    const { documents, isLoading: isLoadingDocuments, refetch: refetchDocuments } = useDocuments(params.slug);
+const trabajo = ref(null);
+const router = useRouter();
+const route = useRoute();
 
-    const enterpriseNoExiste = ref(false);
-    const enterpriseEditMenu = ref(false);
+// Cargar los detalles del trabajo al montar el componente
+onMounted(async () => {
+  const id = route.params.id;
+  try {
+    const response = await api.get(`admin/jobs/${id}`);
+    trabajo.value = response.data;
+  } catch (error) {
+    console.error('Error al obtener los detalles del trabajo:', error);
+  }
+});
 
-    const showDeleteMenu = ref(false);
+// Método para recargar los documentos
+function reloadDocuments() {
+  const id = route.params.id; // Obtener el ID del trabajo desde la ruta
+  api.get(`admin/jobs/${id}`)
+    .then(response => {
+      trabajo.value = response.data; // Actualiza los datos del trabajo
+    })
+    .catch(error => {
+      console.error('Error al recargar los documentos:', error);
+    });
+}
 
-    const handleDeleteMenuClose = () => showDeleteMenu.value = false;
-
-    const handleDeleteMenuAccept = async () => {
-      showDeleteMenu.value = false;
-      await useDeleteEnterprise(params.slug);
-      router.push({ name: "enterprises" });
-    };
-
-    const handleCloseMenuEditEnterprise = () => {
-      enterpriseEditMenu.value = false;
-      refetch();
-    };
-
-    const handleNotValidEnterprise = async () => {
-      await useNotValidEnterprise(params.slug);
-      refetch();
-    };
-
-    const handleValidEnterprise = async () => {
-      await useValidEnterprise(params.slug);
-      refetch();
-    };
-
-    return {
-      isLoading: isLoading  && isLoadingDocuments,
-      enterprise,
-      documents,
-      isLoadingDocuments,
-      refetchDocuments,
-      showDeleteMenu,
-      enterpriseNoExiste,
-      handleDeleteMenuClose,
-      handleDeleteMenuAccept,
-      api_base_backend,
-      enterpriseEditMenu,
-      handleCloseMenuEditEnterprise,
-      handleNotValidEnterprise,
-      handleValidEnterprise,
-    };
-  },
-};
+// Función para regresar a la página anterior
+function volver() {
+  router.back();
+}
 </script>

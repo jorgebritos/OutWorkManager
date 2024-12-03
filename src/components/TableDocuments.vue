@@ -1,7 +1,9 @@
 <template>
   <div style="width: 100%; height: 100vh" class="q-mt-xl">
     <div class="flex justify-between q-mb-md items-center">
-      <h4 class="text-h4 q-my-none">Documentos :</h4>
+      <div class="text-body1">
+                  <q-icon name="folder" color="primary" /> <strong>Documentos:</strong>
+                </div>
       <q-btn
         label="Añadir Documento"
         class="q-mt-md q-mr-sm"
@@ -69,6 +71,7 @@
       v-if="showAddDocumentMenu"
       :show="showAddDocumentMenu"
       :handleCloseAddDocumentMenu="handleCloseAddDocumentMenu"
+      
     />
   </div>
 </template>
