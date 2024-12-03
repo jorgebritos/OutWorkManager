@@ -317,6 +317,15 @@ const conversations = ref([
     sent: true,
     messages: [],
   },
+  {
+    id: 5,
+    person: 'Goku',
+    avatar: 'https://pbs.twimg.com/media/EwdQxGNWEAonShr.png',
+    caption: "I'm working for protect the earth",
+    time: '17:00',
+    sent: true,
+    messages: [],
+  },
 ]);
 
 const currentConversationIndex = ref(0);
