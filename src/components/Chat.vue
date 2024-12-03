@@ -182,19 +182,20 @@
 }
 
 .chat-area {
-  width: 88%;
-  height: calc(100% - 9%);
+  width: 90%;
+  height: 86%;
   position: absolute;
   top: 0;
   right: 0;
   color: #000;
+  margin-top: 43px;
+
 }
 
 .messages-area {
-  margin-top: 45px ;
   height: 100%;
   padding: 10px;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
@@ -204,6 +205,7 @@
 .message-item {
   max-width: 30%;
   margin-bottom: 10px;
+  margin-right: 10px;
   padding: 10px;
   border-radius: 10px;
   word-wrap: break-word;
