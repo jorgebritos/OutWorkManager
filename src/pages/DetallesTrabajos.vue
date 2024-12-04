@@ -95,12 +95,8 @@
             <div class="col-12 col-md-12" style="width: 100%;">
               <q-card-section>
                 <!-- Lista de documentos solo se muestra si hay documentos -->
-                <table-documents
-                  v-if="trabajo?.documentos"
-                  :documents="trabajo?.documentos"
-                  :isOperator="true"
-                  @refetch="reloadDocuments"
-                />
+                
+                <table-documents :documents="documents"/>
                 <!-- Botones adicionales para documentos -->
                 <q-list v-if="!trabajo?.documentos?.length">
                   <q-item
@@ -133,12 +129,18 @@ import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { api } from 'src/boot/axios';
 import TableDocuments from "../components/documents/TableDocuments.vue";
+import { useDocuments } from "src/hooks/api/documents.hooks";
+
 
 const trabajo = ref(null);
 const router = useRouter();
 const route = useRoute();
 
+const params = route.params.id;
+console.log(params);
+
 // Cargar los detalles del trabajo al montar el componente
+
 onMounted(async () => {
   const id = route.params.id;
   try {
@@ -147,19 +149,12 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error al obtener los detalles del trabajo:', error);
   }
+ 
 });
+const { documents, isLoading: isLoadingDocuments, refetch: refetchDocuments } = useDocuments(params);
 
-// Método para recargar los documentos
-function reloadDocuments() {
-  const id = route.params.id; // Obtener el ID del trabajo desde la ruta
-  api.get(`admin/jobs/${id}`)
-    .then(response => {
-      trabajo.value = response.data; // Actualiza los datos del trabajo
-    })
-    .catch(error => {
-      console.error('Error al recargar los documentos:', error);
-    });
-}
+
+
 
 // Función para regresar a la página anterior
 function volver() {
