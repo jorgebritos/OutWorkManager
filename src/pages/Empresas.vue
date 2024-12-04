@@ -1,21 +1,22 @@
 <template>
-  <div>
-    <q-toolbar class="column">
+  <q-page class="row justify-center">
+    
       <q-input
-        style="width: 100%"
+       
         filled
-        class="custom-input"
+        class="custom-input col-6"
         v-model="search"
         label="Busqueda"
+       
       >
         <template v-slot:prepend>
           <q-btn flat round dense class="icono_de_busqueda" icon="search" />
         </template>
       </q-input>
 
-      <q-toolbar class="row justify-between">
-        <div>
-          <q-btn flat bordered @click="filter(null)"> Todos </q-btn>
+        <div class="col-12 q-mt-xl row justify-center">
+          <div class="coso  col-7 items-center">
+          <q-btn flat bordered @click="filter(null)" class="q-mt-xl"> Todos </q-btn>
           <q-btn flat bordered @click="filter(true)">
             <q-avatar icon="mdi-check" class="bg-green text-white" />Validados
           </q-btn>
@@ -34,8 +35,8 @@
             @handleCloseCreateEnterprise="handleCloseEnterpriseCreateMenu"
           />
         </div>
-      </q-toolbar>
-    </q-toolbar>
+     
+   
 
     <div v-if="!isLoading" class="q-pa-md row justify-center">
       <div v-for="enterprise in enterprises" :key="enterprise.id">
@@ -47,7 +48,8 @@
       </div>
     </div>
     <div v-if="isLoading" class="text-center">loading ...</div>
-  </div>
+    </div>
+  </q-page>
 </template>
 
 <script>
@@ -89,3 +91,17 @@ export default {
   },
 };
 </script>
+<style scoped>
+
+.coso{
+  background-color: blueviolet;
+  min-height: 100px;
+}
+.custom-input{
+  height: 40px;
+  position: absolute;  
+}
+::v-deep(.main){
+  min-height: 0 !important;
+}
+</style>

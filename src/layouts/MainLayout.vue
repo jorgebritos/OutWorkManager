@@ -1,8 +1,8 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout>
     <q-page-container>
       <MenuToolbarLayout>
-        <router-view @click="ver_menu =false"/>
+        <router-view @click="ver_menu =false" class="q-mt-xl"/>
       </MenuToolbarLayout>
     </q-page-container>
   </q-layout>
