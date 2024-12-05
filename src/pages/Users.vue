@@ -18,7 +18,8 @@
     :show="createUser"
     @handleCreateUserMenuClose="handleCreateUserMenuClose"
   />
-  <div class="flex justify-center">
+  <q-page class="row justify-center pagina">
+  <div class="flex justify-center col-8">
     <q-input
       style="max-width: 700px; width: 100%"
       filled
@@ -32,8 +33,8 @@
     </q-input>
   </div>
 
-  <div class="full-width flex justify-center">
-    <div>
+  <div class="col-8 flex justify-center row">
+    <div class="col-8">
       <q-btn
         class="bg-primary text-white q-mr-md"
         @click="handleCreateUserMenuOpen"
@@ -44,6 +45,7 @@
         color="#000000"
         label="Filtrar"
         text-color="#000000"
+        
       >
         <q-list>
           <q-item clickable v-close-popup @click="fetchUsers(undefined)">
@@ -70,7 +72,7 @@
       </q-btn-dropdown>
     </div>
   </div>
-  <div class="q-pa-md">
+  <div class="col-8">
     <q-markup-table style="height: 500px; overflow-y: scroll">
       <thead>
         <tr>
@@ -105,6 +107,7 @@
       </tbody>
     </q-markup-table>
   </div>
+  </q-page>
 </template>
 
 <script>

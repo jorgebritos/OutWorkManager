@@ -1,6 +1,6 @@
 <template>
-  <q-page>
-    <div class="ola q-mx-auto">
+  <q-page class="row">
+    <div class="col-8 ola q-mx-auto">
        <!-- Añadir el menú desplegable para filtrar -->
        <q-btn-dropdown  color="#ffffff" :label="selectedOption" text-color="#000000" style=" margin-bottom: 2%;">
           <q-list>

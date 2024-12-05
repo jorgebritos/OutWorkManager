@@ -1,7 +1,6 @@
 <template>
-  <q-page>
-    <div class="ola q-mx-auto">
-      <q-list bordered style="background-color: #ffffff;">
+  <q-page class="row justify-center">
+    <q-list bordered style="background-color: #ffffff;" class="col-8">
         <q-item bordered>
           <q-item-section class="col-2">
             <q-item-label header>Nombre Empresa</q-item-label>
@@ -23,16 +22,15 @@
           </q-item-section>
         </q-item>
         <q-list bordered>
-        <q-item >
-          <q-item-section class="col-12 text-center" > 
+        <q-item class="row col-12 justify-center">
+          <q-item-section class="col-4 row"> 
             <q-btn  color="green" @click="dialogVisible = true" class="col-12">Registrar trabajo</q-btn>
           </q-item-section>
         </q-item>
       </q-list>
-      
- 
-   <template>
-  <q-dialog v-model="dialogVisible" class="col-10">
+    </q-list>
+    <template>
+       <q-dialog v-model="dialogVisible" class="col-10">
     <q-card style="height: 80%; width: 80%;">
        <q-markup-table style="height: 90%; overflow-y: scroll">
       <q-card-section>
@@ -132,10 +130,8 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-</template>
-    
-
-    <q-item v-for="(item, index) in item" :key="index" :class="{'bg-grey-4': index % 2 === 0}">
+    </template>
+     <q-item v-for="(item, index) in item" :key="index" :class="{'bg-grey-4': index % 2 === 0}">
           <q-item-section class="col-2">
             {{ item.nombre }}
           </q-item-section>
@@ -191,10 +187,7 @@
                       
           </q-item-section>
         </q-item>
-      </q-list>
-    </div>
-     <!-- Q-Dialog para mostrar los detalles -->
-     <q-dialog v-model="showDialog" persistent>
+        <q-dialog v-model="showDialog" persistent>
                             <q-card style="min-width: 90%; min-height: 90%; display: flex;">
                               <div class="col-6" style="width: 60%;">
                               <q-card-section class="col-6">
@@ -250,7 +243,7 @@
                                 <q-btn flat label="Cerrar" color="primary" @click="closeDialog" />
                               </q-card-actions>
                             </q-card>
-                          </q-dialog>
+                          </q-dialog>  
   </q-page>
 </template>
 
@@ -609,10 +602,11 @@ onMounted(() => {
 @media only screen and (max-width: 1022px) {
   .ola {
     overflow-x: scroll;
-    width: 900px;
+    
   }
 }
 .fecha-hora-input {
     margin-bottom: 20px;
   }
+
 </style>

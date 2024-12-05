@@ -155,6 +155,8 @@ q-scrollarea__container scroll relative-position fit hide-scrollbar
   box-shadow: 1px 1px 1px rgb(73, 73, 73),2px 2px 2px rgb(245, 245, 245),
         3px 3px 3px rgb(255, 255, 255),4px 4px 2px rgb(217, 217, 217),5px 5px 2px rgb(15, 15, 15);
   background-color: #085d71;
+  position: fixed;
+  top: 0;
 }
 .botones{
   position: absolute;

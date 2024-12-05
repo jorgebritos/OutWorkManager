@@ -2,7 +2,7 @@
   <q-layout>
     <q-page-container>
       <MenuToolbarLayout>
-        <router-view @click="ver_menu =false" class="q-mt-xl"/>
+        <router-view @click="ver_menu =false" class="pagina"/>
       </MenuToolbarLayout>
     </q-page-container>
   </q-layout>
@@ -21,3 +21,8 @@ defineOptions({
 
 
 </script>
+<style>
+  .pagina{
+    margin-top: 128px;
+  }
+</style>
