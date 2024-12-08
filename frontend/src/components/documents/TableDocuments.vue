@@ -51,7 +51,7 @@ export default {
     const refetch = () => emit("refetch");
 
     const handleRefetchPage = (page) => {
-      emit("refetch", page);
+      emit("refetch", {page});
     };
 
     return {

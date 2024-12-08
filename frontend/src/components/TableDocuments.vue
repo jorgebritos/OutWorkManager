@@ -71,7 +71,6 @@
       v-if="showAddDocumentMenu"
       :show="showAddDocumentMenu"
       :handleCloseAddDocumentMenu="handleCloseAddDocumentMenu"
-      
     />
   </div>
 </template>

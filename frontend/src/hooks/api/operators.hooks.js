@@ -6,11 +6,9 @@ export const useOperators = (enterprise) => {
   const operators = ref(null);
   const paginate = ref(null);
 
-  const refetch = (page=1) => {
+  const refetch = (params={}) => {
     api.get(`enterprises/${enterprise}/operators`, {
-      params: {
-        page
-      },
+      params,
     }).then((response) => {
       isLoading.value = false;
       operators.value = response.data.operators;

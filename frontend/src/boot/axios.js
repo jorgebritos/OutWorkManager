@@ -43,14 +43,7 @@ api.interceptors.response.use(
 
     if (error?.response?.status === 401) {
       userStore.setAuth(false);
-    } else {
-      if (error?.response?.status !== 422) {
-        Notify.create({
-          type: "negative",
-          message: "An error occurred: " + error.message,
-        });
-      }
-    }
+    } 
 
     return Promise.reject(error);
   }

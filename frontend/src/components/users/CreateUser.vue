@@ -13,9 +13,7 @@
             :key="index"
             class="q-mt-sm"
           >
-            <span  class="q-pa-xs bg-negative text-white">{{
-              error
-            }}</span>
+            <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
           <q-input
@@ -74,33 +72,32 @@
           label="Cerrar"
           color="primary"
           v-close-popup
-          @click="handleCloseCreateUser"
+          @click="handleClose"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
+  <q-btn 
+    class="bg-primary text-white q-mr-md" 
+    @click="handleOpen"
+  >
+    Crear
+  </q-btn>
 </template>
 
 <script>
-import { reactive, toRef, ref } from "vue";
+import { reactive, ref } from "vue";
 import { api } from "src/boot/axios";
 
 export default {
-  props: {
-    show: {
-      type: Boolean,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
-
     const roles = [
       { label: "Empresario", value: "Enterprise" },
       { label: "Guardia", value: "Guard" },
       { label: "Admin", value: "Admin" },
     ];
 
-    const show = toRef(props, "show");
+    const show = ref(false);
 
     const data = reactive({
       email: "",
@@ -111,12 +108,10 @@ export default {
 
     const error_create = ref(null);
 
-    const handleCloseCreateUser = () => {
-      emit("handleCreateUserMenuClose");
-    };
+    const handleOpen = () => show.value = true
+    const handleClose = () => show.value = false
 
     const handleCreateUser = () => {
-
       api
         .post(
           "users",
@@ -129,10 +124,10 @@ export default {
           }
         )
         .then(() => {
-          handleCloseCreateUser();
+          emit("refetch");
+          handleClose();
         })
         .catch((err) => {
-            console.error(err)
           if (err?.response?.status === 422) {
             const messages = err.response.data.errors;
             error_create.value = messages;
@@ -144,7 +139,8 @@ export default {
       data,
       handleCreateUser,
       show,
-      handleCloseCreateUser,
+      handleClose,
+      handleOpen,
       roles,
       error_create,
     };

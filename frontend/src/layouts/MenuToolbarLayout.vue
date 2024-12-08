@@ -1,11 +1,10 @@
 <template>
-  <q-toolbar class="menu row items-center text-white">
+  <q-toolbar class="menu row items-center text-white q-py-sm">
     <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
     <img
       src="src/assets/LogoCamcel.jpg"
       alt="Logo Camcel"
-      width="287"
-      height="65"
+      style="max-width: 200px"
       class="q-ml-xl"
     />
     <div class="menu_toolbar">

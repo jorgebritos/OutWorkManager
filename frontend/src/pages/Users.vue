@@ -1,9 +1,4 @@
 <template>
-  <CreateUser
-    v-if="createUser"
-    :show="createUser"
-    @handleCreateUserMenuClose="handleCreateUserMenuClose"
-  />
   <div class="flex justify-center">
     <q-input
       style="max-width: 700px; width: 100%"
@@ -20,13 +15,13 @@
 
   <div class="full-width flex justify-center">
     <div>
-      <q-btn
-        class="bg-primary text-white q-mr-md"
-        @click="handleCreateUserMenuOpen"
-        >Crear</q-btn
-      >
+      <CreateUser @refetch="refetch" />
 
-      <q-btn-dropdown color="#000000" :label="role === null? 'Todos': role" text-color="#000000">
+      <q-btn-dropdown
+        color="#000000"
+        :label="role === null ? 'Todos' : role"
+        text-color="#000000"
+      >
         <q-list>
           <q-item clickable v-close-popup @click="role = null">
             <q-item-section>
@@ -83,7 +78,7 @@
 
 <script>
 import { ref, watch } from "vue";
-import CreateUser from "src/components/CreateUser.vue";
+import CreateUser from "src/components/users/CreateUser.vue";
 import Pagination from "src/components/helpers/Pagination.vue";
 import UserItem from "src/components/users/UserItem.vue";
 import { useUsers } from "src/hooks/api/users.hooks.js";
@@ -97,20 +92,20 @@ export default {
   },
   setup() {
     const { isLoading, refetch, users, paginate } = useUsers();
-    const search = ref("");
 
-    const role = ref(null)
+    const search = ref("");
+    const role = ref(null);
 
     watch([role, search], () => {
-      console.log(role.value)
+      console.log(role.value);
       refetch({
         role: role.value,
         search: search.value,
-      })
-    })
+      });
+    });
 
     const handleRefetchPage = (page) => {
-      refetch({role: role.value, page});
+      refetch({ role: role.value, page });
     };
 
     return {

@@ -29,12 +29,11 @@ export const useDocumentsEnterprise = (enterprise) => {
   const documents = ref(null);
   const paginate = ref(null);
 
-  const refetch = (page = 1) => {
+  const refetch = (params={}) => {
+    console.log(params)
     api
       .get(`enterprises/${enterprise}/documents`, {
-        params: {
-          page,
-        },
+        params,
       })
       .then((response) => {
         isLoading.value = false;
@@ -62,12 +61,10 @@ export const useDocumentsOperators = (enterprise, operator) => {
   const documents = ref(null);
   const paginate = ref(null);
 
-  const refetch = (page = 1) => {
+  const refetch = (params = {}) => {
     api
       .get(`enterprises/${enterprise}/operators/${operator}/documents`, {
-        params: {
-          page,
-        },
+        params,
       })
       .then((response) => {
         isLoading.value = false;

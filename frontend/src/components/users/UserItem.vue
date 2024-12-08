@@ -34,7 +34,7 @@
 <script>
 import { ref } from "vue";
 import ValidDeleteUserMenu from "src/components/ValidDeleteMenu.vue";
-import EditUser from "src/components/EditUser.vue";
+import EditUser from "src/components/users/EditUser.vue";
 import { useDeleteUser } from "src/hooks/api/users.hooks"
 
 export default {
