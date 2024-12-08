@@ -10,16 +10,19 @@ const routes = [
   },
   {
     path: '/his.trabajo/:id', // Ruta con parámetro dinámico
-    name: 'TrabajoDetalle',
+    name: 'Detalle',
     component: DetallesTrabajos,
     props: true // Para pasar el parámetro como prop al componente
   },
   {
-    path: '/login',
-    component: () => import('layouts/MainLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/Login.vue') }
-    ]
+    path: '/trabajos/:id', // Ruta con parámetro dinámico
+    name: 'Detalles',
+    component: DetallesTrabajos,
+    props: true // Para pasar el parámetro como prop al componente
+  },
+  {
+    path: "/login/",
+    component: () => import("pages/Login.vue"),
   },
   {
     path: '/registro',

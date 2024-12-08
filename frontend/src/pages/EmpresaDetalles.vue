@@ -80,7 +80,7 @@
           </div>
         </div>
         <div style="width: 400px" v-if="enterprise.user">
-          <h5 class="text-h5 q-my-none">Encargado de la enterprise</h5>
+          <h5 class="text-h5 q-my-none">Encargado</h5>
           <q-card>
             <q-card-section>
               Nombre: {{ enterprise.user.name }}

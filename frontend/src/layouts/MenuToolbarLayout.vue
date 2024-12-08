@@ -112,8 +112,19 @@ import { inject, ref } from "vue";
 import Chat from 'src/components/Chat.vue'
 import notificaciones from 'src/components/Notificaciones.vue' 
 import Notificaciones2 from 'src/components/Notificaciones2.vue';
+import { useUserStore } from "../store/user.store";
+import { useRouter } from "vue-router";
+import { watchEffect } from "vue";
+
+const userStore = useUserStore();
+const router = useRouter();
 const ver_menu=inject("ver_menu")
 const search = ref("");
+
+const handleLogout = () => {
+  userStore.clearSession();
+  router.push("/login");
+}
 
 const menuList = [
   {

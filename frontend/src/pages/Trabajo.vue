@@ -173,84 +173,25 @@
             <q-icon v-if="!item.confirmacionEmpresa" name="mdi-close-circle" color="red" size="40px"></q-icon>
           </q-item-section>
           <q-item-section class="col-2 text-center">
-            <!--boton Documentos-->
+             <!--boton Documentos-->
                
                       <!-- Documentos -->
                       
-                        <div>
-                          <q-btn
-                            class="q-mx-auto"
-                            style="background-color: white;"
-                            @click="()=>openDialog(item)"
-                          >
-                            <q-icon name="description" size="30px"></q-icon>
-                          </q-btn>
+                      <q-btn
+                      class="q-mx-auto"
+                      style="background-color: white;"
+                      @click="()=> $router.push(`/trabajos/${item.id}`)"
+                    >
+                      <q-icon name="description" size="30px"></q-icon>
+                    </q-btn>
 
-                         
-                        </div>
+                      
                       
           </q-item-section>
         </q-item>
       </q-list>
     </div>
-     <!-- Q-Dialog para mostrar los detalles -->
-     <q-dialog v-model="showDialog" persistent>
-                            <q-card style="min-width: 90%; min-height: 90%; display: flex;">
-                              <div class="col-6" style="width: 60%;">
-                              <q-card-section class="col-6">
-                                <div class="text-h6">Empresa: {{ trabajo.nombre }}</div> <!-- Nombre de la empresa -->
-                                <div class="text-subtitle1">Trabajo a realizar: {{ trabajo.trabajo }}</div> <!-- Trabajo a realizar -->
-                               
-                              </q-card-section>
-
-                              <q-separator />
-
-                              <q-card-section>
-                                <div class="text-body1">
-                                  <strong>Fechas:</strong>
-                               </div>
-                               <div v-for="(fecha, fechaIndex) in trabajo.fechas" :key="fechaIndex">{{ fecha }}</div>
-                               <!--  <div v-for="(fecha, index) in item.Fechas" :key="index">
-                                  {{ fecha.formattedDate }} - Entrada: {{ fecha.horaEntrada }} | Salida: {{ fecha.horaSalida }}
-                                </div>-->
-                              </q-card-section>
-
-                              <q-separator />
-
-                              <q-card-section>
-                                <div class="text-body1">
-                                  <strong>Confirmación:</strong>
-                                </div>
-                                <p>Prevencionista: {{ formatConfirmation(trabajo.confirmacionPREV) }}</p>
-                                <p>Empresa: {{ formatConfirmation(trabajo.confirmacionEmpresa) }}</p>
-                               
-                              </q-card-section>
-
-                              <q-separator />
-                            </div>
-                            <div class="col-6">
-                              <q-card-section class="col-12" style="width: 40%; height: 90%;">
-                                <div class="text-body1">
-                                  <strong>Documentos:</strong>
-                                </div>
-                                <div v-for="(documento, index) in trabajo.Documentos" :key="index">
-                                  <q-btn
-                                    flat
-                                    color="primary"
-                                    @click="expandDocument(documento)"
-                                  >
-                                    {{ documento.titulo }}
-                                  </q-btn>
-                                </div>
-                              </q-card-section>
-
-                              <q-separator />
-                            </div>
-                              <q-card-actions style="align-items: right; align-content: flex-end; ">
-                                <q-btn flat label="Cerrar" color="primary" @click="closeDialog" />
-                              </q-card-actions>
-                            </q-card>
-                          </q-dialog>
+    
   </q-page>
 </template>
 
@@ -284,11 +225,13 @@ const fetchEnterprises = async () => {
   try {
     const response = await api.get("enterprises");
    
-   
+   console.log(response.data)
     // Mapea los datos para obtener solo los campos necesarios
     enterpriseOptions.value = response.data.map(empresa => ({
+      
       enterprise_id: empresa.id, // Usamos RUT como el identificador
-      nombre: empresa.nombre, // Usamos 'nombre' para el nombre de la empresa
+
+      nombre: empresa.name, // Usamos 'nombre' para el nombre de la empresa
       
     }));
   } catch (error) {
@@ -432,20 +375,23 @@ const registrarActividad = async () => {
     confirmacionPREV: null // Agregar el enterprise_id aquí
   };
   try {
-    await $q.loading.show();
-    await api.post('admin/jobs', payload); // Enviar el payload con el enterprise_id
-    $q.notify({ type: 'positive', message: 'Actividad registrada exitosamente.' });
+    console.log(payload)
+    
+   
+    await api.post('admin/jobs/update', payload); // Enviar el payload con el enterprise_id
+    
     dialogVisible.value = false;
     // Limpiar datos después del registro
     newActividad.value = { nombre: '', trabajo: '' };
     fechaHoraList.value = [];
     operadoresList.value = [];
     documentosList.value = [];
+    
   } catch (error) { 
   console.error('Error:', error.response ? error.response.data : error.message);
   $q.notify({ type: 'negative', message: 'Hubo un error al registrar la actividad.' });
   } finally {
-    $q.loading.hide();
+    console.log("Bien");
   }
 };
 
@@ -601,6 +547,9 @@ onMounted(() => {
     
     obteneritem();
 });
+
+console.log(selectedEnterpriseId)
+console.log(enterpriseOptions)
 
 </script>
 
