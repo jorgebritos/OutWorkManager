@@ -23,10 +23,14 @@ class Enterprise extends Model
     {
         return "slug";
     }
-    
-    public function user()
-    {
+
+    public function user () {
         return $this->belongsTo(User::class);
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);  // Ajusta según tu relación real
     }
 
     public function operators()

@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        "email",
         'password',
         'rol'
     ];
@@ -33,7 +34,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    
     public function enterprise()
     {
         return $this->hasOne(Enterprise::class);

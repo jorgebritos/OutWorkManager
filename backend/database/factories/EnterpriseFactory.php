@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Enterprise;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\File;
@@ -18,16 +19,17 @@ class EnterpriseFactory extends Factory
      */
     public function definition(): array
     {
-        $path = storage_path("app/public/enterprises/");
+        // $path = storage_path("app/public/enterprises/");
 
         //$image = $this->faker->image($path, 50, 50, null, false);
 
         $name = $this->faker->name();
+
         return [
             "RUT" => $this->faker->uuid(),
             "nombre" => $name,
             "slug" => str($name." ".uniqid())->slug(),
-            "image" => null,
+            "image" => null,//"storage/enterprises/".$image,
             "is_valid" => $this->faker->boolean(),
             "user_id" => User::factory()
         ];

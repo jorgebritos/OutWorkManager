@@ -12,22 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jobs', function (Blueprint $table) {
-            $table->id();
-            $table->time("ingreso_hora");
-            $table->time("salida_hora");
-            $table->date("date");
-            
-            $table->string('RUT_enterprise');
-            $table->foreign('RUT_enterprise')->references('RUT')->on('enterprises');
-            $table->timestamps();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('jobs');
-    }
-};
+         
+                $table->id();
+                $table->string("trabajo");
+                $table->boolean("confirmacion_prevencionista")->nullable()->default(null);
+                $table->boolean("confirmacion_empresa")->nullable()->default(null);
+                
+                $table->unsignedBigInteger('enterprise_id')->nullable();
+                $table->foreign('enterprise_id')->references('id')->on('enterprises')->onDelete('cascade');
+    
+                $table->timestamps();
+            });
+        }
+    
+        /**
+         * Reverse the migrations.
+         */
+        public function down(): void
+        {
+            Schema::dropIfExists('jobs');
+        }
+    };
+    

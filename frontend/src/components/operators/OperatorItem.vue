@@ -20,7 +20,7 @@
         {{ operator.is_valid ? "Autorizado" : "No Autorizado" }}
       </p>
     </td>
-    <td class="text-left">{{ operator.cargo }} hola</td>
+    <td class="text-left">{{ operator.cargo }}</td>
     <td class="text-center">
       <q-btn
         type="button"
@@ -57,7 +57,7 @@ export default {
 
     const handleDeleteMenuAccept = async () => {
       validDeleteMenu.value = false;
-      // await useDeleteOperator(params.slug, props.operator.id)
+      await useDeleteOperator(params.slug, props.operator.id)
       emit("refetch")
     };    
 

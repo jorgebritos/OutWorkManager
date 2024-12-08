@@ -1,7 +1,7 @@
 <template>
   <q-dialog v-model="show">
     <q-card style="width: 2500px">
-      <q-card-section>
+      <q-card-section class="q-mb-md">
         <div class="text-h6">Añadir Documento</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
@@ -17,10 +17,12 @@
 
           <q-checkbox
             name="is_valid"
+            class="q-my-md"
             required
             label="Autorizado"
             v-model="data.is_valid"
           />
+
           <div
             v-for="(error, index) in error_create?.is_valid"
             :key="index"
@@ -29,14 +31,20 @@
             <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
-          <q-file color="teal" filled label="Documento" v-model="data.document">
+          <q-file
+            color="teal"
+            filled
+            label="Documento"
+            required
+            v-model="data.document"
+          >
             <template v-slot:prepend>
               <q-icon name="cloud_upload" />
             </template>
           </q-file>
 
           <div
-            v-for="(error, index) in error_create?.image"
+            v-for="(error, index) in error_create?.document"
             :key="index"
             class="q-mt-sm"
           >
@@ -44,7 +52,13 @@
           </div>
 
           <div class="q-mt-md">
-            <div class="row items-center"></div>
+            <q-input
+              filled
+              type="datetime-local"
+              required
+              v-model="data.expire"
+              label="Selecciona fecha y hora"
+            />
             <div
               v-for="(error, index) in error_create?.expire"
               :key="index"
@@ -62,6 +76,7 @@
           />
         </q-form>
       </q-card-section>
+
       <q-card-actions align="right">
         <q-btn
           flat
@@ -83,27 +98,19 @@
 </template>
 
 <script>
-import { reactive, toRef, ref } from "vue";
-import { useRoute } from "vue-router";
+import { reactive, ref } from "vue";
+import { useCreateDocumentEnterprise } from "src/hooks/api/documents.hooks";
 
 export default {
   props: {
-    role: {
+    enterprise: {
       type: String,
       required: true,
     },
   },
   setup(props, { emit }) {
-    const { params } = useRoute();
-
     const show = ref(false);
 
-    const handleCloseMenu = () => {
-      showAddDocumentMenu.value = false;
-      emit("refetch");
-    };
-
-    const error_create = ref(null);
     const data = reactive({
       title: "",
       type: "",
@@ -113,20 +120,44 @@ export default {
       document: null,
     });
 
+    const handleCloseMenu = () => {
+      show.value = false;
+
+      data.title = "";
+      data.type = "";
+      data.is_valid = false;
+      data.document = null;
+      data.expire = null;
+
+      emit("refetch");
+    };
+
+
+    const error_create = ref(null);
 
     const handleAddDocument = async () => {
-      const role = props.role;
-      if (role === "enterprise") {
-        console.log(data);
+      console.log(data);
+      const { isError, error } = await useCreateDocumentEnterprise(
+        props.enterprise,
+        {
+          ...data,
+          expire: data.expire.replace("T", " "),
+        }
+      );
+      if (isError.value) {
+        error_create.value = error.value;
+        console.log(error_create.value);
+      } else {
+        handleCloseMenu();
       }
     };
 
     return {
       data,
+      error_create,
       handleAddDocument,
       show,
       handleCloseMenu,
-      error_create,
       show,
     };
   },
