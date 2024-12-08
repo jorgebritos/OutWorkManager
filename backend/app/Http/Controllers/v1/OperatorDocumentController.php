@@ -10,6 +10,7 @@ use App\Models\Operator;
 use App\Http\Requests\DocumentStoreRequest;
 use App\Http\Requests\DocumentUpdateRequest;
 use App\Http\Resources\Pagination\OperatorDocumentsPaginatedCollection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class OperatorDocumentController extends Controller
@@ -17,12 +18,19 @@ class OperatorDocumentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Enterprise $enterprise, Operator $operator)
+    public function index(Enterprise $enterprise, Operator $operator, Request $request)
     {
         Gate::authorize("view", $enterprise);
         Gate::authorize("view", $operator);
 
-        $documents = $operator->documents()->orderBy("created_at", "desc")->paginate(5);
+        $query = $operator->documents();
+
+        $search = $request->input('search', null);
+
+        if ($search !== null) {
+            $query->where('title', 'LIKE', "%{$search}%");
+        }
+        $documents = $query->orderBy("created_at", "desc")->paginate(5);
 
         return response()->json(new OperatorDocumentsPaginatedCollection($documents));
     }

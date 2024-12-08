@@ -39,7 +39,7 @@ class UserController extends Controller
             $query->where('name', 'LIKE', "%{$search}%");
         }
 
-        $users = $query->paginate(10);
+        $users = $query->orderBy('created_at', 'desc')->paginate(10);
         
         return response()->json(new UsersPaginatedCollection($users), 200);
     }

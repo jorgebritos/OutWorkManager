@@ -9,18 +9,26 @@ use App\Http\Resources\OperatorResource;
 use App\Http\Resources\Pagination\OperatorsPaginatedCollection;
 use App\Models\Enterprise;
 use App\Models\Operator;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
 class OperatorController extends Controller
 {
-    public function index(Enterprise $enterprise)
+    public function index(Enterprise $enterprise, Request $request)
     {
         Gate::authorize('viewAny', Operator::class);
         Gate::authorize('view', $enterprise);
 
-        $operators = $enterprise->operators()->orderBy("created_at", "desc")->paginate(5);
+        $query = $enterprise->operators();
 
+        $search = $request->input('search', null);
+
+        if ($search !== null) {
+            $query->where('name', 'LIKE', "%{$search}%");
+        }
+
+        $operators = $query->orderBy("created_at", "desc")->paginate(5);
+        
         return response()->json(new OperatorsPaginatedCollection($operators));
     }
 
