@@ -1,6 +1,5 @@
 const inicio = (req,res)=>{
-   
-    res.reditrect("/")
+   res.status(200).reditrect("/")
 }
 
 export{

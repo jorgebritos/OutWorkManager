@@ -11,7 +11,7 @@ servidor.use(express.json())
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 // Archivos estáticos
-servidor.use("/",express.static(`${__dirname}/dist/spa`)) 
+servidor.use("/",express.static(`${__dirname}/Login_front/spa`)) 
 export{
     servidor
 }

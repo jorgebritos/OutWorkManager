@@ -1,14 +1,24 @@
-import { Usuario } from "../../Base_De_Datos/bd_Registro.js"
-const post_registro = (req,res)=>{
+import { Usuarios } from "../../Base_De_Datos/Usuarios.js"
+
+const post_registro = async(req,res)=>{
     const { usuario, contra, correo } = req.body
-    const datos = {
-        usuario,
-        contra,
-        correo
+    const existeCorreo = await Usuarios.findOne({ correo })
+    if(!existeCorreo){
+        const datos = {
+            usuario,
+            contra,
+            correo,
+            rol:"usuario",
+        }
+        const agregar_usuario = new Usuarios(datos)
+        agregar_usuario.save()
+        res.status(200).send("usuario guardado")
     }
-    const agregar_usuario = new Usuario(datos)
-    agregar_usuario.save()
-    res.send("usuario guardado")
+    else{
+        res.status(400).json({ msg: "Correo ya existe" }) 
+    } 
+    
+    
 }
 
 export{

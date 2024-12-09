@@ -5,8 +5,7 @@ const UsuarioSchema = new mongoose.Schema({
     usuario: {
         type: String,
         required: [true, "El nombre de usuario es obligatorio"],
-        minlength: [3, "El nombre de usuario debe tener al menos 3 caracteres"],
-        maxlength: [20, "El nombre de usuario no debe exceder los 20 caracteres"],
+        minlength: [6, "El nombre de usuario debe tener al menos 6 caracteres"],
     },
     contra: {
         type: String,
@@ -22,11 +21,26 @@ const UsuarioSchema = new mongoose.Schema({
             "El correo debe tener un formato válido",
         ],
     },
+    rol: {
+        type: String,
+        enum: ['prevencionista', 'guarda', 'empresa', 'usuario'], // Valores permitidos
+        required: true, // Opcional: asegúrate de que el campo sea obligatorio
+    },
+    mensajeria: {
+        type: mongoose.Schema.Types.ObjectId, // Identificador de otra colección
+        ref: 'Mensajeria', // Nombre del modelo al que hace referencia
+        
+    },
+    empresa: {
+        type: mongoose.Schema.Types.ObjectId, // Identificador de otra colección
+        ref: 'Empresa', // Nombre del modelo al que hace referencia
+         
+    },
 }, { timestamps: true }); // Agrega createdAt y updatedAt automáticamente
 
 // Crear el modelo
-const Usuario = mongoose.model('Usuario', UsuarioSchema);
+const Usuarios = mongoose.model('Usuarios', UsuarioSchema,"Usuarios");
 
 export { 
-    Usuario
+    Usuarios
 }
