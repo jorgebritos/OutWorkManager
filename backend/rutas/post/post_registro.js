@@ -1,9 +1,20 @@
 import { Usuarios } from "../../Base_De_Datos/Usuarios.js"
+import  bcryptjs from "bcryptjs"
+
+const encriptar_contra =(contra)=>{
+    const llave = process.env.llave 
+    const vueltas = bcryptjs.genSaltSync(11)
+    const contra_con_llave = contra + llave
+    const contraEncriptada = bcryptjs.hashSync(contra_con_llave, vueltas)
+
+    return contraEncriptada
+}
 
 const post_registro = async(req,res)=>{
-    const { usuario, contra, correo } = req.body
+    let { usuario, contra, correo } = req.body
     const existeCorreo = await Usuarios.findOne({ correo })
     if(!existeCorreo){
+        contra = encriptar_contra(contra)
         const datos = {
             usuario,
             contra,
