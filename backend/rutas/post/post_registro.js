@@ -13,6 +13,7 @@ const encriptar_contra =(contra)=>{
 const post_registro = async(req,res)=>{
     const datos = req.body
     let { usuario, contra, correo } = datos
+    
     const existeCorreo = await Usuarios.findOne({ correo })
     if(!existeCorreo){
         contra = encriptar_contra(contra)
