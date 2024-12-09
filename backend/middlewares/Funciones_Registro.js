@@ -34,8 +34,7 @@ const validar_contraseña = (contra) => {
 };
 
 const validar_datos = (req, res, next) => {
-    const { usuario, correo, contra } = req.body;
-
+    const { usuario, correo, contra } = req.body
     const [comprobar_usuario, comprobar_correo, comprobar_contra] = validar_campos(usuario, correo, contra);
     const usuarioValido = validar_usuario(usuario);
     const correoValido = validar_correo(correo);

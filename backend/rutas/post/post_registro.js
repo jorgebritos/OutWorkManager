@@ -11,7 +11,8 @@ const encriptar_contra =(contra)=>{
 }
 
 const post_registro = async(req,res)=>{
-    let { usuario, contra, correo } = req.body
+    const datos = req.body
+    let { usuario, contra, correo } = datos
     const existeCorreo = await Usuarios.findOne({ correo })
     if(!existeCorreo){
         contra = encriptar_contra(contra)
@@ -24,7 +25,7 @@ const post_registro = async(req,res)=>{
         }
         const agregar_usuario = new Usuarios(datos)
         agregar_usuario.save()
-        res.status(200).send("usuario guardado")
+        res.status(200).json({mensaje:"usuario guardado"})
     }
     else{
         res.status(400).json({ msg: "Correo ya existe" }) 
