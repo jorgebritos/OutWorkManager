@@ -9,6 +9,7 @@ const post_registro = async(req,res)=>{
             contra,
             correo,
             rol:"usuario",
+           
         }
         const agregar_usuario = new Usuarios(datos)
         agregar_usuario.save()
