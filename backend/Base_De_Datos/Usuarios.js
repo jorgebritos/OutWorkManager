@@ -33,7 +33,7 @@ const UsuarioSchema = new mongoose.Schema({
     },
     empresa: {
         type: mongoose.Schema.Types.ObjectId, // Identificador de otra colección
-        ref: 'Empresa', // Nombre del modelo al que hace referencia
+        ref: 'Empresas', // Nombre del modelo al que hace referencia
          
     },
 }, { timestamps: true }); // Agrega createdAt y updatedAt automáticamente
