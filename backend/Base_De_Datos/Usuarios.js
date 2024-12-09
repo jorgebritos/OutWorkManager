@@ -1,4 +1,4 @@
-import { bd ,mongoose } from "./bd.js"
+import { bd, mongoose } from "./bd.js"
 bd()
 // Definir el esquema
 const UsuarioSchema = new mongoose.Schema({
@@ -26,21 +26,40 @@ const UsuarioSchema = new mongoose.Schema({
         enum: ['prevencionista', 'guarda', 'empresa', 'usuario'], // Valores permitidos
         required: true, // Opcional: asegúrate de que el campo sea obligatorio
     },
+    documentos: [
+        {
+            id: { type: BigInt },
+            url: {
+                type: String,
+                required: true
+            },
+            titulo: {
+                type: String,
+                required: true
+            },
+            tipo: {
+                type: String,
+                required: true
+            },
+            vencimiento: { type: Date },
+            es_valido: { type: Number },
+        }
+    ],
     mensajeria: {
         type: mongoose.Schema.Types.ObjectId, // Identificador de otra colección
         ref: 'Mensajeria', // Nombre del modelo al que hace referencia
-        
+
     },
     empresa: {
         type: mongoose.Schema.Types.ObjectId, // Identificador de otra colección
         ref: 'Empresas', // Nombre del modelo al que hace referencia
-         
+
     },
 }, { timestamps: true }); // Agrega createdAt y updatedAt automáticamente
 
 // Crear el modelo
-const Usuarios = mongoose.model('Usuarios', UsuarioSchema,"Usuarios");
+const Usuarios = mongoose.model('Usuarios', UsuarioSchema, "Usuarios");
 
-export { 
+export {
     Usuarios
 }
