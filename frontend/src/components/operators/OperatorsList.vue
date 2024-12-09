@@ -4,18 +4,21 @@
     :show="createOperator"
     @handleCloseCreateOperator="handleCloseCreateOperator"
   />
-  <q-input
-    style="width: 100%"
-    filled
-    class="q-mt-xl"
-    v-model="search"
-    label="Busqueda"
-  >
-    <template v-slot:prepend>
-      <q-btn flat round dense class="icono_de_busqueda" icon="search" />
-    </template>
-  </q-input>
 
+  <div class="row items-center q-mt-xl">
+    <q-input
+      style="width: 100%"
+      filled
+      class="col"
+      v-model="search"
+      label="Busqueda"
+    >
+      <template v-slot:prepend>
+        <q-btn flat round dense class="icono_de_busqueda" icon="search" />
+      </template>
+    </q-input>
+    <q-btn round class="q-mx-sm" icon="mdi-reload" @click="refetch" />
+  </div>
   <div class="row justify-between items-center q-my-md">
     <h4 class="text-h4 q-my-none">Operarios:</h4>
     <q-btn
@@ -26,7 +29,7 @@
       @click="handleOpenCreateOperator"
     />
   </div>
-  <q-markup-table flat bordered>
+  <q-markup-table flat bordered v-if="!isLoading">
     <thead class="bg-dark text-white">
       <tr>
         <th class="text-left">C.I.</th>
@@ -87,10 +90,10 @@ export default {
     };
 
     watch(search, () => {
-      refetch({search: search.value})
-    })
+      refetch({ search: search.value });
+    });
 
-    const handleRefetchPage = (page) => refetch({page}); 
+    const handleRefetchPage = (page) => refetch({ page });
 
     const handleCloseCreateOperator = () => {
       createOperator.value = false;

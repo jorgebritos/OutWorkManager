@@ -77,17 +77,14 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-btn 
-    class="bg-primary text-white q-mr-md" 
-    @click="handleOpen"
-  >
+  <q-btn class="bg-primary text-white q-mr-md" @click="handleOpen">
     Crear
   </q-btn>
 </template>
 
 <script>
 import { reactive, ref } from "vue";
-import { api } from "src/boot/axios";
+import { useCreateUser } from "src/hooks/api/users.hooks";
 
 export default {
   setup(props, { emit }) {
@@ -111,28 +108,18 @@ export default {
     const handleOpen = () => show.value = true
     const handleClose = () => show.value = false
 
-    const handleCreateUser = () => {
-      api
-        .post(
-          "users",
-          {
-            ...data,
-            rol: data.rol.value,
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        )
-        .then(() => {
-          emit("refetch");
-          handleClose();
-        })
-        .catch((err) => {
-          if (err?.response?.status === 422) {
-            const messages = err.response.data.errors;
-            error_create.value = messages;
-          }
-        });
+    const handleCreateUser = async () => {
+      const { isError, error } = await useCreateUser({
+        ...data,
+        rol: data.rol.value,
+      });
+
+      if (isError.value) {
+        error_create.value = error.value;
+      } else {
+        emit("refetch")
+        handleClose()
+      }
     };
 
     return {

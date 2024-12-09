@@ -32,6 +32,62 @@ export const useUsers = () => {
   };
 };
 
+export const useEditUser = async (id, data) => {
+  const user = ref(null);
+  const isError = ref(false);
+  const error = ref(null);
+
+  await api
+    .patch("users/" + id, data, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      user.value = response.data.user;
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err?.response?.status === 422) {
+        const messages = err.response.data.errors;
+        isError.value = true;
+        error.value = messages;
+      }
+    });
+
+  return {
+    user,
+    isError,
+    error,
+  };
+};
+
+export const useCreateUser = async (data) => {
+  const user = ref(null);
+  const isError = ref(false);
+  const error = ref(null);
+
+  await api
+    .post("users/", data, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((response) => {
+      user.value = response.data.user;
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err?.response?.status === 422) {
+        const messages = err.response.data.errors;
+        isError.value = true;
+        error.value = messages;
+      }
+    });
+
+  return {
+    user,
+    isError,
+    error,
+  };
+};
+
 export const useDeleteUser = async (id) => {
   return await api.delete(`users/${id}}`);
 };

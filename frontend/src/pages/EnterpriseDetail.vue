@@ -12,7 +12,7 @@
         :src="`${api_base_backend}/${enterprise.image}`"
         alt="esta enterprise no pose imagen"
         style="height: 350px"
-        :fit="cover"
+        fit="cover"
       >
         <template v-slot:error>
           <div class="absolute-full text-subtitle2 flex flex-center">

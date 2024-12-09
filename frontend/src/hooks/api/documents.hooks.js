@@ -30,7 +30,6 @@ export const useDocumentsEnterprise = (enterprise) => {
   const paginate = ref(null);
 
   const refetch = (params={}) => {
-    console.log(params)
     api
       .get(`enterprises/${enterprise}/documents`, {
         params,

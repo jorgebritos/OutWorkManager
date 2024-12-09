@@ -8,13 +8,11 @@
         <q-form @submit.prevent="handleEditUser">
           <q-input name="name" label="name" v-model="data.name" />
           <div
-            v-for="(error, index) in error_create?.name"
+            v-for="(error, index) in error_edit?.name"
             :key="index"
             class="q-mt-sm"
           >
-            <span  class="q-pa-xs bg-negative text-white">{{
-              error
-            }}</span>
+            <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
           <q-input
@@ -24,7 +22,7 @@
             v-model="data.email"
           />
           <div
-            v-for="(error, index) in error_create?.email"
+            v-for="(error, index) in error_edit?.email"
             :key="index"
             class="q-mt-sm"
           >
@@ -39,20 +37,16 @@
             value=""
           />
           <div
-            v-for="(error, index) in error_create?.password"
+            v-for="(error, index) in error_edit?.password"
             :key="index"
             class="q-mt-sm"
           >
             <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
-          <q-select
-            v-model="data.rol"
-            :options="roles"
-            label="Rol Usuario"
-          />
+          <q-select v-model="data.rol" :options="roles" label="Rol Usuario" />
           <div
-            v-for="(error, index) in error_create?.rol"
+            v-for="(error, index) in error_edit?.rol"
             :key="index"
             class="q-mt-sm"
           >
@@ -69,23 +63,20 @@
           label="Cerrar"
           color="primary"
           v-close-popup
-          @click="handleCloseEditUser"
+          @click="show = false"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
+  <q-btn icon="edit" class="text-primary q-mr-md" @click="show = true" />
 </template>
 
 <script>
-import { toRef, ref, reactive } from "vue";
-import { api } from "src/boot/axios";
+import { ref, reactive } from "vue";
+import { useEditUser } from "src/hooks/api/users.hooks";
 
 export default {
   props: {
-    show: {
-      type: Boolean,
-      required: true,
-    },
     user: {
       type: Object,
       required: true,
@@ -98,52 +89,38 @@ export default {
       { label: "Admin", value: "Admin" },
     ];
 
-    const show = toRef(props, "show");
+    const show = ref(false);
     const data = reactive({
       name: props.user.name,
       email: props.user.email,
       password: undefined,
-      rol: props.user.rol === "Empresario sin empresa"? roles[0]: props.user.rol,
-    })
+      rol:
+        props.user.rol === "Empresario sin empresa" ? roles[0] : props.user.rol,
+    });
 
-    const error_create = ref(null);
+    const error_edit = ref(null);
 
-    const handleCloseEditUser = () => {
-      emit("handleCloseEditUser");
-    };
+    const handleEditUser = async () => {
+      const { isError, error } = await useEditUser(props.user.id, {
+        ...data,
+        rol: data.rol.value,
+        email: data.email === props.user.email ? undefined : data.email,
+      });
 
-    const handleEditUser = () => {
-      api
-        .patch(
-          "users/" + props.user.id,
-          {
-            ...data,
-            rol: data.rol.value,
-            email: data.email === props.user.email? undefined: data.email
-          },
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        )
-        .then(() => {
-          handleCloseEditUser();
-        })
-        .catch((err) => {
-          console.error(err);
-          if (err?.response?.status === 422) {
-            const messages = err.response.data.errors;
-            error_create.value = messages;
-          }
-        });
+      if (isError.value) {
+        error_edit.value = error.value;
+      } else {
+        emit("refetch")
+        show.value = false
+      }
     };
 
     return {
       handleEditUser,
       show,
-      handleCloseEditUser,
       roles,
       data,
-      error_create,
+      error_edit,
     };
   },
 };

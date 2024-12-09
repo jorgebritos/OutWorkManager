@@ -11,6 +11,7 @@ use App\Http\Controllers\v1\OperatorController as V1OperatorController;
 use App\Http\Controllers\v1\UserController as V1UserController;
 use App\Http\Controllers\v1\EnterpriseDocumentController as V1EnterpriseDocumentController;
 use App\Http\Controllers\v1\OperatorDocumentController as V1OperatorDocumentController;
+//use App\Http\Controllers\v1\JobDocumentController as V1JobDocumentController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, "me"]);
@@ -22,8 +23,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::prefix("/operators/{operator:id}")->group(function () {
             Route::apiResource("/documents", V1OperatorDocumentController::class)->names("operators.documents");
             Route::get('/enterprises/{id}/documents', [V1EnterpriseController::class, 'getDocuments']);
-            
 
+        });
+
+        Route::prefix("jobs/{job:id}")->group(function () {
+            //Route::apiResource("/documents", V1JobDocumentController::class)->names("operators.documents");
         });
     });
 

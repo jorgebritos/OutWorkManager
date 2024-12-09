@@ -1,15 +1,18 @@
 <template>
-  <q-input
-    style="width: 100%"
-    filled
-    class="q-mt-xl"
-    v-model="search"
-    label="Busqueda"
-  >
-    <template v-slot:prepend>
-      <q-btn flat round dense class="icono_de_busqueda" icon="search" />
-    </template>
-  </q-input>
+  <div class="row items-center q-mt-xl">
+    <q-input
+      style="width: 100%"
+      filled
+      class="col"
+      v-model="search"
+      label="Busqueda"
+    >
+      <template v-slot:prepend>
+        <q-btn flat round dense class="icono_de_busqueda" icon="search" />
+      </template>
+    </q-input>
+    <q-btn round class="q-mx-sm" icon="mdi-reload" @click="refetch" />
+  </div>
   <div class="flex justify-between q-mb-md items-center">
     <h4 class="text-h4 q-my-none">Documentos :</h4>
     <add-document

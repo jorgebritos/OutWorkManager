@@ -1,16 +1,19 @@
 <template>
   <div class="flex justify-center">
-    <q-input
-      style="max-width: 700px; width: 100%"
-      filled
-      v-model="search"
-      class="custom-input q-mb-md"
-      label="Busqueda"
-    >
-      <template v-slot:prepend>
-        <q-btn flat round dense class="icono_de_busqueda" icon="search" />
-      </template>
-    </q-input>
+    <div class="row items-center q-mt-xl q-px-sm q-mb-sm" style="width: 100%">
+      <q-input
+        style="width: 100%"
+        filled
+        class="col"
+        v-model="search"
+        label="Busqueda"
+      >
+        <template v-slot:prepend>
+          <q-btn flat round dense class="icono_de_busqueda" icon="search" />
+        </template>
+      </q-input>
+      <q-btn round class="q-mx-sm" icon="mdi-reload" @click="refetch" />
+    </div>
   </div>
 
   <div class="full-width flex justify-center">

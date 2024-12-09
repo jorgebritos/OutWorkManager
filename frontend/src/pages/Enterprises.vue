@@ -1,17 +1,20 @@
 <template>
   <div>
     <q-toolbar class="column">
-      <q-input
-        style="width: 100%"
-        filled
-        class="custom-input"
-        v-model="search"
-        label="Busqueda"
-      >
-        <template v-slot:prepend>
-          <q-btn flat round dense class="icono_de_busqueda" icon="search" />
-        </template>
-      </q-input>
+      <div class="row items-center q-mt-xl" style="width: 100%;">
+        <q-input
+          style="width: 100%"
+          filled
+          class="col"
+          v-model="search"
+          label="Busqueda"
+        >
+          <template v-slot:prepend>
+            <q-btn flat round dense class="icono_de_busqueda" icon="search" />
+          </template>
+        </q-input>
+        <q-btn round class="q-mx-sm" icon="mdi-reload" @click="() => refetch({filter: true})" />
+      </div>
 
       <q-toolbar class="row justify-between">
         <div>
@@ -36,7 +39,6 @@
         </div>
       </q-toolbar>
     </q-toolbar>
-
     <div v-if="!isLoading">
       <div class="q-pa-md row justify-center">
         <div
@@ -76,8 +78,8 @@ export default {
 
     const filter = ref(true);
 
-    const handleRefetchPage = (page_tag) => {
-      refetch({ filter: filter.value, page: page_tag, search: search.value });
+    const handleRefetchPage = (page) => {
+      refetch({ filter: filter.value, page, search: search.value });
     };
 
     watch([search, filter], () => {
