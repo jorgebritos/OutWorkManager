@@ -34,29 +34,34 @@ const validar_contraseña = (contra) => {
 };
 
 const validar_datos = (req, res, next) => {
-    const { usuario, correo, contra } = req.body
-    const [comprobar_usuario, comprobar_correo, comprobar_contra] = validar_campos(usuario, correo, contra);
-    const usuarioValido = validar_usuario(usuario);
-    const correoValido = validar_correo(correo);
-    const contraValida = validar_contraseña(contra);
+    const { usuario, correo, contra ,repetir_contra} = req.body
+    if(contra === repetir_contra){    
+        const [comprobar_usuario, comprobar_correo, comprobar_contra] = validar_campos(usuario, correo, contra);
+        const usuarioValido = validar_usuario(usuario);
+        const correoValido = validar_correo(correo);
+        const contraValida = validar_contraseña(contra);
 
-    const errores = [
-        comprobar_usuario !== true ? comprobar_usuario : null,
-        comprobar_correo !== true ? comprobar_correo : null,
-        comprobar_contra !== true ? comprobar_contra : null,
-        usuarioValido !== true ? usuarioValido : null,
-        correoValido !== true ? correoValido : null,
-        contraValida !== true ? contraValida : null
-    ].filter(Boolean); // Filtrar los errores nulos
+        const errores = [
+            comprobar_usuario !== true ? comprobar_usuario : null,
+            comprobar_correo !== true ? comprobar_correo : null,
+            comprobar_contra !== true ? comprobar_contra : null,
+            usuarioValido !== true ? usuarioValido : null,
+            correoValido !== true ? correoValido : null,
+            contraValida !== true ? contraValida : null
+        ].filter(Boolean); // Filtrar los errores nulos
 
-    // Si hay errores, enviar la respuesta con los mensajes de error
-    if (errores.length > 0) {
-        return res.status(400).json({ mensaje: errores });
+        // Si hay errores, enviar la respuesta con los mensajes de error
+        if (errores.length > 0) {
+            return res.status(400).json({ mensaje: errores });
+        }
+
+        // Si no hay errores, continuar al siguiente middleware
+        next();
     }
-
-    // Si no hay errores, continuar al siguiente middleware
-    next();
-};
+    else{
+        return res.status(400).json({ mensaje: "Las contraseñas no coinciden" });
+    }
+}
 
 export {
     validar_datos
