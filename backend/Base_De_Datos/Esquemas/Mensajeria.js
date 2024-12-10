@@ -11,12 +11,6 @@ const MensajeriaSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuarios'
     },
-    usuario_remitente: {
-        type: String,
-    },
-    usuario_destinatario: {
-        type: String,
-    },
     mensajes: [
         {
             mensaje: {type: String},
