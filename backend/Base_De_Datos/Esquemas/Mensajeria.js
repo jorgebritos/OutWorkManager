@@ -1,4 +1,4 @@
-import { bd, mongoose } from "./bd.js"
+import { bd, mongoose } from "../bd.js"
 bd()
 // Definir el esquema
 // Esquema de Chats
@@ -10,12 +10,6 @@ const MensajeriaSchema = new mongoose.Schema({
     usuario2: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Usuarios'
-    },
-    usuario_remitente: {
-        type: String,
-    },
-    usuario_destinatario: {
-        type: String,
     },
     mensajes: [
         {
