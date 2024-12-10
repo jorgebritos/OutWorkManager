@@ -1,11 +1,23 @@
 <template>
  <div class="q-pa-md">
     <q-layout view="hHh Lpr lff" style="padding: 10px 10px;">
-      <q-header elevated style="padding: 0 20px;" class="row justify-between bg-teal-10">
+      <q-header
+      elevated
+      :style="{ padding: '0 20px', backgroundColor: '#085d71' }"
+      class="row justify-between items-center"
+    >
         <div>
-          <q-toolbar class="row items-center">
-            <q-toolbar-title>Camcel-Guarda</q-toolbar-title>
-          </q-toolbar>
+             <q-toolbar class="row items-center">
+        
+          <div class="q-mx-auto" style="display: flex; justify-content: center">
+            <img
+              src="src/assets/LogoCamcel.jpg"
+              alt="Logo Camcel"
+              width="287"
+              height="65"
+            />
+          </div>
+        </q-toolbar>
         </div>
       </q-header>
     <q-page-container class="ola">
