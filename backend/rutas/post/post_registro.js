@@ -1,4 +1,4 @@
-import { Usuarios } from "../../Base_De_Datos/Usuarios.js"
+import { Usuarios } from "../../Base_De_Datos/Esquemas/Usuarios.js"
 import  bcryptjs from "bcryptjs"
 
 const encriptar_contra =(contra)=>{
