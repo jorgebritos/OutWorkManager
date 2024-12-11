@@ -3,6 +3,7 @@ import cors from "cors" // importamos el modulo de cors para recibir peticiones 
 import { fileURLToPath } from "url" // para obtener las rutas del archivo actual
 import { dirname } from "path" // para obtener las rutas del directorio actual
 import { config } from "dotenv" // importamos dotenv para las variables de entorno
+import { socket_io } from "./Controladores/websocket.js" 
 //-----------------------------------------------------------------------------------
 config() // ejecutamos config
 const servidor = express() // ejecutamos la configuración de express
@@ -16,6 +17,7 @@ servidor.use(express.json()) // Usamos como middleware la funcion de express jso
 
 
 servidor.use("/",express.static(`${__dirname}/Login_front/spa`)) // Archivos estáticos " Los que se envían al usuario " 
+socket_io(servidor)
 export{
     servidor // exportamos la variable del servidor
 }
