@@ -3,10 +3,12 @@ import cors from "cors" // importamos el modulo de cors para recibir peticiones 
 import { fileURLToPath } from "url" // para obtener las rutas del archivo actual
 import { dirname } from "path" // para obtener las rutas del directorio actual
 import { config } from "dotenv" // importamos dotenv para las variables de entorno
-import { configurarSocket } from './funciones/ws.js';
-import { Server } from 'socket.io';
-import http from 'http';
-import { manejarMensaje } from './controller/websocket.js';
+import fs from "fs"
+import path from "path"
+import { configurarSocket } from './funciones/ws.js'
+import { Server } from 'socket.io'
+import http from 'http'
+import { manejarMensaje } from './controller/websocket.js'
 //-----------------------------------------------------------------------------------
 config() // ejecutamos config
 const servidor = express() // ejecutamos la configuración de express
@@ -19,15 +21,42 @@ servidor.use(cors()) // Usamos como middleware la funcion de cors
 servidor.use(express.json()) // Usamos como middleware la funcion de express json para que interprete los datos que vienen como json
 
 
+// Importar Rutas Dinamicas de la carpeta rutas
+const rutas_dinamicas =[]
+const obtener_datos = (e)=>{
+    const ruta = path.join(`${__dirname}/rutas/${e}`)
+    const archivos = fs.readdirSync(ruta); // Leer el directorio de forma síncrona
+    return archivos
+}
+
+const obtener_rutas = () => {
+    try {
+      const ruta = path.join(`${__dirname}/rutas`) // Ajusta la ruta según tu estructura
+      const archivos = fs.readdirSync(ruta) // Leer el directorio de forma síncrona
+      return archivos
+    } catch (error) {
+      console.error('Error al leer la carpeta:', error.message)
+      return [] // Retorna un array vacío en caso de error
+    }
+  };
+  
+  const rutas = obtener_rutas()
+  rutas.forEach(element => {
+    rutas_dinamicas[element]=(obtener_datos(element))
+    
+  })
+  
+  
+ 
 servidor.use("/",express.static(`${__dirname}/Login_front/spa`)) // Archivos estáticos " Los que se envían al usuario " 
-const server = http.createServer(servidor);
-const io = new Server(server);
+const server = http.createServer(servidor)
+const io = new Server(server)
 
 // Configura socket.io en funciones
 configurarSocket(io);
 // Manejar conexiones de clientes
 io.on('connection', (socket) => {
-    console.log(`Cliente conectado: ${socket.id}`);
+    console.log(`Cliente conectado: ${socket.id}`)
 
     // Escuchar evento 'mensaje'
     socket.on('mensaje', (data) => manejarMensaje(socket, data));
@@ -40,5 +69,6 @@ io.on('connection', (socket) => {
 
 
 export{
-    servidor // exportamos la variable del servidor
+    servidor, // exportamos la variable del servidor
+    rutas_dinamicas // exportamos las rutas dinamicas en forma de array
 }
