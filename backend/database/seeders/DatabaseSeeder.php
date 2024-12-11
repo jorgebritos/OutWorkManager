@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
             UserEnterpriseSeeder::class,
             EnterpriseSeeder::class,
             OperatorSeeder::class,
+            JobSeeder::class,
             DocumentSeeder::class,
             UserSeeder::class,
             UserAdminSeeder::class,
-            JobSeeder::class,
         ]);
     }
 }

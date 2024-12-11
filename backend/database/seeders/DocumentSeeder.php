@@ -20,19 +20,19 @@ class DocumentSeeder extends Seeder
         $jobs = Job::all();
 
         foreach ($enterprises as $enterprise) {
-            Document::factory(30)->create([
+            Document::factory(15)->create([
                 "enterprise_id" => $enterprise->id
             ]);
         }
 
         foreach ($operators as $operator) {
-            Document::factory(30)->create([
+            Document::factory(15)->create([
                 "operator_id" => $operator->id
             ]);
         }
         
         foreach ($jobs as $job) {
-            Document::factory(30)->create([
+            Document::factory(15)->create([
                 "job_id" => $job->id
             ]);
         }

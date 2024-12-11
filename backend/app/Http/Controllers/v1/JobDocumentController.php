@@ -37,7 +37,6 @@ class JobDocumentController extends Controller
      */
     public function store(Job $job, DocumentStoreRequest $request)
     {
-
         $request->validated();
 
         $path = $request->file('document')->store('documents', 'public');
