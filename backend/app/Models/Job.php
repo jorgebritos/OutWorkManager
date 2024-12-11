@@ -27,7 +27,7 @@ class Job extends Model
     {
         return $this->hasMany(JobDate::class);
     }
-    public function documentos()
+    public function documents()
     {
         return $this->hasMany(Document::class);
     }

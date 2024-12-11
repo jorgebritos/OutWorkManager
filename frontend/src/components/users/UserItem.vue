@@ -22,7 +22,7 @@
 
 <script>
 import { ref } from "vue";
-import ValidDeleteUserMenu from "src/components/ValidDeleteMenu.vue";
+import ValidDeleteUserMenu from "src/components/helpers/ValidDeleteMenu.vue";
 import EditUser from "src/components/users/EditUser.vue";
 import { useDeleteUser } from "src/hooks/api/users.hooks";
 

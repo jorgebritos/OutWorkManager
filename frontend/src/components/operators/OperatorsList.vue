@@ -60,7 +60,7 @@
 
 <script>
 import { useOperators } from "src/hooks/api/operators.hooks";
-import MenuCreateOperator from "src/components/MenuCreateOperator.vue";
+import MenuCreateOperator from "src/components/operators/MenuCreateOperator.vue";
 import OperatorItem from "src/components/operators/OperatorItem.vue";
 import { ref, watch } from "vue";
 import Pagination from "src/components/helpers/Pagination.vue";

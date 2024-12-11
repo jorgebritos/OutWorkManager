@@ -27,7 +27,7 @@
           </h4>
         </div>
       </q-img>
-      <div class="row justify-between">
+      <div class="row justify-between items-center">
         <div class="text-caption">
           <div class="text-grey row items-center">
             {{ enterprise.is_valid ? "Verificado" : "No verificado" }}
@@ -67,34 +67,30 @@
                   color="secondary"
                   @click="handleValidEnterprise"
                 />
-
-                <q-btn
-                  type="button"
-                  class="text-lg text-negative q-ml-md"
-                  @click="
-                    () => {
-                      showDeleteMenu = true;
-                    }
-                  "
-                >
-                  Eliminar <span class="mdi mdi-trash-can"></span>
-                </q-btn>
               </div>
             </q-card-section>
           </div>
         </div>
-        <div style="width: 400px" v-if="enterprise.user">
-          <h5 class="text-h5 q-my-none">Encargado de la enterprise</h5>
-          <q-card>
-            <q-card-section>
-              Nombre: {{ enterprise.user.name }}
-            </q-card-section>
-            <q-card-section>
-              Email: {{ enterprise.user.email }}
-            </q-card-section>
-          </q-card>
-        </div>
+        <q-btn
+          type="button"
+          class="text-lg text-negative"
+          @click="
+            () => {
+              showDeleteMenu = true;
+            }
+          "
+        >
+          Eliminar <span class="mdi mdi-trash-can"></span>
+        </q-btn>
       </div>
+      <div style="width: 400px" v-if="enterprise.user">
+        <h5 class="text-h5 q-my-none">Encargado de la enterprise</h5>
+        <q-card>
+          <q-card-section> Nombre: {{ enterprise.user.name }} </q-card-section>
+          <q-card-section> Email: {{ enterprise.user.email }} </q-card-section>
+        </q-card>
+      </div>
+
       <operators-list :enterprise="enterprise.slug" />
       <enterprise-documents :enterprise="enterprise.slug" />
     </div>
@@ -112,7 +108,7 @@
 <script>
 import EditEnterprise from "src/components/enterprises/EditEnterprise.vue";
 import OperatorsList from "src/components/operators/OperatorsList.vue";
-import MenuCreateOperator from "src/components/MenuCreateOperator.vue";
+import MenuCreateOperator from "src/components/operators/MenuCreateOperator.vue";
 import { useRoute, useRouter } from "vue-router";
 import { ref } from "vue";
 import { api_base_backend } from "../helpers.js";
@@ -123,7 +119,7 @@ import {
   useNotValidEnterprise,
   useDeleteEnterprise,
 } from "src/hooks/api/enterprises.hooks";
-import ValidDeleteEnterpriseMenu from "src/components/ValidDeleteMenu.vue";
+import ValidDeleteEnterpriseMenu from "src/components/helpers/ValidDeleteMenu.vue";
 
 export default {
   components: {

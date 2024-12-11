@@ -62,11 +62,11 @@
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { ref } from "vue";
-import MenuEditOperator from "src/components/MenuEditOperator.vue";
+import MenuEditOperator from "src/components/operators/MenuEditOperator.vue";
 import TableDocuments from "../components/documents/TableDocuments.vue";
 import { useOperator, useDeleteOperator } from "src/hooks/api/operators.hooks";
 import OperatorDocuments from "src/components/documents/OperatorDocuments.vue";
-import ValidDeleteOperatorMenu from "src/components/ValidDeleteMenu.vue";
+import ValidDeleteOperatorMenu from "src/components/helpers/ValidDeleteMenu.vue";
 
 export default {
   components: {
