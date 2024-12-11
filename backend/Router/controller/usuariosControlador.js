@@ -1,6 +1,6 @@
 const axios = require("axios");
 const { Op } = require("sequelize");
-const { Usuarios } = require("../Esquemas/Usuarios.js");
+const { Usuarios } = require("../../Base_De_Datos/Esquemas/Usuarios.js");
 import bcryptjs from "bcryptjs"
 
 // const getUser = async (req, res) => {

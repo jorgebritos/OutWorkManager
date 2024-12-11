@@ -1,6 +1,6 @@
 // controladores/websocket.js
 
-import { emitirEventoATodos, emitirEventoACliente } from '../funciones/ws.js';
+import { emitirEventoATodos, emitirEventoACliente } from '../../funciones/ws.js';
 
 // Manejar un evento recibido
 const  manejarMensaje = (socket, data) =>{
