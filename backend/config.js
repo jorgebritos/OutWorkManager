@@ -3,7 +3,10 @@ import cors from "cors" // importamos el modulo de cors para recibir peticiones 
 import { fileURLToPath } from "url" // para obtener las rutas del archivo actual
 import { dirname } from "path" // para obtener las rutas del directorio actual
 import { config } from "dotenv" // importamos dotenv para las variables de entorno
-import { socket_io } from "./Controladores/websocket.js" 
+import { configurarSocket } from './funciones/ws.js';
+import { Server } from 'socket.io';
+import http from 'http';
+import { manejarMensaje } from './controller/websocket.js';
 //-----------------------------------------------------------------------------------
 config() // ejecutamos config
 const servidor = express() // ejecutamos la configuración de express
@@ -17,7 +20,25 @@ servidor.use(express.json()) // Usamos como middleware la funcion de express jso
 
 
 servidor.use("/",express.static(`${__dirname}/Login_front/spa`)) // Archivos estáticos " Los que se envían al usuario " 
-socket_io(servidor)
+const server = http.createServer(servidor);
+const io = new Server(server);
+
+// Configura socket.io en funciones
+configurarSocket(io);
+// Manejar conexiones de clientes
+io.on('connection', (socket) => {
+    console.log(`Cliente conectado: ${socket.id}`);
+
+    // Escuchar evento 'mensaje'
+    socket.on('mensaje', (data) => manejarMensaje(socket, data));
+
+    // Manejar desconexión
+    socket.on('disconnect', () => {
+        console.log(`Cliente desconectado: ${socket.id}`);
+    });
+});
+
+
 export{
     servidor // exportamos la variable del servidor
 }
