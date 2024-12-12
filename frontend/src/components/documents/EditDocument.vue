@@ -2,13 +2,13 @@
   <q-dialog v-model="show">
     <q-card style="width: 2500px">
       <q-card-section class="q-mb-md">
-        <div class="text-h6">Añadir Documento</div>
+        <div class="text-h6">Editar Documento</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        <q-form @submit.prevent="handleAddDocument">
-          <q-input name="title" required label="Titulo" v-model="data.title" />
+        <q-form @submit.prevent="handleEditDocument">
+          <q-input name="title" label="Titulo" v-model="data.title" />
           <div
-            v-for="(error, index) in error_create?.title"
+            v-for="(error, index) in error_edit?.title"
             :key="index"
             class="q-mt-sm"
           >
@@ -18,13 +18,12 @@
           <q-checkbox
             name="is_valid"
             class="q-my-md"
-            required
             label="Autorizado"
             v-model="data.is_valid"
           />
 
           <div
-            v-for="(error, index) in error_create?.is_valid"
+            v-for="(error, index) in error_edit?.is_valid"
             :key="index"
             class="q-mt-sm"
           >
@@ -35,7 +34,6 @@
             color="teal"
             filled
             label="Documento"
-            required
             v-model="data.document"
           >
             <template v-slot:prepend>
@@ -44,23 +42,21 @@
           </q-file>
 
           <div
-            v-for="(error, index) in error_create?.document"
+            v-for="(error, index) in error_edit?.document"
             :key="index"
             class="q-mt-sm"
           >
             <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
-
           <div class="q-mt-md">
             <q-input
               filled
               type="datetime-local"
-              required
               v-model="data.expire"
               label="Selecciona fecha y hora"
             />
             <div
-              v-for="(error, index) in error_create?.expire"
+              v-for="(error, index) in error_edit?.expire"
               :key="index"
               class="q-mt-sm"
             >
@@ -68,12 +64,7 @@
             </div>
           </div>
 
-          <q-btn
-            label="Guardar"
-            class="q-mt-md"
-            type="submit"
-            color="primary"
-          />
+          <q-btn label="Editar" class="q-mt-md" type="submit" color="primary" />
         </q-form>
       </q-card-section>
 
@@ -88,79 +79,85 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-btn
-    label="Añadir Documento"
-    class="q-mt-md q-mr-sm"
-    type="button"
-    color="primary"
-    @click="show = true"
-  />
+  <q-btn type="button" class="text-h6 text-secondary" @click="handleOpenMenu">
+    <span class="mdi mdi-pencil"></span>
+  </q-btn>
 </template>
 
 <script>
 import { reactive, ref } from "vue";
-import { useCreateDocumentOperator } from "src/hooks/api/documents.hooks";
+import { handleToggleFetchEditDocuments } from "src/hooks/api/documents.hooks";
 
 export default {
   props: {
-    enterprise: {
+    entity: {
       type: String,
       required: true,
     },
-    operator: {
-      type: String,
+    params: {
+      type: Object,
       required: true,
     },
+    doc: {
+      type: Object,
+      required: true,
+    }
   },
   setup(props, { emit }) {
     const show = ref(false);
 
-    const data = reactive({
-      title: "",
-      type: "",
-      is_valid: false,
-      document: null,
-      expire: null,
-    });
-
     const handleCloseMenu = () => {
       show.value = false;
-      
-      data.title = ""
-      data.type = ""
-      data.is_valid = false
-      data.document = null
-      data.expire = null
 
-      emit("refetch");
+      data.title = props.doc.title;
+      data.type = props.doc.type;
+
+      data.is_valid = props.doc.is_valid;
+      data.document = undefined;
+      data.expire = props.doc.expire;
     };
 
-    const error_create = ref(null)
+    const data = reactive({
+      title: props.doc.title,
+      type: props.doc.type,
+      is_valid: props.doc.is_valid,
+      document: undefined,
+      expire: props.doc.expire,
+      document: props.doc.document,
+    });
 
-    const handleAddDocument = async () => {
-      console.log(data)
-      const { isError, error } = await useCreateDocumentOperator(
-        props.enterprise,
-        props.operator,
+    const handleOpenMenu = (e) => { 
+      e.stopPropagation();
+      show.value = true;
+    }
+
+    const error_edit = ref(null);
+
+    const handleEditDocument = async () => {
+      const { isError, error } = await handleToggleFetchEditDocuments(
+        props.entity,
+        props.params,
         {
           ...data,
           expire: data.expire.replace("T", " "),
         }
       );
       if (isError.value) {
-        error_create.value = error.value;
-        console.log(error_create.value);
+        error_edit.value = error.value;
+        console.log(error_edit.value);
       } else {
-        handleCloseMenu()
+        show.value = false;
+        emit("refetch");
       }
     };
 
     return {
+      error_edit,
       data,
-      error_create,
-      handleAddDocument,
+      handleEditDocument,
       show,
       handleCloseMenu,
+      handleOpenMenu,
       show,
     };
   },

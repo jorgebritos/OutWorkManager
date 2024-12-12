@@ -99,14 +99,18 @@
 
 <script>
 import { reactive, ref } from "vue";
-import { useCreateDocumentEnterprise } from "src/hooks/api/documents.hooks";
+import { handleToggleFetchCreateDocuments } from "src/hooks/api/documents.hooks";
 
 export default {
   props: {
-    enterprise: {
+    entity: {
       type: String,
       required: true,
     },
+    params: {
+      type: Object,
+      required: true,
+    }
   },
   setup(props, { emit }) {
     const show = ref(false);
@@ -132,13 +136,13 @@ export default {
       emit("refetch");
     };
 
-
     const error_create = ref(null);
 
     const handleAddDocument = async () => {
       console.log(data);
-      const { isError, error } = await useCreateDocumentEnterprise(
-        props.enterprise,
+      const { isError, error } = await handleToggleFetchCreateDocuments(
+        props.entity,
+        props.params,
         {
           ...data,
           expire: data.expire.replace("T", " "),

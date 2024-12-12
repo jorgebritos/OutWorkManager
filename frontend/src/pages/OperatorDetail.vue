@@ -43,8 +43,11 @@
       </q-card>
       <div class="q-mt-xl">
         <operator-documents
-          :enterprise="operator.enterprise"
-          :operator="operator.id"
+          entity="operator"
+          :params="{
+            enterprise: operator.enterprise,
+            operator: operator.id,
+          }"
         />
       </div>
     </div>
@@ -63,15 +66,13 @@
 import { useRoute, useRouter } from "vue-router";
 import { ref } from "vue";
 import MenuEditOperator from "src/components/operators/MenuEditOperator.vue";
-import TableDocuments from "../components/documents/TableDocuments.vue";
 import { useOperator, useDeleteOperator } from "src/hooks/api/operators.hooks";
-import OperatorDocuments from "src/components/documents/OperatorDocuments.vue";
+import OperatorDocuments from "src/components/documents/Documents.vue";
 import ValidDeleteOperatorMenu from "src/components/helpers/ValidDeleteMenu.vue";
 
 export default {
   components: {
     MenuEditOperator,
-    TableDocuments,
     OperatorDocuments,
     ValidDeleteOperatorMenu,
   },
@@ -115,7 +116,7 @@ export default {
       handleOutClick,
       showDeleteMenu,
       handleDeleteMenuAccept,
-      handleDeleteMenuClose
+      handleDeleteMenuClose,
     };
   },
 };

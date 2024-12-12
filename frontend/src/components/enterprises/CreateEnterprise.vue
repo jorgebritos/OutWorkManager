@@ -94,7 +94,6 @@
 <script>
 import { reactive, toRef, ref } from "vue";
 import { api } from "src/boot/axios";
-import { useEnterpriseStore } from "src/store/enterprise.store";
 import { useCreateEnterprise } from "src/hooks/api/enterprises.hooks";
 
 export default {

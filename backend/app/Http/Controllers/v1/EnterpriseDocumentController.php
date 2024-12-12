@@ -73,7 +73,7 @@ class EnterpriseDocumentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Enterprise $enterprise, DocumentUpdateRequest $request, Document $document)
+    public function update(Enterprise $enterprise, Document $document, DocumentUpdateRequest $request)
     {
         Gate::authorize("view", $enterprise);
         Gate::authorize("update", $document);

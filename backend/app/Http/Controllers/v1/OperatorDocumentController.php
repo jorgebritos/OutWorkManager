@@ -72,15 +72,13 @@ class OperatorDocumentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Enterprise $enterprise, Operator $operator, DocumentUpdateRequest $request, Document $document)
+    public function update(Enterprise $enterprise, Operator $operator, Document $document, DocumentUpdateRequest $request)
     {
         Gate::authorize("view", $enterprise);
         Gate::authorize("view", $operator);
         Gate::authorize("update", $document);
 
         $data = $request->validated();
-
-        $enterprise->documents()->findOrFail($document->id);
 
         $path = null;
 
@@ -102,8 +100,6 @@ class OperatorDocumentController extends Controller
         Gate::authorize("view", $enterprise);
         Gate::authorize("view", $operator);
         Gate::authorize("delete", $document);
-
-        $enterprise->documents()->findOrFail($document->id);
 
         $document->delete();
 

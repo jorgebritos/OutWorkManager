@@ -92,7 +92,10 @@
       </div>
 
       <operators-list :enterprise="enterprise.slug" />
-      <enterprise-documents :enterprise="enterprise.slug" />
+      <enterprise-documents
+        :params="{ enterprise: enterprise.slug }"
+        entity="enterprise"
+      />
     </div>
 
     <div v-if="isLoading" class="text-center">Cargando...</div>
@@ -112,7 +115,7 @@ import MenuCreateOperator from "src/components/operators/MenuCreateOperator.vue"
 import { useRoute, useRouter } from "vue-router";
 import { ref } from "vue";
 import { api_base_backend } from "../helpers.js";
-import EnterpriseDocuments from "../components/documents/EnterpriseDocuments.vue";
+import EnterpriseDocuments from "../components/documents/Documents.vue";
 import {
   useEnterprise,
   useValidEnterprise,

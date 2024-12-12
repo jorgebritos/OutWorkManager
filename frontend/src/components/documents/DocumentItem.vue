@@ -15,14 +15,20 @@
       </p>
     </td>
     <td class="text-center">
-      <q-btn type="button" class="text-h6 text-secondary">
-        <span class="mdi mdi-pencil"></span>
-      </q-btn>
+      <EditDocument
+        :entity="entity"
+        :params="{
+          ...params,
+          pk: document.id,
+        }"
+        @refetch="refetch"
+        :doc="document"
+      />
 
       <q-btn
         v-if="document.is_valid"
         type="button"
-        @click="handleValidate"
+        @click="handleToggleValidate"
         class="q-ml-md text-h6 text-negative"
       >
         <span class="mdi mdi-thumb-down"></span>
@@ -30,7 +36,7 @@
 
       <q-btn
         v-else
-        @click="handleInValidate"
+        @click="handleToggleValidate"
         type="button"
         class="q-ml-md text-h6 text-primary"
       >
@@ -47,8 +53,10 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import ViewDocument from "./ViewDocument.vue";
+import EditDocument from "./EditDocument.vue";
+import { handleToggleFetchEditDocuments } from "src/hooks/api/documents.hooks";
 
 export default {
   props: {
@@ -56,36 +64,50 @@ export default {
       type: Object,
       required: true,
     },
-    role: {
+    entity: {
       type: String,
       required: true,
-    }
+    },
+    params: {
+      type: Object,
+      required: true,
+    },
   },
   components: {
     ViewDocument,
+    EditDocument,
   },
-  data(props) {
+  setup(props, { emit }) {
     const show = ref(false);
 
-    const handleInValidate = (e) => {
+    const handleToggleValidate = async (e) => {
       e.stopPropagation();
-      console.log("validate")
+      await handleToggleFetchEditDocuments(
+        props.entity,
+        {
+          ...props.params,
+          pk: props.document.id,
+        },
+        {
+          ...props.document,
+          is_valid: !props.document.is_valid,
+        }
+      );
+      props.document.is_valid = !props.document.is_valid
     };
 
-    const handleValidate = (e) => {
-      e.stopPropagation();
-      console.log("in validate")
+    const refetch = () => {
+      emit("refetch");
     };
 
     const handleCloseDocumentView = () => (show.value = false);
 
     return {
-      document: props.document,
       show,
       handleCloseDocumentView,
-      handleInValidate,
-      handleValidate
+      handleToggleValidate,
+      refetch,
     };
   },
 };
-</script>unvalidate
+</script>
