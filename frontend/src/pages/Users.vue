@@ -1,6 +1,7 @@
 <template>
+  <h2 class="q-mt-md q-mb-sm">Usuarios:</h2>
   <div class="flex justify-center">
-    <div class="row items-center q-mt-xl q-px-sm q-mb-sm" style="width: 100%">
+    <div class="row items-center q-mt-lg q-px-sm q-mb-sm" style="width: 100%">
       <q-input
         style="width: 100%"
         filled

@@ -88,7 +88,7 @@ export default {
         icon: "mdi-folder-multiple",
         href: "his.trabajo",
       },
-      { label: "Trabajos", icon: "mdi-account-hard-hat", href: "trabajos" },
+      { label: "Trabajos", icon: "mdi-account-hard-hat", href: "jobs" },
       {
         label: "Soporte",
         icon: "mdi-cog-outline",

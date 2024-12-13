@@ -15,7 +15,7 @@ class JobFactory extends Factory
             "title" => $this->faker->title(),
             "is_check" => $this->faker->boolean(),
             "is_check_enterprise" => $this->faker->boolean(),
-            "date" => $this->faker->date(),
+            "date" => $this->faker->boolean()? $this->faker->dateTimeBetween('now', '+1 years'): $this->faker->date(),
             "in_time" => $this->faker->time(),
             "out_time" => $this->faker->time(),
         ];

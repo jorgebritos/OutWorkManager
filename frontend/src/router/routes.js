@@ -13,12 +13,6 @@ const routes = [
     props: true, // Para pasar el parámetro como prop al componente
   },
   {
-    path: "/trabajos/:id", // Ruta con parámetro dinámico
-    name: "Detalles",
-    component: () => import("src/pages/DetallesTrabajos.vue"),
-    props: true, // Para pasar el parámetro como prop al componente
-  },
-  {
     path: "/login/",
     component: () => import("pages/Login.vue"),
   },
@@ -28,35 +22,39 @@ const routes = [
     children: [{ path: "", component: () => import("pages/Registro.vue") }],
   },
   {
-    path: "/enterprise/",
+    path: "/enterprise",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "",
+        path: "/",
         component: () => import("src/pages/Enterprises.vue"),
         name: "enterprises",
       },
       {
-        path: ":slug/",
+        path: "/:slug/",
         component: () => import("src/pages/EnterpriseDetail.vue"),
         name: "enterprise-detail",
       },
       {
-        path: ":enterprise/operator/:pk/",
+        path: "/:enterprise/operator/:pk/",
         component: () => import("src/pages/OperatorDetail.vue"),
         name: "operators-detail",
       },
     ],
   },
-
   {
-    path: "/trabajos",
+    path: "/jobs",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
         path: "",
-        component: () => import("src/pages/Trabajo.vue"),
-        name: "trabajos",
+        component: () => import("src/pages/Jobs.vue"),
+        name: "jobs",
+      },
+      {
+        path: "/:pk",
+        component: () => import("src/pages/JobDetail.vue"),
+        name: "job-detail",
       },
     ],
   },

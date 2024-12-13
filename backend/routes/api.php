@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
-    Route::apiResource("/jobs", V1JobController::class)->except(["show"]);
+    Route::apiResource("/jobs", V1JobController::class);
     Route::prefix("jobs/{job:id}")->group(function () {
         Route::apiResource("/documents", V1JobDocumentController::class)->names("jobs.documents");
     });
