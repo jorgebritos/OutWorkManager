@@ -33,7 +33,7 @@ const useDocumentsEnterprise = (enterprise) => {
   const documents = ref(null);
   const paginate = ref(null);
 
-  const refetch = (params={}) => {
+  const refetch = (params = {}) => {
     api
       .get(`enterprises/${enterprise}/documents`, {
         params,
@@ -92,23 +92,21 @@ const useDocumentsOperators = (enterprise, operator) => {
   };
 };
 
-export const handleToggleFetchDocuments = (entity=null, props = {}) => {
-
-  if (entity === 'enterprise') {
+export const handleToggleFetchDocuments = (entity = null, props = {}) => {
+  if (entity === "enterprise") {
     return useDocumentsEnterprise(props.enterprise);
   }
 
-  if (entity === 'job') {
+  if (entity === "job") {
     return useDocumentsJob(props.job);
   }
 
-  if (entity === 'operator') {
+  if (entity === "operator") {
     return useDocumentsOperators(props.enterprise, props.operator);
   }
 
   return null;
-}
-
+};
 
 const useCreateDocumentJob = async (job, data) => {
   const doc = ref(null);
@@ -123,13 +121,9 @@ const useCreateDocumentJob = async (job, data) => {
   formData.append("document", data.document);
 
   await api
-    .post(
-      `job/${job}/documents`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    )
+    .post(`job/${job}/documents`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
     .then((response) => {
       doc.value = response.data.document;
     })
@@ -147,7 +141,6 @@ const useCreateDocumentJob = async (job, data) => {
     doc,
   };
 };
-
 
 const useCreateDocumentOperator = async (enterprise, operator, data) => {
   const doc = ref(null);
@@ -221,23 +214,59 @@ const useCreateDocumentEnterprise = async (enterprise, data) => {
   };
 };
 
-
-export const handleToggleFetchCreateDocuments = (entity=null, props = {}, data) => {
-
-  if (entity === 'enterprise') {
+export const handleToggleFetchCreateDocuments = (
+  entity = null,
+  props = {},
+  data
+) => {
+  if (entity === "enterprise") {
     return useCreateDocumentEnterprise(props.enterprise, data);
   }
 
-  if (entity === 'job') {
+  if (entity === "job") {
     return useCreateDocumentJob(props.job, data);
   }
 
-  if (entity === 'operator') {
+  if (entity === "operator") {
     return useCreateDocumentOperator(props.enterprise, props.operator, data);
   }
 
   return null;
-}
+};
+
+const useDeleteDocumentJob = async (job, pk) => {
+  return await api.delete(`job/${job}/documents/${pk}`);
+};
+
+const useDeleteDocumentOperator = async (enterprise, operator, pk) => {
+  return await api.delete(
+    `enterprises/${enterprise}/operators/${operator}/documents/${pk}`
+  );
+};
+
+const useDeleteDocumentEnterprise = async (enterprise, pk,) => {
+  return await api.delete(`enterprises/${enterprise}/documents/${pk}`);
+};
+
+export const handleToggleFetchDeleteDocuments = (entity = null, props = {}) => {
+  if (entity === "enterprise") {
+    return useDeleteDocumentEnterprise(props.enterprise, props.pk);
+  }
+
+  if (entity === "job") {
+    return useDeleteDocumentJob(props.job, props.pk);
+  }
+
+  if (entity === "operator") {
+    return useDeleteDocumentOperator(
+      props.enterprise,
+      props.operator,
+      props.pk
+    );
+  }
+
+  return null;
+};
 
 const useEditDocumentJob = async (job, pk, data) => {
   const doc = ref(null);
@@ -251,18 +280,14 @@ const useEditDocumentJob = async (job, pk, data) => {
   formData.append("expire", data.expire);
   formData.append("is_valid", data.is_valid ? "1" : "0");
 
-  if(data.document) {
+  if (data.document) {
     formData.append("document", data.document);
   }
 
   await api
-    .post(
-      `job/${job}/documents/${pk}`,
-      formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    )
+    .post(`job/${job}/documents/${pk}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
     .then((response) => {
       doc.value = response.data.document;
     })
@@ -281,7 +306,6 @@ const useEditDocumentJob = async (job, pk, data) => {
   };
 };
 
-
 const useEditDocumentOperator = async (enterprise, operator, pk, data) => {
   const doc = ref(null);
   const isError = ref(false);
@@ -294,7 +318,7 @@ const useEditDocumentOperator = async (enterprise, operator, pk, data) => {
   formData.append("expire", data.expire);
   formData.append("is_valid", data.is_valid ? "1" : "0");
 
-  if(data.document) {
+  if (data.document) {
     formData.append("document", data.document);
   }
 
@@ -335,12 +359,12 @@ const useEditDocumentEnterprise = async (enterprise, pk, data) => {
   formData.append("title", data.title);
   formData.append("expire", data.expire);
   formData.append("is_valid", data.is_valid ? "1" : "0");
- 
-  if(data.document) {
+
+  if (data.document) {
     formData.append("document", data.document);
   }
 
-  console.log(data)
+  console.log(data);
   await api
     .post(`enterprises/${enterprise}/documents/${pk}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -363,22 +387,27 @@ const useEditDocumentEnterprise = async (enterprise, pk, data) => {
   };
 };
 
-
-export const handleToggleFetchEditDocuments = (entity=null, props = {}, data) => {
-
-  if (entity === 'enterprise') {
+export const handleToggleFetchEditDocuments = (
+  entity = null,
+  props = {},
+  data
+) => {
+  if (entity === "enterprise") {
     return useEditDocumentEnterprise(props.enterprise, props.pk, data);
   }
 
-  if (entity === 'job') {
+  if (entity === "job") {
     return useEditDocumentJob(props.job, props.pk, data);
   }
 
-  if (entity === 'operator') {
-    return useEditDocumentOperator(props.enterprise, props.operator, props.pk, data);
+  if (entity === "operator") {
+    return useEditDocumentOperator(
+      props.enterprise,
+      props.operator,
+      props.pk,
+      data
+    );
   }
 
   return null;
-}
-
-
+};

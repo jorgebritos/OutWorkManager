@@ -1,4 +1,10 @@
 <template>
+  <ValidDeleteMenu
+    v-if="validDeleteMenu"
+    :show="validDeleteMenu"
+    @handleDeleteMenuClose="handleDeleteMenuClose"
+    @handleDeleteMenuAccept="handleDeleteMenuAccept"
+  />
   <tr
     :class="`${document.is_valid ? '' : 'bg-grey-4'} cursor-pointer`"
     @click="() => (show = true)"
@@ -42,6 +48,14 @@
       >
         <span class="mdi mdi-thumb-up"></span>
       </q-btn>
+
+      <q-btn
+        type="button"
+        @click="handleDeleteMenuOpen"
+        class="q-ml-md text-h6 text-negative"
+      >
+        <span class="mdi mdi-trash-can"></span>
+      </q-btn>
     </td>
   </tr>
   <view-document
@@ -56,7 +70,11 @@
 import { ref, watch } from "vue";
 import ViewDocument from "./ViewDocument.vue";
 import EditDocument from "./EditDocument.vue";
-import { handleToggleFetchEditDocuments } from "src/hooks/api/documents.hooks";
+import {
+  handleToggleFetchEditDocuments,
+  handleToggleFetchDeleteDocuments,
+} from "src/hooks/api/documents.hooks";
+import ValidDeleteMenu from "src/components/helpers/ValidDeleteMenu.vue";
 
 export default {
   props: {
@@ -76,9 +94,28 @@ export default {
   components: {
     ViewDocument,
     EditDocument,
+    ValidDeleteMenu,
   },
   setup(props, { emit }) {
     const show = ref(false);
+
+    const validDeleteMenu = ref(false);
+
+    const handleDeleteMenuClose = () => (validDeleteMenu.value = false);
+
+    const handleDeleteMenuOpen = (e) => {
+      e.stopPropagation();
+      validDeleteMenu.value = true;
+    };
+
+    const handleDeleteMenuAccept = async () => {
+      validDeleteMenu.value = false;
+      await handleToggleFetchDeleteDocuments(props.entity, {
+        ...props.params,
+        pk: props.document.id,
+      });
+      emit("refetch");
+    };
 
     const handleToggleValidate = async (e) => {
       e.stopPropagation();
@@ -93,7 +130,7 @@ export default {
           is_valid: !props.document.is_valid,
         }
       );
-      props.document.is_valid = !props.document.is_valid
+      props.document.is_valid = !props.document.is_valid;
     };
 
     const refetch = () => {
@@ -107,6 +144,10 @@ export default {
       handleCloseDocumentView,
       handleToggleValidate,
       refetch,
+      validDeleteMenu,
+      handleDeleteMenuClose,
+      handleDeleteMenuOpen,
+      handleDeleteMenuAccept,
     };
   },
 };
