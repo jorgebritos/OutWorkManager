@@ -25,9 +25,9 @@ class JobStoreRequest extends FormRequest
             "title" => ["required", "string"],
             "is_check" => ["boolean"],
             "is_check_enterprise" => ["boolean"],
-            "date" => ["required", "date"],
-            "in_time" => ["required", "time"],
-            "out_time" => ["required", "time"],
+            "date" => ["required", "date", 'date_format:Y-m-d'],
+            "in_time" => ["required", 'date_format:H:i'],
+            "out_time" => ["required", 'date_format:H:i'],
             'enterprise_id' => ["required", "exists:enterprises,id"],
         ];
     }
