@@ -24,13 +24,13 @@
         <thead class="bg-red-4" style="position: sticky; top: 0; z-index: 1">
           <tr>
             <th class="text-left">Empresa</th>
-            <th class="text-right">Trabajos</th>
+            <th class="text-left">Trabajos</th>
             <th class="text-right">Fecha</th>
             <th class="text-right">Hora salida</th>
             <th class="text-right">Hora entrada</th>
             <th class="text-right">Confirmación</th>
             <th class="text-right">Confirmación de la empresa</th>
-            <th class="text-right">+Mas Informacion</th>
+            <th class="text-right">+Más Información</th>
           </tr>
         </thead>
         <tbody v-if="!isLoading">

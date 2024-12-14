@@ -6,8 +6,8 @@ const useDocumentsJob = (job) => {
   const documents = ref(null);
   const paginate = ref(null);
 
-  const refetch = () => {
-    api.get(`jobs/${job}/documents`).then((response) => {
+  const refetch = (params = {}) => {
+    api.get(`jobs/${job}/documents`, {params}).then((response) => {
       isLoading.value = false;
       documents.value = response.data.documents;
       paginate.value = response.data.meta;
@@ -61,7 +61,7 @@ const useDocumentsEnterprise = (enterprise) => {
 
 const useDocumentsOperators = (enterprise, operator) => {
   const isLoading = ref(true);
-  const documents = ref(null);
+  const documents = ref(null);"The route api/v1/job/7/documents/16907 could not be found."
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
@@ -121,7 +121,7 @@ const useCreateDocumentJob = async (job, data) => {
   formData.append("document", data.document);
 
   await api
-    .post(`job/${job}/documents`, formData, {
+    .post(`jobs/${job}/documents`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
@@ -235,7 +235,7 @@ export const handleToggleFetchCreateDocuments = (
 };
 
 const useDeleteDocumentJob = async (job, pk) => {
-  return await api.delete(`job/${job}/documents/${pk}`);
+  return await api.delete(`jobs/${job}/documents/${pk}`);
 };
 
 const useDeleteDocumentOperator = async (enterprise, operator, pk) => {
@@ -285,7 +285,7 @@ const useEditDocumentJob = async (job, pk, data) => {
   }
 
   await api
-    .post(`job/${job}/documents/${pk}`, formData, {
+    .post(`jobs/${job}/documents/${pk}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
@@ -364,7 +364,6 @@ const useEditDocumentEnterprise = async (enterprise, pk, data) => {
     formData.append("document", data.document);
   }
 
-  console.log(data);
   await api
     .post(`enterprises/${enterprise}/documents/${pk}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },

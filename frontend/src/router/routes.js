@@ -22,28 +22,28 @@ const routes = [
     children: [{ path: "", component: () => import("pages/Registro.vue") }],
   },
   {
-    path: "/enterprise",
+    path: "/enterprise/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "/",
+        path: "",
         component: () => import("src/pages/Enterprises.vue"),
         name: "enterprises",
       },
       {
-        path: "/:slug/",
+        path: ":slug/",
         component: () => import("src/pages/EnterpriseDetail.vue"),
         name: "enterprise-detail",
       },
       {
-        path: "/:enterprise/operator/:pk/",
+        path: ":enterprise/operator/:pk/",
         component: () => import("src/pages/OperatorDetail.vue"),
         name: "operators-detail",
       },
     ],
   },
   {
-    path: "/jobs",
+    path: "/jobs/",
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
@@ -52,7 +52,7 @@ const routes = [
         name: "jobs",
       },
       {
-        path: "/:pk",
+        path: ":pk/",
         component: () => import("src/pages/JobDetail.vue"),
         name: "job-detail",
       },

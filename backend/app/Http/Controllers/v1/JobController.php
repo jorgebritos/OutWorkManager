@@ -57,7 +57,7 @@ class JobController extends Controller
             $query->where('title', 'LIKE', "%{$search}%");
         }
 
-        $jobs = $query->orderBy('created_at', 'desc')->paginate(20);
+        $jobs = $query->orderBy('created_at', 'desc')->paginate(15);
 
         return response()->json([
             "jobs" => JobResource::collection($jobs),
@@ -66,7 +66,7 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        return response()->json(JobResource::make($job));
+        return response()->json(['job' => JobResource::make($job)]);
     }
     /**
      * Store a newly created resource in storage.

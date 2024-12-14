@@ -12,7 +12,7 @@ class JobFactory extends Factory
     public function definition()
     {
         return [
-            "title" => $this->faker->title(),
+            "description" => $this->faker->paragraph(),
             "is_check" => $this->faker->boolean(),
             "is_check_enterprise" => $this->faker->boolean(),
             "date" => $this->faker->boolean()? $this->faker->dateTimeBetween('now', '+1 years'): $this->faker->date(),
