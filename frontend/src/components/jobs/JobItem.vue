@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td class="text-left">{{ job.enterprise }}</td>
-    <td class="text-right">{{ job.title }}</td>
+    <td class="text-left">{{ job.description.slice(0, 40) }}...</td>
     <td class="text-right">{{ job.date }}</td>
     <td class="text-right">{{ job.in_time }}</td>
     <td class="text-right">{{ job.out_time }}</td>
@@ -17,11 +17,9 @@
       <q-avatar v-else icon="mdi-close" class="bg-red text-h4 text-white" />
     </td>
     <td class="text-center">
-      <router-link
-        class="text-md"
-      >
+      <q-btn class="text-md" @click="handleOutClick">
         <q-icon name="arrow_forward" size="20px" />
-      </router-link>
+      </q-btn>
     </td>
   </tr>
 </template>
@@ -29,6 +27,7 @@
 <script>
 import { ref } from "vue";
 import { useUpdateJob } from "src/hooks/api/jobs.hooks";
+import { useRouter } from "vue-router";
 
 export default {
   props: {
@@ -38,6 +37,8 @@ export default {
     },
   },
   setup(props, { emit }) {
+    const router = useRouter()
+
     const check = ref(props.job.is_check);
 
     const handleToggleCheck = async () => {
@@ -46,7 +47,13 @@ export default {
       });
     };
 
-    return { check, handleToggleCheck };
+    const handleOutClick = () =>
+      router.push({
+        name: 'job-detail',
+        params: {pk: props.job.id}
+      });
+
+    return { check, handleToggleCheck, handleOutClick };
   },
 };
 </script>

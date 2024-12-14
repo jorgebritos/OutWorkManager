@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
-            $table->string("title");
+            $table->text("description");
             $table->boolean("is_check")->nullable()->default(null);
             $table->boolean("is_check_enterprise")->nullable()->default(null);
 

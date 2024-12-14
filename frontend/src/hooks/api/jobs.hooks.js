@@ -38,6 +38,39 @@ export const useJobs = () => {
   };
 };
 
+export const useJob = (pk) => {
+  const isLoading = ref(true);
+  const job = ref(null);
+
+  const refetch = (params = {}) => {
+    api
+      .get(`jobs/${pk}`, {
+        params
+      })
+      .then((response) => {
+        isLoading.value = false;
+        job.value = response.data.job;
+      });
+  };
+
+  api
+    .get(`jobs/${pk}`, {
+      params: {
+        valid: true,
+      },
+    })
+    .then((response) => {
+      isLoading.value = false;
+      job.value = response.data.job;
+    });
+
+  return {
+    job,
+    isLoading,
+    refetch,
+  };
+};
+
 export const useUpdateJob = async (pk, data) => {
   const job = ref(null);
   const isError = ref(false);
@@ -65,4 +98,4 @@ export const useUpdateJob = async (pk, data) => {
     isError,
     error,
   };
-};
+}

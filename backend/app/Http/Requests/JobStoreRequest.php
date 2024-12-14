@@ -22,7 +22,7 @@ class JobStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title" => ["required", "string"],
+            "description" => ["required", "string"],
             "is_check" => ["boolean"],
             "is_check_enterprise" => ["boolean"],
             "date" => ["required", "date", 'date_format:Y-m-d'],
