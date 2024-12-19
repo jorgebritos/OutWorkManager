@@ -8,7 +8,7 @@ import path from "path"
 import { configurarSocket } from './funciones/ws.js'
 import { Server } from 'socket.io'
 import http from 'http'
-import { manejarMensaje } from './controller/websocket.js'
+import { manejarMensaje } from './Router/controllers/websocket.js'
 //-----------------------------------------------------------------------------------
 config() // ejecutamos config
 const servidor = express() // ejecutamos la configuración de express

@@ -1,7 +1,6 @@
-import { bd, mongoose } from "../bd.js"
-bd()
-// Definir el esquema
-const UsuarioSchema = new mongoose.Schema({
+import mongoose from "mongoose";
+
+const User = new mongoose.Schema({
     usuario: {
         type: String,
         required: [true, "El nombre de usuario es obligatorio"],
@@ -44,22 +43,9 @@ const UsuarioSchema = new mongoose.Schema({
             vencimiento: { type: Date },
             es_valido: { type: Number },
         }
-    ],
-    mensajeria: {
-        type: mongoose.Schema.Types.ObjectId, // Identificador de otra colección
-        ref: 'Mensajeria', // Nombre del modelo al que hace referencia
-
-    },
-    empresa: {
-        type: mongoose.Schema.Types.ObjectId, // Identificador de otra colección
-        ref: 'Empresas', // Nombre del modelo al que hace referencia
-
-    },
+    ]
 }, { timestamps: true }); // Agrega createdAt y updatedAt automáticamente
 
 // Crear el modelo
-const Usuarios = mongoose.model('Usuarios', UsuarioSchema, "Usuarios");
+export default mongoose.model('Usuarios', User, "Usuarios");
 
-export {
-    Usuarios
-}

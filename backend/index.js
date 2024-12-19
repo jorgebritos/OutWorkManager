@@ -1,15 +1,23 @@
-import { servidor, rutas_dinamicas } from "./config.js"
-import { inicio } from "./rutas/get/inicio.js"
-import { post_registro } from "./rutas/post/post_registro.js"
-import { validar_datos } from "./middlewares/Funciones_Registro.js"
-import { jobs_show } from "./rutas/get/jobs.js"
+import express from 'express';
+import mongoose, { mongo } from 'mongoose';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import routes from './Router/routes/index.js';
 
-console.log(rutas_dinamicas)
-// Rutas GET
+const app = express();
 
 
-servidor.get("/",inicio)
-servidor.get("/jobs/:id", jobs_show)
-// Rutas POST
+//express.json
+app.use(bodyParser.json());
+dotenv.config();
+const PORT = process.env.PORT || 5000;
+const MONGOURL = process.env.MONGOURL;
 
-servidor.post("/registro", validar_datos , post_registro)
+mongoose.connect(MONGOURL).then(() => {
+    console.log("Database Connected");
+    app.listen(PORT, () => {
+        console.log("Server Running")
+    })
+}).catch((error) => console.error(error));
+
+app.use("/api", routes)
