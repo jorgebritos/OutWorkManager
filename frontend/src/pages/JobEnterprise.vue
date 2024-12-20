@@ -2,7 +2,6 @@
   <q-page>
     <div class="q-pa-md">
       <h2 class="q-mt-md q-mb-sm text-center">Trabajos</h2>
-
       <div class="row items-center" style="width: 100%">
         <q-input
           style="width: 100%"
@@ -17,7 +16,7 @@
         </q-input>
       </div>
       <div class="q-my-lg w-full flex justify-center items-center">
-        <CreateJob @refetch="() => refetch({ valid: true })" />
+        <CreateJob @refetch="()=>refetch({})"/>
 
         <q-btn-dropdown
           color="#000000"
@@ -70,8 +69,7 @@
         </tbody>
       </q-markup-table>
     </div>
-
-    <Pagination
+   <Pagination
       v-if="!isLoading"
       :currentPage="paginate.current_page"
       :maxPages="paginate.last_page"
@@ -81,16 +79,20 @@
 </template>
 
 <script>
-import { useJobs } from "src/hooks/api/jobs.hooks";
+import { useEnterpriseJobs } from "src/hooks/api/jobs.hooks";
 import { ref, watch } from "vue";
-import JobItem from "src/components/jobs/JobItem.vue";
+import JobItem from "src/components/jobs/EnterpriseJobItem.vue";
 import Pagination from "src/components/helpers/Pagination.vue";
-import CreateJob from "src/components/jobs/CreateJob.vue";
+import CreateJob from "src/components/jobs/CreateEnterpriseJob.vue";
+import { useUserStore } from "src/store/user.store";
 
 export default {
   components: { JobItem, Pagination, CreateJob },
   setup() {
-    const { isLoading, jobs, refetch, paginate } = useJobs();
+    const userStore = useUserStore()
+    const user = userStore.getUser
+
+    const { isLoading, jobs, refetch, paginate } = useEnterpriseJobs(user.enterprise.slug);
 
     const filter = ref(null);
 
@@ -105,23 +107,10 @@ export default {
     });
 
     const handleRefetchPage = (page) => {
-      refetch({
-        filter: filter.value,
-        search: search.value,
-        page,
-        valid: true,
-      });
+      refetch({ filter: filter.value, search: search.value, page, valid: true });
     };
 
-    return {
-      isLoading,
-      jobs,
-      paginate,
-      refetch,
-      search,
-      filter,
-      handleRefetchPage,
-    };
+    return { isLoading, jobs, paginate, refetch, search, filter, handleRefetchPage };
   },
 };
 </script>

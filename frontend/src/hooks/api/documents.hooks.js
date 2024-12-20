@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
+import {useAutoRefetch} from "./autorefetchs.hooks";
 
 const useDocumentsJob = (job) => {
   const isLoading = ref(true);
@@ -20,6 +21,8 @@ const useDocumentsJob = (job) => {
     paginate.value = response.data.meta;
   });
 
+  useAutoRefetch(refetch)
+  
   return {
     documents,
     paginate,
@@ -51,6 +54,8 @@ const useDocumentsEnterprise = (enterprise) => {
     paginate.value = response.data.meta;
   });
 
+  useAutoRefetch(refetch)
+  
   return {
     documents,
     paginate,
@@ -84,6 +89,8 @@ const useDocumentsOperators = (enterprise, operator) => {
       paginate.value = response.data.meta;
     });
 
+  useAutoRefetch(refetch)
+  
   return {
     documents,
     paginate,

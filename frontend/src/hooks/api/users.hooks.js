@@ -1,5 +1,6 @@
 import { api } from "src/boot/axios";
 import { ref } from "vue";
+import {useAutoRefetch} from "./autorefetchs.hooks";
 
 export const useUsers = () => {
   const isLoading = ref(true);
@@ -7,7 +8,7 @@ export const useUsers = () => {
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
-    api
+    return api
       .get("users", {
         params,
       })
@@ -15,6 +16,8 @@ export const useUsers = () => {
         isLoading.value = false;
         users.value = response.data.users;
         paginate.value = response.data.meta;
+
+        return response
       });
   };
 
@@ -23,6 +26,8 @@ export const useUsers = () => {
     users.value = response.data.users;
     paginate.value = response.data.meta;
   });
+
+  useAutoRefetch(async () => await refetch())
 
   return {
     isLoading,

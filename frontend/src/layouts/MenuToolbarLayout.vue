@@ -48,18 +48,20 @@
       </q-list>
     </q-scroll-area>
   </q-drawer>
-  <q-page-container class="q-pt-md q-mx-auto q-px-md" style="max-width: 1500px">
-    <q-page>
-      <slot />
-    </q-page>
+  <q-page-container
+    class="q-pt-md q-mx-auto q-px-md"
+    style="max-width: 1500px; padding-bottom: 70px"
+  >
+    <slot />
   </q-page-container>
 </template>
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import Chat from "src/components/Chat.vue";
 import notificaciones from "src/components/Notificaciones.vue";
 import Notificaciones2 from "src/components/Notificaciones2.vue";
 import { useUserStore } from "src/store/user.store";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -69,43 +71,74 @@ export default {
   },
   setup() {
     const search = ref("");
-
-    const menuList = [
-      {
-        icon: "business_center",
-        label: "Empresas",
-        href: "enterprises",
-        separator: false,
-      },
-      {
-        icon: "mdi-account",
-        label: "Usuarios",
-        href: "users",
-        separator: false,
-      },
-      {
-        label: "His. trabajo",
-        icon: "mdi-folder-multiple",
-        href: "his.trabajo",
-      },
-      { label: "Trabajos", icon: "mdi-account-hard-hat", href: "jobs" },
-      {
-        label: "Soporte",
-        icon: "mdi-cog-outline",
-        href: "soporte",
-        separator: false,
-      },
-    ];
+    const router = useRouter()
 
     const userStore = useUserStore();
+    const user = computed(() => userStore.getUser);
+
+    const menuList = computed(() => {
+      if (user.value.rol === "Admin") {
+        return [
+          {
+            icon: "business_center",
+            label: "Empresas",
+            href: "enterprises",
+            separator: false,
+          },
+          {
+            icon: "mdi-account",
+            label: "Usuarios",
+            href: "users",
+            separator: false,
+          },
+          {
+            label: "His. trabajo",
+            icon: "mdi-folder-multiple",
+            href: "his.trabajo",
+          },
+          { label: "Trabajos", icon: "mdi-account-hard-hat", href: "jobs" },
+          {
+            label: "Soporte",
+            icon: "mdi-cog-outline",
+            href: "soporte",
+            separator: false,
+          },
+        ];
+      } else {
+        const menu = [
+          {
+            icon: "business_center",
+            label: "Mi Empresa",
+            href: "enterprise_home",
+            separator: false,
+          },
+        ];
+
+        if (user.value.enterprise) {
+          menu.push({
+            label: "Trabajos",
+            icon: "business",
+            href: "jobs-enterprise",
+          });
+        }
+        
+        menu.push({
+          label: "Soporte",
+          icon: "mdi-cog-outline",
+          href: "soporte",
+          separator: false,
+        });
+
+        return menu;
+      }
+    });
 
     const handleLogout = () => {
-      // Close session logic here
       userStore.setToken(null);
       userStore.setAuth(false);
       userStore.setUser(null);
-      
-      router.push("/login");
+
+      router.push({name: 'login'})
     };
 
     return {

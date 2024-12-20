@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-toolbar class="column">
-      <div class="row items-center q-mt-xl" style="width: 100%;">
+      <div class="row items-center q-mt-xl" style="width: 100%">
         <q-input
           style="width: 100%"
           filled
@@ -13,29 +13,43 @@
             <q-btn flat round dense class="icono_de_busqueda" icon="search" />
           </template>
         </q-input>
-        <q-btn round class="q-mx-sm" icon="mdi-reload" @click="() => refetch({filter: true})" />
       </div>
 
-      <q-toolbar class="row justify-between">
+      <q-toolbar class="row justify-between q-mx-auto" style="width: 100%; max-width: 1200px;">
         <div>
-          <q-btn flat bordered @click="filter = null"> Todos </q-btn>
-          <q-btn flat bordered @click="filter = true">
-            <q-avatar icon="mdi-check" class="bg-green text-white" />Validados
-          </q-btn>
-          <q-btn flat bordered @click="filter = false">
-            <q-avatar icon="mdi-close" class="bg-red text-white" />No Validados
-          </q-btn>
+          <q-btn-dropdown
+            color="#000000"
+            :label="
+              filter === null
+                ? 'Todos'
+                : filter === true
+                ? 'Validadas'
+                : 'No Validadas'
+            "
+            text-color="#000000"
+          >
+            <q-list>
+              <q-item clickable v-close-popup @click="filter = null">
+                <q-item-section>
+                  <q-item-label>Todos</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="filter = true">
+                <q-item-section>
+                  <q-item-label>Validadas</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable v-close-popup @click="filter = false">
+                <q-item-section>
+                  <q-item-label>No Validadss</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
         </div>
 
-        <div>
-          <q-btn flat bordered @click="enterpriseCreateMenu = true">
-            <q-avatar icon="mdi-plus-circle-outline" />
-          </q-btn>
-          <create-empresa
-            v-if="enterpriseCreateMenu"
-            :show="enterpriseCreateMenu"
-            @handleCloseCreateEnterprise="handleCloseEnterpriseCreateMenu"
-          />
+        <div class="q-mt-sm">
+          <create-empresa @refetch="refetch"/>
         </div>
       </q-toolbar>
     </q-toolbar>

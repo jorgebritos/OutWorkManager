@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Enterprise;
+use App\Models\Job;
 use App\Models\Operator;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -28,6 +29,10 @@ class UserEnterpriseSeeder extends Seeder
 
         Operator::factory(5)->create([
             'enterprise_id' => $enterprises->first()->id
+        ]);
+
+        Job::factory(5)->create([
+            'enterprise_id' => $enterprises->first()->id,
         ]);
     }
 }

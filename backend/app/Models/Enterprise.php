@@ -33,6 +33,11 @@ class Enterprise extends Model
         return $this->hasMany(Document::class);  // Ajusta según tu relación real
     }
 
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
+
     public function operators()
     {
         return $this->hasMany(Operator::class);

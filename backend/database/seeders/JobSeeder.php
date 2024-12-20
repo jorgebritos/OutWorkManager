@@ -13,7 +13,7 @@ class JobSeeder extends Seeder
         $enterprises = Enterprise::all();
 
         foreach ($enterprises as $enterprise) {
-            Job::factory()->create([
+            Job::factory(4)->create([
                 'enterprise_id' => $enterprise->id,
             ]);
         }

@@ -24,7 +24,6 @@ class JobUpdateRequest extends FormRequest
         return [
             "description" => ["string"],
             "is_check" => ["boolean"],
-            "is_check_enterprise" => ["boolean"],
             "date" => ["date", 'date_format:Y-m-d'],
             "in_time" => ["date", 'date_format:H:i'],
             "out_time" => ["date", 'date_format:H:i'],

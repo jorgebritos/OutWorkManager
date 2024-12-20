@@ -1,10 +1,18 @@
 <template>
   <q-page>
+    <valid-delete-operator-menu
+      v-if="showDeleteMenu"
+      :show="showDeleteMenu"
+      @handleDeleteMenuClose="handleDeleteMenuClose"
+      @handleDeleteMenuAccept="handleDeleteMenuAccept"
+    />
+
     <div class="q-pa-md" v-if="!isLoading">
       <div class="flex justify-between q-mb-md">
         <q-btn color="primary" flat @click="handleOutClick">salir</q-btn>
         <div class="flex justify-between">
           <!--  TODO: editar y borrar -->
+          <q-btn color="negative" @click="showDeleteMenu = true">Borrar</q-btn>
         </div>
       </div>
       <h6 class="text-h6 q-my-sm">Detalles del trabajo:</h6>
@@ -58,24 +66,67 @@
 <script>
 import JobDocuments from "src/components/documents/Documents.vue";
 import { useRoute, useRouter } from "vue-router";
-import { useJob } from "src/hooks/api/jobs.hooks";
+import {
+  useDeleteJob,
+  useDeleteEnterpriseJob,
+  useJob,
+  useEnterpriseJob,
+} from "src/hooks/api/jobs.hooks";
+import ValidDeleteOperatorMenu from "src/components/helpers/ValidDeleteMenu.vue";
+import { ref } from "vue";
+import { useUserStore } from "src/store/user.store";
 
 export default {
   components: {
-    JobDocuments
+    JobDocuments,
+    ValidDeleteOperatorMenu,
   },
   setup() {
     const { params } = useRoute();
     const router = useRouter();
 
-    const { job, isLoading } = useJob(params.pk);
+    const userStore = useUserStore();
+    const user = userStore.getUser;
 
-    const handleOutClick = () =>
-      router.push({
-        name: "jobs",
-      });
+    const { job, isLoading } =
+      user.rol === "Admin"
+        ? useJob(params.pk)
+        : useEnterpriseJob(user.enterprise.slug, params.pk);
 
-    return { isLoading, job, handleOutClick };
+    const handleOutClick = () => {
+      if (user.rol === "Admin") {
+        router.push({
+          name: "jobs",
+        });
+      } else {
+        router.push({
+          name: "jobs-enterprise",
+        });
+      }
+    };
+
+    const showDeleteMenu = ref(false);
+
+    const handleDeleteMenuClose = () => (showDeleteMenu.value = false);
+
+    const handleDeleteMenuAccept = async () => {
+      showDeleteMenu.value = false;
+      if (user.rol === "Admin") {
+        await useDeleteJob(params.pk);
+      } else {
+        await useDeleteEnterpriseJob(user.enterprise.slug, params.pk);
+      }
+      handleOutClick();
+    };
+
+    return {
+      isLoading,
+      job,
+      handleOutClick,
+      showDeleteMenu,
+      handleDeleteMenuAccept,
+      handleDeleteMenuClose,
+    };
   },
 };
 </script>

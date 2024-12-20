@@ -17,7 +17,6 @@
         <q-btn flat round dense class="icono_de_busqueda" icon="search" />
       </template>
     </q-input>
-    <q-btn round class="q-mx-sm" icon="mdi-reload" @click="refetch" />
   </div>
   <div class="row justify-between items-center q-my-md">
     <h4 class="text-h4 q-my-none">Operarios:</h4>
@@ -93,7 +92,7 @@ export default {
       refetch({ search: search.value });
     });
 
-    const handleRefetchPage = (page) => refetch({ page });
+    const handleRefetchPage = (page) => refetch({ page, search: search.value });
 
     const handleCloseCreateOperator = () => {
       createOperator.value = false;

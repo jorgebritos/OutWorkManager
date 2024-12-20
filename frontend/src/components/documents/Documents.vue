@@ -11,7 +11,6 @@
         <q-btn flat round dense class="icono_de_busqueda" icon="search" />
       </template>
     </q-input>
-    <q-btn round class="q-mx-sm" icon="mdi-reload" @click="refetch" />
   </div>
   <div class="flex justify-between q-mb-md items-center">
     <h4 class="text-h4 q-my-none">Documentos :</h4>
@@ -82,7 +81,7 @@ export default {
     });
 
     const handleRefetchPage = (page) => {
-      refetch({ page });
+      refetch({ page, search: search.value });
     };
 
     return {
