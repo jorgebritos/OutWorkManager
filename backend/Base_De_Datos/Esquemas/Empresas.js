@@ -1,7 +1,7 @@
 import { bd, mongoose } from "../bd.js"
 bd()
 
-const EmpresasSchema = new mongoose.Schema({
+const Enterprise = new mongoose.Schema({
     nombre: {
         type: String,
         required: true
@@ -94,7 +94,7 @@ const EmpresasSchema = new mongoose.Schema({
     ]
 }, { timestamps: true });
 
-const Empresas = mongoose.model('Empresas', EmpresasSchema, "Empresas")
+const Empresas = mongoose.model('Empresas', Enterprise, "Empresas")
 
 export {
     Empresas

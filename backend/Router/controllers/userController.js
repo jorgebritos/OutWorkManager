@@ -1,4 +1,4 @@
-import UsuarioSchema from "../../Base_De_Datos/Esquemas/Usuarios.js"
+import User from "../../Base_De_Datos/Esquemas/Usuarios.js"
 
 export const create = async (req, res) => {
     try {
@@ -41,7 +41,6 @@ export const update = async (req, res) => {
         }
 
         const updateUser = await User.findByIdAndUpdate(id, req.body, { new: true });
-        console.log(updateUser)
         res.status(201).json(updateUser)
     } catch (error) {
         res.status(500).json({ error: "Internal Network error" })
@@ -62,6 +61,7 @@ export const deleteUser = async (req, res) => {
         res.status(201).json({message: "User deleted successfully."});
 
     } catch (error) {
+        
         res.status(500).json({ error: "Internal Network error" })
 
     }
