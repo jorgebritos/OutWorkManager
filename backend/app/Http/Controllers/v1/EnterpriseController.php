@@ -12,8 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
-use function Laravel\Prompts\search;
-
 class EnterpriseController extends Controller
 {
     /**
@@ -66,7 +64,7 @@ class EnterpriseController extends Controller
         }
 
         if ($user->rol === "Enterprise") {
-            $enterprise = $user->enterprises()->create($data);
+            $enterprise = $user->enterprise()->create($data);
         }
 
         return response(["enterprise" => EnterpriseResource::make($enterprise)], 201);

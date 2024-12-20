@@ -2,23 +2,23 @@
 
 namespace App\Http\Resources\Pagination;
 
-use App\Http\Resources\JobDocumentResource;
+use App\Http\Resources\JobResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class JobDocumentPaginatedCollection extends ResourceCollection
+class JobPaginatedCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
      *
      * @return array<int|string, mixed>
      */
-    public $collects = JobDocumentResource::class;
-   
+    public $collects = JobResource::class;
+
     public function toArray(Request $request): array
     {
         return [
-            "documents" => $this->collection,
+            "jobs" => $this->collection,
             'links' => [
                 'first' => $this->url(1),
                 'last' => $this->url($this->lastPage()),
@@ -34,6 +34,7 @@ class JobDocumentPaginatedCollection extends ResourceCollection
                 'to' => $this->lastItem(),
                 'total' => $this->total(),
             ],
-        ];
+        ];;
+
     }
 }

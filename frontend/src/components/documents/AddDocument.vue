@@ -57,7 +57,7 @@
               type="datetime-local"
               required
               v-model="data.expire"
-              label="Selecciona fecha y hora"
+              label="Fecha de expiracion del documento"
             />
             <div
               v-for="(error, index) in error_create?.expire"

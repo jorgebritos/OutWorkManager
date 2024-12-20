@@ -12,16 +12,17 @@
       <q-card-actions class="flex justify-between">
         <q-btn
           flat
-          label="Cerrar"
-          v-close-popup
-          @click="handleDeleteMenuClose"
-        />
-        <q-btn
-          flat
           label="Aceptar"
           color="primary"
           v-close-popup
           @click="handleDeleteMenuAccept"
+        />
+
+        <q-btn
+          flat
+          label="Cerrar"
+          v-close-popup
+          @click="handleDeleteMenuClose"
         />
       </q-card-actions>
     </q-card>

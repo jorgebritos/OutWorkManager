@@ -10,6 +10,7 @@ use App\Http\Resources\Pagination\JobDocumentPaginatedCollection;
 use App\Models\Document;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class JobDocumentController extends Controller
 {
@@ -18,6 +19,7 @@ class JobDocumentController extends Controller
      */
     public function index(Job $job, Request $request)
     {
+        Gate::authorize("view", $job);
 
         $query = $job->documents();
 
@@ -37,6 +39,8 @@ class JobDocumentController extends Controller
      */
     public function store(Job $job, DocumentStoreRequest $request)
     {
+        Gate::authorize("view", $job);
+
         $request->validated();
 
         $path = $request->file('document')->store('documents', 'public');
@@ -60,7 +64,9 @@ class JobDocumentController extends Controller
      */
     public function show(Job $job, Document $document)
     {
-
+        Gate::authorize("view", $job);
+        Gate::authorize("view", $document);
+        
         return response()->json(["document" => JobDocumentResource::make($document)]);
     }
 
@@ -69,7 +75,9 @@ class JobDocumentController extends Controller
      */
     public function update(Job $job, DocumentUpdateRequest $request, Document $document)
     {
-
+        Gate::authorize("view", $job);
+        Gate::authorize("update", $document);
+    
         $data = $request->validated();
 
         $path = null;
@@ -89,7 +97,9 @@ class JobDocumentController extends Controller
      */
     public function destroy(Job $job, Document $document)
     {
-
+        Gate::authorize("view", $job);
+        Gate::authorize("delete", $document);
+        
         $document->delete();
 
         return response()->json();

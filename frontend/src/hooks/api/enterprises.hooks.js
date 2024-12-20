@@ -1,34 +1,36 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
+import { useAutoRefetch } from "./autorefetchs.hooks";
 
-export const useEnterprises = () => {
+export const useEnterprises = (params = { filter: true }) => {
   const isLoading = ref(true);
   const enterprises = ref(null);
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
-    api
+    return api
       .get("enterprises", {
-        params
+        params,
       })
       .then((response) => {
         isLoading.value = false;
         enterprises.value = response.data.enterprises;
         paginate.value = response.data.meta;
+        return response;
       });
   };
 
   api
     .get("enterprises", {
-      params: {
-        filter: true,
-      },
+      params,
     })
     .then((response) => {
       isLoading.value = false;
       enterprises.value = response.data.enterprises;
       paginate.value = response.data.meta;
     });
+
+  useAutoRefetch(async () => await refetch(params));
 
   return {
     enterprises,
@@ -86,9 +88,12 @@ export const useCreateEnterprise = async (data) => {
   formData.append("RUT", data.RUT);
   formData.append("nombre", data.name);
   formData.append("is_valid", data.is_valid);
-  formData.append("user_id", data.user_id);
 
-  if (data.image !== null) {
+  if (data.user_id) {
+    formData.append("user_id", data.user_id);
+  }
+
+  if (data.image) {
     formData.append("image", data.image);
   }
 

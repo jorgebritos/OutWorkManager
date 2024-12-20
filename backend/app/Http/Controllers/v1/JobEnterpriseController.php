@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\JobStoreRequest;
-use App\Http\Requests\JobUpdateRequest;
+use App\Http\Requests\JobEnterpriseStoreRequest;
+use App\Http\Requests\JobEnterpriseUpdateRequest;
 use App\Http\Resources\JobResource;
 use App\Http\Resources\Pagination\JobPaginatedCollection;
 use App\Models\Enterprise;
@@ -14,19 +14,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
-class JobController extends Controller
+class JobEnterpriseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
 
-    public function index(Request $request)
+    public function index(Enterprise $enterprise, Request $request)
     {
-        // uso las politicas de empresas para que
-        // solo el admin pueda usar estre controllador
-        Gate::authorize('viewAny', Enterprise::class);
-        
-        $query = Job::query();
+        Gate::authorize('view', $enterprise);
+
+        $query = $enterprise->jobs()->getQuery();
 
         $valid = $request->input('valid');
 
@@ -36,7 +34,6 @@ class JobController extends Controller
             $query->where(function ($q) use ($now) {
                 $q->where(DB::raw("CONCAT(date, ' ', in_time)"), '>', $now->toDateTimeString());
             });
-
         } else if ($valid === 'false') {
             $now = Carbon::now();
 
@@ -68,20 +65,23 @@ class JobController extends Controller
         return response()->json(new JobPaginatedCollection($jobs));
     }
 
-    public function show(Job $job)
+    public function show(Enterprise $enterprise, Job $job)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('view', $enterprise);
+        Gate::authorize('view', $job);
+
         return response()->json(['job' => JobResource::make($job)]);
     }
     /**
      * Store a newly created resource in storage.
      */
-    public function store(JobStoreRequest $request)
+    public function store(Enterprise $enterprise, JobEnterpriseStoreRequest $request)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('view', $enterprise);
+
         $data =  $request->validated();
 
-        $job = Job::create($data);
+        $job = $enterprise->jobs()->create($data);
 
         return response()->json(JobResource::make($job), 201);
     }
@@ -89,9 +89,11 @@ class JobController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(JobUpdateRequest $request, Job $job)
+    public function update(Enterprise $enterprise, JobEnterpriseUpdateRequest $request, Job $job)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('update', $enterprise);
+        Gate::authorize('update', $job);
+
         $data = $request->validated();
 
         $job->update($data);
@@ -102,9 +104,11 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Job $job)
+    public function destroy(Enterprise $enterprise, Job $job)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('delete', $enterprise);
+        Gate::authorize('delete', $job);
+
         $job->delete();
 
         return response()->json();

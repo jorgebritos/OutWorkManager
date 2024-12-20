@@ -1,7 +1,6 @@
 import { boot } from "quasar/wrappers";
 import axios from "axios";
 import { useUserStore } from "src/store/user.store";
-import { Notify } from "quasar";
 import {api_base_backend} from "src/helpers.js";
 
 // Be careful when using SSR for cross-request state pollution

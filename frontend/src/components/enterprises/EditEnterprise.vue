@@ -22,7 +22,13 @@
             <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
-          <q-file color="teal" filled label="image" v-model="image">
+          <q-file
+            class="q-mt-md"
+            color="teal"
+            filled
+            label="image"
+            v-model="image"
+          >
             <template v-slot:prepend>
               <q-icon name="cloud_upload" />
             </template>
@@ -36,15 +42,17 @@
             <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
-          <p v-if="isLoadingUser">loading...</p>
-          <q-select
-            v-else
-            v-model="enterprise.user"
-            required
-            option-label="email"
-            :options="users"
-            label="Usuarios"
-          />
+          <div v-if="user.rol === 'Admin'">
+            <p v-if="isLoadingUser">loading...</p>
+            <q-select
+              v-else
+              v-model="enterprise.user"
+              required
+              option-label="email"
+              :options="users"
+              label="Usuarios"
+            />
+          </div>
 
           <div
             v-for="(error, index) in error_edit?.user_id"
@@ -74,6 +82,7 @@
 import { ref, toRef } from "vue";
 import { api } from "src/boot/axios";
 import { useUpdateEnterprise } from "src/hooks/api/enterprises.hooks";
+import { useUserStore } from "src/store/user.store";
 
 export default {
   props: {
@@ -90,6 +99,9 @@ export default {
     const enterprise = toRef(props, "enterprise");
     const error_edit = ref(null);
     const image = ref(null);
+    const userStore = useUserStore();
+
+    const user = userStore.getUser;
 
     const isLoadingUser = ref(true);
     const users = ref(null);
@@ -115,17 +127,18 @@ export default {
       } = await useUpdateEnterprise(enterprise.value.slug, {
         ...enterprise.value,
         image: image.value,
-      })
+      });
 
       if (!isError.value) {
-        enterprise.value.image = data.value.image
-        handleClose()
+        enterprise.value.image = data.value.image;
+        handleClose();
       } else {
         error_edit.value = error.value;
       }
     };
 
     return {
+      user,
       show,
       handleClose,
       enterprise,

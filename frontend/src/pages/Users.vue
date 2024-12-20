@@ -1,5 +1,5 @@
 <template>
-  <h2 class="q-mt-md q-mb-sm">Usuarios:</h2>
+  <h2 class="q-mt-md q-mb-sm text-center">Usuarios</h2>
   <div class="flex justify-center">
     <div class="row items-center q-mt-lg q-px-sm q-mb-sm" style="width: 100%">
       <q-input
@@ -13,7 +13,6 @@
           <q-btn flat round dense class="icono_de_busqueda" icon="search" />
         </template>
       </q-input>
-      <q-btn round class="q-mx-sm" icon="mdi-reload" @click="refetch" />
     </div>
   </div>
 
@@ -109,7 +108,7 @@ export default {
     });
 
     const handleRefetchPage = (page) => {
-      refetch({ role: role.value, page });
+      refetch({ role: role.value, page, search: search.value });
     };
 
     return {

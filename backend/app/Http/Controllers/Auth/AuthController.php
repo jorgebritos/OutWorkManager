@@ -9,53 +9,62 @@ use App\Models\User;
 use Database\Seeders\EnterpriseSeeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
+use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 
-class AuthController extends Controller 
+class AuthController extends Controller
 {
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users|max:255',
+            'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json($validator->errors()->toJson(), 400);
         }
 
-        $user = User::create([
+        User::create([
             'name' => $request->name,
+            'email' => $request->email,
             'password' => Hash::make($request->password),
             "rol" => "Enterprise"
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json([], 201);
+    }
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ], 201);
+    public function refresh()
+    {
+        try {
+            $newToken = auth()->refresh();
+
+            return response()->json([
+                'token' => $newToken
+            ]);
+        } catch (JWTException $e) {
+            return response()->json([
+                'error' => 'Token no valid or expired'
+            ], 401);
+        }
     }
 
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        Validator::make($request->all(), [
             'email' => 'required|email|max:255',
             'password' => 'required|string',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+        $credentials = request(['email', 'password']);
+
+        if (!$token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $user = User::where('email', $request->email)->first();
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
-
-        $token = $user->createToken('auth_token')->plainTextToken;
 
         $enterprise = $user->enterprise;
 
@@ -63,10 +72,11 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer',
             "user" => [
+                'id' => $user->id,
                 "name" => $user->name,
                 "rol" => $user->rol
             ],
-            'enterprise' => $enterprise? EnterpriseResource::make($enterprise): null
+            'enterprise' => $enterprise ? EnterpriseResource::make($enterprise) : null
         ]);
     }
 
@@ -74,14 +84,14 @@ class AuthController extends Controller
     {
 
         $enterprise = $request->user->enterprise;
-            
+
         return response()->json([
             "user" => [
+                "id" => $request->user()->id,
                 "name" => $request->user()->name,
-                "email" => $request->user()->email,
                 "rol" => $request->user()->rol
             ],
-            'enterprise' => $enterprise? EnterpriseResource::make($enterprise): null
+            'enterprise' => $enterprise ? EnterpriseResource::make($enterprise) : null
         ], 201);
     }
 }

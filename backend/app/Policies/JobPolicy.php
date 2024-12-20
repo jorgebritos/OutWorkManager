@@ -2,29 +2,25 @@
 
 namespace App\Policies;
 
-use App\Models\Enterprise;
+use App\Models\Job;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
-class EnterprisePolicy
+class JobPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->rol === "Admin";
+        return $user->rol === "Enterprise" || $user->rol = "Admin";
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Enterprise $enterprise): bool
+    public function view(User $user, Job $job): bool
     {
-        return $user->rol === "Admin"
-            ? true : (
-                $user->rol === "Enterprise" && $user->id === $enterprise->user_id
-            );
+        return ($user->rol === "Enterprise" && $user->enterprise->id === $job->enterprise_id) || $user->rol === "Admin";
     }
 
     /**
@@ -32,29 +28,23 @@ class EnterprisePolicy
      */
     public function create(User $user): bool
     {
-        return $user->rol === "Admin" || ($user->rol === "Enterprise" && !($user->enterprise));
+        return ($user->rol === "Enterprise" && !($user->enterprise())) || $user->rol === "Admin";
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Enterprise $enterprise): bool
+    public function update(User $user, Job $job): bool
     {
-        return $user->rol === "Admin"
-            ? true : (
-                $user->rol === "Enterprise" && $user->id === $enterprise->user_id
-            );
+        return ($user->rol === "Enterprise" && $user->enterprise->id === $job->enterprise_id) || $user->rol === "Admin";
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Enterprise $enterprise): bool
+    public function delete(User $user, Job $job): bool
     {
-        return $user->rol === "Admin"
-            ? true : (
-                $user->rol === "Enterprise" && $user->id === $enterprise->user_id
-            );
+        return ($user->rol === "Enterprise" && $user->enterprise->id === $job->enterprise_id) || $user->rol === "Admin";
     }
 
     /**
