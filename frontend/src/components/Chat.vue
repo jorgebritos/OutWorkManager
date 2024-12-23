@@ -2,187 +2,162 @@
   <q-btn
     flat
     icon="mdi-chat"
-    @click="menu = true"
+    @click="dialog = true"
     color="white"
     class="q-mr-md"
   >
     <q-dialog
-      v-model="menu"
+      v-model="dialog"
       persistent
+      :maximized="maximizedToggle"
       transition-show="slide-up"
       transition-hide="slide-down"
     >
-      <div
-        style="max-width: 1600px; width: 100%; max-height: 900px; height: 100%"
-        class="shadow-2 rounded-borders row"
-      >
-        <q-card
-          style="
-            height: 100%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-          "
-        >
-          <!-- Header Section -->
-          <q-card-section class="q-pa-none">
-            <q-toolbar class="bg-grey-3 text-black">
-              <div round flat>
-                <q-btn
-                  flat
-                  @click="drawer = !drawer"
-                  round
-                  dense
-                  icon="menu"
-                  class="q-mr-lg"
-                />
-                <div v-if="received1" class="flex items-center">
+      <q-card class="bg-teal-10 text-white">
+        <div class="header">
+          <q-toolbar class="bg-grey-3 text-black">
+            <div round flat @click="isMobile && (menu = !menu)">
+              <q-avatar>
+                <img :src="currentConversation.avatar" />
+              </q-avatar>
+            </div>
+
+            <span
+              class="q-subtitle-1 q-pl-md"
+              @click="isMobile && (menu = !menu)"
+            >
+              {{ currentConversation.person }}
+            </span>
+
+            <q-space />
+
+            <q-btn dense flat icon="close" v-close-popup>
+              <q-tooltip class="bg-white text-primary">Close</q-tooltip>
+            </q-btn>
+          </q-toolbar>
+        </div>
+
+        <!-- Sidebar / Drawer -->
+        <div class="Drawer" style="width: 300px">
+          <q-toolbar class="bg-grey-3">
+            <q-avatar class="cursor-pointer"></q-avatar>
+            <q-space />
+          </q-toolbar>
+
+          <!-- Menú desplegable para móviles -->
+          <q-menu v-if="isMobile" v-model="menu" auto-close>
+            <q-list>
+              <q-item
+                v-for="(conversation, index) in conversations"
+                :key="conversation.id"
+                clickable
+                @click="
+                  setCurrentConversation(index);
+                  menu = false;
+                "
+              >
+                <q-item-section avatar>
                   <q-avatar>
-                    <img
-                      v-if="received?.image"
-                      :src="`${api_base_backend}/${chat.image}`"
-                    />
-                    <img v-else :src="user_generic" />
+                    <img :src="conversation.avatar" />
                   </q-avatar>
-                  <p>{{ received?.name }}</p>
-                </div>
-              </div>
-              <q-space />
-              <q-btn dense flat icon="close" v-close-popup>
-                <q-tooltip class="bg-white text-primary">Close</q-tooltip>
-              </q-btn>
-            </q-toolbar>
-          </q-card-section>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ conversation.person }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
 
-          <!-- Chat Messages Section (Main Content) -->
-          <q-card-section
-            class="q-flex-grow-1 text-black q-px-xl"
-            style="overflow-y: auto; height: 100%"
-          >
-            <q-scroll-area class="fit">
-              <q-list>
-                dddd
-                <!-- Aquí irían los mensajes -->
-              </q-list>
-            </q-scroll-area>
-          </q-card-section>
+          <q-scroll-area style="height: calc(100% - 100px)">
+            <q-list>
+              <q-item
+                v-for="(conversation, index) in conversations"
+                :key="conversation.id"
+                clickable
+                v-ripple
+                @click="setCurrentConversation(index)"
+              >
+                <q-item-section avatar>
+                  <q-avatar>
+                    <img :src="conversation.avatar" />
+                  </q-avatar>
+                </q-item-section>
 
-          <!-- Input and Emoji Picker -->
-          <q-card-section class="q-pa-none">
-            <q-toolbar class="bg-grey-3 text-black row">
-              <q-btn
-                round
-                flat
-                icon="insert_emoticon"
-                class="q-mr-sm"
-                @click="toggleEmojiPicker"
-              />
-              <emoji-picker
-                v-if="showEmojiPicker"
-                @emoji-click="addEmoji"
-                class="emoji-picker"
-              ></emoji-picker>
-              <q-input
-                rounded
-                outlined
-                dense
-                class="WAL__field col-grow q-mr-sm"
-                bg-color="white"
-                v-model="message"
-                placeholder="Type a message"
-              />
-              <q-btn round flat icon="send" @click="sendMessage" />
-            </q-toolbar>
-          </q-card-section>
-        </q-card>
-      </div>
+                <q-item-section>
+                  <q-item-label lines="1">
+                    {{ conversation.person }}
+                  </q-item-label>
+                  <q-item-label class="conversation__summary" caption>
+                    <q-icon name="check" v-if="conversation.sent" />
+                    <q-icon name="not_interested" v-if="conversation.deleted" />
+                    {{ conversation.caption }}
+                  </q-item-label>
+                </q-item-section>
+
+                <q-item-section side>
+                  <q-item-label caption>
+                    {{ conversation.time }}
+                  </q-item-label>
+                  <q-icon name="keyboard_arrow_down" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-scroll-area>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <q-page-container class="bg-grey-5 chat-area">
+          <q-scroll-area class="messages-area">
+            <q-list>
+              <q-item
+                v-for="(msg, index) in currentConversation.messages"
+                :key="index"
+                class="message-item"
+                :class="{
+                  'sent-message': msg.isSender,
+                  'received-message': !msg.isSender,
+                }"
+              >
+                <q-item-section>
+                  <q-item-label>{{ msg.text }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-scroll-area>
+        </q-page-container>
+
+        <!-- Message Input Bar -->
+        <div @keydown="sendMessage2">
+          <q-toolbar class="BarraTexto bg-grey-3 text-black row">
+            <q-btn
+              round
+              flat
+              icon="insert_emoticon"
+              class="q-mr-sm"
+              @click="toggleEmojiPicker"
+            />
+            <!-- Contenedor del selector de emojis -->
+            <emoji-picker
+              v-if="showEmojiPicker"
+              @emoji-click="addEmoji"
+              class="emoji-picker"
+            ></emoji-picker>
+            <q-input
+              rounded
+              outlined
+              dense
+              class="WAL__field col-grow q-mr-sm"
+              bg-color="white"
+              v-model="message"
+              placeholder="Type a message"
+            />
+            <q-btn round flat icon="send" @click="sendMessage" />
+          </q-toolbar>
+        </div>
+      </q-card>
     </q-dialog>
   </q-btn>
 </template>
-
-<script>
-import { ref } from "vue";
-import "emoji-picker-element";
-import { getCurrentInstance, onMounted } from "vue";
-import { useEnterprises } from "src/hooks/api/enterprises.hooks";
-import { api_base_backend } from "../helpers.js";
-import user_generic from "../../public/imagenes/user.png";
-
-export default {
-  setup() {
-    const { proxy } = getCurrentInstance();
-
-    const {
-      isLoading: isLoadingChats,
-      enterprises: chats,
-      paginate,
-      refetch,
-    } = useEnterprises();
-
-    let chats_old = null;
-
-    const handleChatsScroll = () => {
-      chats_old = chats.value;
-      refetch({ page: paginate.value.current_page + 1 }).then((response) => {
-        chats.value = [...chats_old, ...response.data.enterprises];
-      });
-    };
-
-    const echo = proxy.$echo;
-
-    const received = ref(null);
-
-    onMounted(() => {
-      echo
-        .private("chat." + received.value?.user.id)
-        .listen("MessageSent", (event) => {
-          console.log("Nuevo mensaje:", event.message);
-        });
-    });
-
-    const message = ref("");
-    const conversation = ref(false);
-    const menu = ref(false);
-    const drawer = ref(false);
-    const showEmojiPicker = ref(false);
-
-    async function sendMessage() {
-      if (message.value.trim() !== "") {
-        currentConversation.value.messages.push({
-          text: message.value,
-          isSender: true,
-        });
-        message.value = "";
-      }
-      await axios.post("/api/chat/send", {
-        receiver_id: received.value.user.id,
-        content: message.value,
-      });
-
-      conversation.push({
-        receiver_id: received.value.user.id,
-        content: message.value,
-      });
-    }
-
-    return {
-      sendMessage,
-      received,
-      message,
-      menu,
-      drawer,
-      showEmojiPicker,
-      isLoadingChats,
-      chats,
-      handleChatsScroll,
-      user_generic,
-      api_base_backend,
-      conversation,
-    };
-  },
-};
-</script>
-
 <style scoped>
 .q-dialog__inner--maximized > div {
   width: 80%;
@@ -330,3 +305,100 @@ export default {
   }
 }
 </style>
+<script setup>
+import { provide, ref } from "vue";
+import { computed } from "vue";
+import "emoji-picker-element"; // Importa el selector de emojis
+
+const conversations = ref([
+  {
+    id: 1,
+    person: "Razvan Stoenescu",
+    avatar: "https://cdn.quasar.dev/team/razvan_stoenescu.jpeg",
+    caption: "I'm working on Quasar!",
+    time: "15:00",
+    sent: true,
+    messages: [],
+  },
+  {
+    id: 2,
+    person: "Dan Popescu",
+    avatar: "https://cdn.quasar.dev/team/dan_popescu.jpg",
+    caption: "I'm working on Quasar!",
+    time: "16:00",
+    sent: true,
+    messages: [],
+  },
+  {
+    id: 3,
+    person: "Jeff Galbraith",
+    avatar: "https://cdn.quasar.dev/team/jeff_galbraith.jpg",
+    caption: "I'm working on Quasar!",
+    time: "18:00",
+    sent: true,
+    messages: [],
+  },
+  {
+    id: 4,
+    person: "Allan Gaunt",
+    avatar: "https://cdn.quasar.dev/team/allan_gaunt.png",
+    caption: "I'm working on Quasar!",
+    time: "17:00",
+    sent: true,
+    messages: [],
+  },
+]);
+
+const currentConversationIndex = ref(0);
+const currentConversation = computed(() => {
+  return conversations.value[currentConversationIndex.value];
+});
+
+const message = ref("");
+const menu = ref(false);
+const isMobile = ref(window.innerWidth < 768); // Detecta si es móvil
+const showEmojiPicker = ref(false); // Controla la visibilidad del selector de emojis
+
+function sendMessage() {
+  if (message.value.trim() !== "") {
+    currentConversation.value.messages.push({
+      text: message.value,
+      isSender: true,
+    });
+    message.value = "";
+  }
+}
+
+function sendMessage2(event) {
+  if (event.key === "Enter") {
+    sendMessage();
+  }
+}
+function handleClickOutside(event) {
+  if (emojiPickerRef.value && !emojiPickerRef.value.contains(event.target)) {
+    showEmojiPicker.value = false;
+  }
+}
+
+function setCurrentConversation(index) {
+  currentConversationIndex.value = index;
+}
+
+// Alterna el selector de emojis
+function toggleEmojiPicker() {
+  showEmojiPicker.value = !showEmojiPicker.value;
+}
+
+// Agrega el emoji al campo de texto
+function addEmoji(event) {
+  message.value += event.detail.unicode;
+}
+
+// Listener para cambios de tamaño de la ventana
+window.addEventListener("resize", () => {
+  isMobile.value = window.innerWidth < 768;
+});
+const text = ref("");
+const dialog = ref(false);
+const maximizedToggle = ref(true);
+</script>
