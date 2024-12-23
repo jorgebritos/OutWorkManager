@@ -254,16 +254,19 @@
 
   .messages-area {
     padding: 5px;
+    overflow-x: hidden;
   }
 
   .message-item {
     max-width: 80%;
+       overflow-x: hidden;
   }
 
   .BarraTexto {
     display: flex;
     align-items: center;
     justify-content: space-between;
+       overflow-x: hidden;
   }
 
   q-btn {
