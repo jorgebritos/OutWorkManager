@@ -149,7 +149,8 @@
 .q-dialog__inner--maximized > div {
     width: 80%;
     height: 80%;
-    overflow-y:hidden
+    overflow-y:hidden;
+     overflow-x:hidden
 
 }
 .Drawer {
@@ -160,6 +161,7 @@
   top: 0;
   position: absolute;
   z-index: 8;
+  overflow-x:hidden
 }
 
 .header {
@@ -169,6 +171,7 @@
   height: 8%;
   position: absolute;
   z-index: 10;
+   overflow-x:hidden
 }
 
 .BarraTexto {
@@ -179,6 +182,7 @@
   height: 9%;
   background-color: black;
   z-index: 9;
+   overflow-x:hidden
 }
 
 .chat-area {
@@ -189,7 +193,7 @@
   right: 0;
   color: #000;
   margin-top: 43px;
-
+ overflow-x:hidden
 }
 
 .messages-area {
@@ -200,6 +204,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+   overflow-x:hidden
 }
 
 .message-item {
@@ -214,16 +219,19 @@
   white-space: pre-wrap;
   overflow-x: hidden;
   box-sizing: border-box;
+   overflow-x:hidden
 }
 
 .sent-message {
   background-color: #dcf8c6;
   margin-left: auto;
+   overflow-x:hidden
 }
 
 .received-message {
   background-color: #fff;
   margin-right: auto;
+   overflow-x:hidden
 }
 
 .emoji-picker {
@@ -236,7 +244,9 @@
   border-radius: 8px;
   width: 300px;
   height: 400px;
+ 
   overflow-y: auto;
+    overflow-x:hidden
 }
 
 @media (max-width: 768px) {
@@ -244,17 +254,20 @@
     width: 100%;
     height: auto;
     position: relative;
+     overflow-x:hidden
   }
 
   .header,
   .BarraTexto,
   .chat-area {
     width: 100%;
+      overflow-x:hidden
   }
 
   .messages-area {
     padding: 5px;
     overflow-x: hidden;
+      
   }
 
   .message-item {
@@ -271,10 +284,12 @@
 
   q-btn {
     min-width: 40px;
+      overflow-x:hidden
   }
 
   q-input {
     min-height: 40px;
+      overflow-x:hidden
   }
 }
 </style>
