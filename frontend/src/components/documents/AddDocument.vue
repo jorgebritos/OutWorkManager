@@ -118,7 +118,7 @@ export default {
     const data = reactive({
       title: "",
       type: "",
-      is_valid: false,
+      is_valid: true,
       document: null,
       expire: null,
       document: null,
@@ -129,7 +129,7 @@ export default {
 
       data.title = "";
       data.type = "";
-      data.is_valid = false;
+      data.is_valid = true;
       data.document = null;
       data.expire = null;
 

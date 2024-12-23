@@ -5,16 +5,16 @@ const routes = [
     children: [
       { path: "", component: () => import("src/pages/Enterprises.vue") },
     ],
-        meta: {requiresAuth: true},
+    meta: { requiresAuth: true },
   },
   {
     path: "/login/",
-    name: 'login',
+    name: "login",
     component: () => import("pages/Login.vue"),
   },
   {
     path: "/register/",
-    name: 'register',
+    name: "register",
     component: () => import("pages/Register.vue"),
   },
   {
@@ -24,25 +24,25 @@ const routes = [
       {
         path: "",
         component: () => import("src/pages/Enterprises.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "enterprises",
       },
       {
         path: ":slug/",
         component: () => import("src/pages/EnterpriseDetail.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "enterprise-detail",
       },
       {
         path: ":enterprise/operator/:pk/",
         component: () => import("src/pages/OperatorDetail.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "operators-detail",
       },
       {
         path: "home/",
         component: () => import("src/pages/EnterpriseHome.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "enterprise_home",
       },
     ],
@@ -52,32 +52,27 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "",
+        path: "admin/",
         component: () => import("src/pages/Jobs.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "jobs",
       },
       {
         path: ":pk/",
         component: () => import("src/pages/JobDetail.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "job-detail",
       },
       {
         path: "enterprise/",
         component: () => import("src/pages/JobEnterprise.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "jobs-enterprise",
       },
-    ],
-  },
-  {
-    path: "/his.trabajo/",
-    component: () => import("layouts/MainLayout.vue"),
-    children: [
       {
-        path: "",
-        component: () => import("src/pages/HisTrabajo.vue"),
+        path: "his.trabajos/",
+        component: () => import("src/pages/HisJobs.vue"),
+        meta: { requiresAuth: true },
         name: "his.jobs",
       },
     ],
@@ -89,15 +84,22 @@ const routes = [
       {
         path: "",
         component: () => import("src/pages/Users.vue"),
-        meta: {requiresAuth: true},
+        meta: { requiresAuth: true },
         name: "users",
       },
     ],
   },
   {
-    path: "/cuenta/",
+    path: "/account/",
     component: () => import("layouts/MainLayout.vue"),
-    children: [],
+    children: [
+      {
+        path: "",
+        component: () => import("src/pages/UserConfig.vue"),
+        meta: { requiresAuth: true },
+        name: "user-config",
+      },
+    ],
   },
   {
     path: "/:catchAll(.*)*",

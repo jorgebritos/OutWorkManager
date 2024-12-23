@@ -17,6 +17,7 @@ class UserResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
+            "image" => $this->image,
             "email" => $this->email,
             "rol" => $this->rol === "Enterprise"? ($this->enterprise ? ("Empresario"): ("Empresario sin Empresa")): ($this->rol === "Guard"? ("Guardia"): $this->rol),
         ];

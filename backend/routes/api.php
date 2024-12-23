@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthController;
-
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\v1\EnterpriseController as V1EnterpriseController;
 use App\Http\Controllers\v1\JobController as V1JobController;
 use App\Http\Controllers\v1\OperatorController as V1OperatorController;
@@ -16,13 +16,17 @@ use App\Http\Controllers\v1\JobEnterpriseController as V1JobEnterpriseController
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [AuthController::class, "me"]);
+    Route::patch('/user', [AuthController::class, "update"]);
+
+    Route::post('/chat/send', [ChatController::class, 'sendMessage']);
+    Route::get('/chat/{receiverId}', [ChatController::class, 'getMessages']);
 
     Route::apiResource("/enterprises", V1EnterpriseController::class);
     Route::prefix("/enterprises/{enterprise:slug}")->group(function () {
         Route::apiResource("/documents", V1EnterpriseDocumentController::class);
 
         Route::apiResource("/jobs", V1JobEnterpriseController::class);
-        
+
         Route::apiResource("/operators", V1OperatorController::class);
         Route::prefix("/operators/{operator:id}")->group(function () {
             Route::apiResource("/documents", V1OperatorDocumentController::class)->names("operators.documents");
@@ -35,8 +39,6 @@ Route::middleware('auth:api')->group(function () {
     });
 
     Route::apiResource("/users", V1UserController::class)->except(["show"]);
-
-
 });
 
 Route::middleware(["guest"])->prefix("auth/")->group(function () {

@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\EnterpriseResource;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Database\Seeders\EnterpriseSeeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
-use PHPOpenSourceSaver\JWTAuth\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -20,6 +19,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:8',
+            'confirm_password' => 'required|string|min:8|same:password',
         ]);
 
         if ($validator->fails()) {
@@ -51,6 +51,26 @@ class AuthController extends Controller
         }
     }
 
+    public function update(UserUpdateRequest $request)
+    {
+        $user = $request->user(); 
+
+        $data = $request->validated();
+
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+       
+        if ($request->hasFile('image')) {
+            $data['image'] = "storage/" . $request->file('image')->store('users', 'public');
+        }
+
+        $user->update($data);
+
+        return response()->json($user);
+    }
+
+
     public function login(Request $request)
     {
         Validator::make($request->all(), [
@@ -73,7 +93,9 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             "user" => [
                 'id' => $user->id,
+                "image" => $user->image,
                 "name" => $user->name,
+                "email" => $user->email,
                 "rol" => $user->rol
             ],
             'enterprise' => $enterprise ? EnterpriseResource::make($enterprise) : null
@@ -82,16 +104,17 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-
-        $enterprise = $request->user->enterprise;
+        $enterprise = $request->user()->enterprise;
 
         return response()->json([
             "user" => [
                 "id" => $request->user()->id,
+                "image" => $request->user()->image,
                 "name" => $request->user()->name,
+                "email" => $request->user()->email,
                 "rol" => $request->user()->rol
             ],
             'enterprise' => $enterprise ? EnterpriseResource::make($enterprise) : null
-        ], 201);
+        ]);
     }
 }

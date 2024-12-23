@@ -13,8 +13,8 @@
       <q-btn flat icon="person" class="q-mr-md">
         <q-menu>
           <q-list>
-            <q-item clickable v-close-popup to="/Configuracion">
-              <q-item-section>Configuracion</q-item-section>
+            <q-item clickable v-close-popup to="/account">
+              <q-item-section>Tú cuenta</q-item-section>
             </q-item>
             <q-item clickable @click="handleLogout" v-close-popup>
               <q-item-section>Cerrar Sesion</q-item-section>
@@ -71,7 +71,7 @@ export default {
   },
   setup() {
     const search = ref("");
-    const router = useRouter()
+    const router = useRouter();
 
     const userStore = useUserStore();
     const user = computed(() => userStore.getUser);
@@ -92,15 +92,25 @@ export default {
             separator: false,
           },
           {
+            label: "Trabajos",
+            icon: "mdi-account-hard-hat",
+            href: "jobs",
+          },
+          {
             label: "His. trabajo",
             icon: "mdi-folder-multiple",
-            href: "his.trabajo",
+            href: "his.jobs",
           },
-          { label: "Trabajos", icon: "mdi-account-hard-hat", href: "jobs" },
           {
             label: "Soporte",
-            icon: "mdi-cog-outline",
+            icon: "mdi-chat-question-outline",
             href: "soporte",
+            separator: true,
+          },
+          {
+            label: "Tú Cuenta",
+            icon: "mdi-cog-outline",
+            href: "user-config",
             separator: false,
           },
         ];
@@ -121,12 +131,18 @@ export default {
             href: "jobs-enterprise",
           });
         }
-        
+
         menu.push({
           label: "Soporte",
-          icon: "mdi-cog-outline",
+          icon: "mdi-chat-question-outline",
           href: "soporte",
-          separator: false,
+          separator: true,
+        });
+
+        menu.push({
+          label: "Tú Cuenta",
+          icon: "mdi-cog-outline",
+          href: "user-config",
         });
 
         return menu;
@@ -138,7 +154,7 @@ export default {
       userStore.setAuth(false);
       userStore.setUser(null);
 
-      router.push({name: 'login'})
+      router.push({ name: "login" });
     };
 
     return {

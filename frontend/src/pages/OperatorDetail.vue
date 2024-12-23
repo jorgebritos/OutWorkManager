@@ -85,8 +85,7 @@ export default {
       params.pk
     );
 
-    const handleOutClick = () =>
-      router.push("/enterprise/" + params.enterprise);
+    const handleOutClick = () => router.go(-1);
 
     const showDeleteMenu = ref(false);
 
