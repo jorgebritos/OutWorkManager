@@ -1,5 +1,4 @@
 <template>
-  <q-page>
     <div class="q-pa-md">
       <h2 class="q-mt-md q-mb-sm text-center">Trabajos</h2>
 
@@ -53,7 +52,7 @@
         style="height: 500px; overflow-y: scroll"
         class="shadow-none rounded-none"
       >
-        <thead class="bg-red-4" style="position: sticky; top: 0; z-index: 1">
+        <thead class="bg-teal-5" style="position: sticky; top: 0; z-index: 1">
           <tr>
             <th class="text-left">Empresa</th>
             <th class="text-left">Trabajos</th>
@@ -77,7 +76,6 @@
       :maxPages="paginate.last_page"
       @handleRefetchPage="handleRefetchPage"
     />
-  </q-page>
 </template>
 
 <script>

@@ -44,20 +44,37 @@
                   <q-icon name="mdi-lock-outline" />
                 </template>
               </q-input>
+              <q-input
+                filled
+                v-model="data.confirm_password"
+                :type="isPwd ? 'password' : 'text'"
+                placeholder="Contraseña confirmación"
+                :dense="dense"
+                style="padding-top: 10px"
+              >
+                <template v-slot:append>
+                  <q-icon name="mdi-lock-outline" />
+                </template>
+              </q-input>
             </div>
 
             <div class="flex flex-end q-mt-md">
               <q-btn
                 label="Registrar"
                 type="submit"
-                color="primary"
+                color="light-blue-14"
                 class="q-mt-md"
                 style="width: 100%"
                 @click.prevent="send"
               />
             </div>
             <div class="q-mt-md">
-              <q-btn flat label="Ya estas registrado ?" href="/#/login" class="text-white"/>
+              <q-btn
+                flat
+                label="Ya estas registrado ?"
+                href="/#/login"
+                class="text-white"
+              />
             </div>
           </q-form>
         </q-card-section>
@@ -76,7 +93,6 @@ import { api } from "src/boot/axios";
 export default {
   setup() {
     const router = useRouter();
-    const userStore = useUserStore();
 
     const ph = ref("");
     const dense = ref(false);
@@ -87,6 +103,7 @@ export default {
       email: "",
       name: "",
       password: "",
+      confirm_password: "",
     });
 
     const isPwd = ref(true);
@@ -98,7 +115,7 @@ export default {
         })
         .then(function (response) {
           if (response.status === 201) {
-            console.log("hola")
+            console.log("hola");
             router.push("/login");
           }
         })
@@ -136,7 +153,7 @@ export default {
   width: 100%;
   max-width: 500px;
   height: 100%;
-  max-height: 500px;
+  max-height: 600px;
   margin: 0 10px;
   backdrop-filter: blur(40px);
   background-color: rgba(255, 255, 255, 0.3);

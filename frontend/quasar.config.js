@@ -18,6 +18,7 @@ export default configure((/* ctx */) => {
     boot: [
       'pinia',
       'axios',
+      'echo',
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
@@ -92,7 +93,7 @@ export default configure((/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ['Notify']
     },
 
     // animations: 'all', // --- includes all animations

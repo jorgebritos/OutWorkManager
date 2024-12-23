@@ -1,17 +1,8 @@
 <template>
   <h2 class="q-mt-md q-mb-sm text-center">Registra tu empresa:</h2>
   <q-form @submit.prevent="handleCreate" class="q-mx-auto" style="width: 600px">
-    <q-input name="RUT" required label="RUT" v-model="data.RUT" />
-    <div
-      v-for="(error, index) in error_create?.RUT"
-      :key="index"
-      class="q-mt-sm"
-    >
-      <span class="q-pa-xs bg-negative text-white">
-        {{ error }}
-      </span>
-    </div>
-    <q-input name="name" required label="nombre" v-model="data.name" />
+    
+    <q-input name="name" required label="Nombre de la empresa" class="q-my-lg" v-model="data.name" />
     <div
       v-for="(error, index) in error_create?.nombre"
       :key="index"

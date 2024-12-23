@@ -116,8 +116,6 @@ export default {
 
     const user = userStore.getUser
 
-    console.log(user)
-
     const data = reactive({
       description: null,
       is_check_enterprise: true,

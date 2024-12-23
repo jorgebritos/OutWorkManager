@@ -22,7 +22,6 @@ class EnterpriseStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "RUT" => ["string", "required", "unique:enterprises"],
             "nombre" => ["string", "required"],
             "slug" => ["string", "required"],
             "is_valid" => ["bool", "required"],
