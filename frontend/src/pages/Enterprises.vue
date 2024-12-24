@@ -15,50 +15,50 @@
         </q-input>
       </div>
 
-      <q-toolbar class="row justify-between q-mx-auto" style="width: 100%; max-width: 1200px;">
-        <div>
-          <q-btn-dropdown
-            color="#000000"
-            :label="
-              filter === null
-                ? 'Todos'
-                : filter === true
-                ? 'Validadas'
-                : 'No Validadas'
-            "
-            text-color="#000000"
-          >
-            <q-list>
-              <q-item clickable v-close-popup @click="filter = null">
-                <q-item-section>
-                  <q-item-label>Todos</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="filter = true">
-                <q-item-section>
-                  <q-item-label>Validadas</q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item clickable v-close-popup @click="filter = false">
-                <q-item-section>
-                  <q-item-label>No Validadss</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-        </div>
+      <q-toolbar
+        class="q-my-lg w-full flex justify-between items-center"
+        style="width: 100%;"
+      >
+        <q-btn-dropdown
+          color="#000000"
+          :label="
+            filter === null
+              ? 'Todos'
+              : filter === true
+              ? 'Validadas'
+              : 'No Validadas'
+          "
+          class="q-mr-md"
+          text-color="#000000"
+        >
+          <q-list>
+            <q-item clickable v-close-popup @click="filter = null">
+              <q-item-section>
+                <q-item-label>Todos</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="filter = true">
+              <q-item-section>
+                <q-item-label>Validadas</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="filter = false">
+              <q-item-section>
+                <q-item-label>No Validadss</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
 
-        <div class="q-mt-sm">
-          <create-empresa @refetch="refetch"/>
-        </div>
+        <create-empresa @refetch="refetch" />
       </q-toolbar>
     </q-toolbar>
     <div v-if="!isLoading">
-      <div class="q-pa-md row justify-center">
+      <div class="q-pa-md row justify-center q-px-lg">
         <div
           v-for="enterprise in enterprises"
           :key="enterprise.id"
-          class="q-mx-sm"
+          class="q-px-sm"
         >
           <card-enterprise :enterprise="enterprise" />
         </div>
