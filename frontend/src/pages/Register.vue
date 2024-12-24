@@ -5,12 +5,12 @@
         <q-card-section>
           <q-form @submit="onSubmit" @reset="onReset" class="w-xl">
             <div class="q-pa-md q-gutter-sm">
-              <h4 class="text-h4 text-center text-white">Login</h4>
+              <h4 class="text-h4 text-center text-white">Registrarse</h4>
             </div>
             <div class="">
               <q-input
                 filled
-                v-model="email"
+                v-model="data.email"
                 type="email"
                 placeholder="Correo"
                 :dense="dense"
@@ -22,7 +22,19 @@
 
               <q-input
                 filled
-                v-model="password"
+                v-model="data.name"
+                type="name"
+                placeholder="Nombre"
+                style="padding-top: 10px"
+                :dense="dense"
+              >
+                <template v-slot:append>
+                  <span class="mdi mdi-account"></span>
+                </template>
+              </q-input>
+              <q-input
+                filled
+                v-model="data.password"
                 :type="isPwd ? 'password' : 'text'"
                 placeholder="Contraseña"
                 :dense="dense"
@@ -32,11 +44,23 @@
                   <q-icon name="mdi-lock-outline" />
                 </template>
               </q-input>
+              <q-input
+                filled
+                v-model="data.confirm_password"
+                :type="isPwd ? 'password' : 'text'"
+                placeholder="Contraseña confirmación"
+                :dense="dense"
+                style="padding-top: 10px"
+              >
+                <template v-slot:append>
+                  <q-icon name="mdi-lock-outline" />
+                </template>
+              </q-input>
             </div>
 
-            <div class="flex flex-end">
+            <div class="flex flex-end q-mt-md">
               <q-btn
-                label="Entrar"
+                label="Registrar"
                 type="submit"
                 color="light-blue-14"
                 class="q-mt-md"
@@ -45,7 +69,12 @@
               />
             </div>
             <div class="q-mt-md">
-              <q-btn flat label="Registrese aquí" href="/#/register" class="text-white"/>
+              <q-btn
+                flat
+                label="Ya estas registrado ?"
+                href="/#/login"
+                class="text-white"
+              />
             </div>
           </q-form>
         </q-card-section>
@@ -56,7 +85,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { useUserStore } from "../store/user.store";
 import { useRouter } from "vue-router";
 import { api } from "src/boot/axios";
@@ -64,35 +93,30 @@ import { api } from "src/boot/axios";
 export default {
   setup() {
     const router = useRouter();
-    const userStore = useUserStore();
 
     const ph = ref("");
     const dense = ref(false);
     const licence = ref(false);
     const text = ref("");
 
-    const email = ref("");
-    const password = ref("");
+    const data = reactive({
+      email: "",
+      name: "",
+      password: "",
+      confirm_password: "",
+    });
+
     const isPwd = ref(true);
 
     const send = async () => {
       api
-        .post("auth/login", {
-          email: email.value,
-          password: password.value,
+        .post("auth/register", {
+          ...data,
         })
         .then(function (response) {
-          userStore.setAuth(true);
-          userStore.setToken(response.data.access_token);
-          userStore.setUser({
-            ...response.data.user,
-            enterprise: response.data.enterprise,
-          });
-
-          if(response.data.user.rol === 'Admin'){
-            router.push("/");
-          }else if (response.data.user.rol === "Enterprise") {
-            router.push({name: 'enterprise_home'});
+          if (response.status === 201) {
+            console.log("hola");
+            router.push("/login");
           }
         })
         .catch(function (error) {
@@ -100,7 +124,7 @@ export default {
         });
     };
 
-    return { ph, dense, licence, text, email, password, isPwd, send };
+    return { ph, dense, licence, text, data, isPwd, send };
   },
 };
 </script>
@@ -129,7 +153,7 @@ export default {
   width: 100%;
   max-width: 500px;
   height: 100%;
-  max-height: 500px;
+  max-height: 600px;
   margin: 0 10px;
   backdrop-filter: blur(40px);
   background-color: rgba(255, 255, 255, 0.3);

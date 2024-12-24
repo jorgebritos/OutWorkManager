@@ -12,7 +12,7 @@
         :src="`${api_base_backend}/${enterprise.image}`"
         alt="esta enterprise no pose imagen"
         style="height: 350px"
-        :fit="cover"
+        fit="cover"
       >
         <template v-slot:error>
           <div class="absolute-full text-subtitle2 flex flex-center">
@@ -27,7 +27,7 @@
           </h4>
         </div>
       </q-img>
-      <div class="row justify-between">
+      <div class="row justify-between items-center">
         <div class="text-caption">
           <div class="text-grey row items-center">
             {{ enterprise.is_valid ? "Verificado" : "No verificado" }}
@@ -51,52 +51,54 @@
                   :show="enterpriseEditMenu"
                   @handleCloseMenuEditEnterprise="handleCloseMenuEditEnterprise"
                 />
+                <div v-if="user.rol === 'Admin'">
+                  <q-btn
+                    v-if="enterprise.is_valid"
+                    label="Desvalidar"
+                    type="button"
+                    color="negative"
+                    @click="handleNotValidEnterprise"
+                  />
 
-                <q-btn
-                  v-if="enterprise.is_valid"
-                  label="Desvalidar"
-                  type="button"
-                  color="negative"
-                  @click="handleNotValidEnterprise"
-                />
-
-                <q-btn
-                  v-else
-                  label="Validar"
-                  type="button"
-                  color="secondary"
-                  @click="handleValidEnterprise"
-                />
-
-                <q-btn
-                  type="button"
-                  class="text-lg text-negative q-ml-md"
-                  @click="
-                    () => {
-                      showDeleteMenu = true;
-                    }
-                  "
-                >
-                  Eliminar <span class="mdi mdi-trash-can"></span>
-                </q-btn>
+                  <q-btn
+                    v-else
+                    label="Validar"
+                    type="button"
+                    color="secondary"
+                    @click="handleValidEnterprise"
+                  />
+                </div>
               </div>
             </q-card-section>
           </div>
         </div>
-        <div style="width: 400px" v-if="enterprise.user">
-          <h5 class="text-h5 q-my-none">Encargado de la enterprise</h5>
-          <q-card>
-            <q-card-section>
-              Nombre: {{ enterprise.user.name }}
-            </q-card-section>
-            <q-card-section>
-              Email: {{ enterprise.user.email }}
-            </q-card-section>
-          </q-card>
-        </div>
+        <q-btn
+          type="button"
+          v-if="user.rol === 'Admin'"
+          class="text-lg text-negative"
+          @click="
+            () => {
+              showDeleteMenu = true;
+            }
+          "
+        >
+          Eliminar 
+          <span class="mdi mdi-trash-can"></span>
+        </q-btn>
       </div>
+      <div style="max-width: 400px" v-if="enterprise.user && user.rol === 'Admin'">
+        <h5 class="text-h5 q-my-none">Encargado de la Empresa</h5>
+        <q-card>
+          <q-card-section> Nombre: {{ enterprise.user.name }} </q-card-section>
+          <q-card-section> Email: {{ enterprise.user.email }} </q-card-section>
+        </q-card>
+      </div>
+
       <operators-list :enterprise="enterprise.slug" />
-      <enterprise-documents :enterprise="enterprise.slug" />
+      <enterprise-documents
+        :params="{ enterprise: enterprise.slug }"
+        entity="enterprise"
+      />
     </div>
 
     <div v-if="isLoading" class="text-center">Cargando...</div>
@@ -112,18 +114,19 @@
 <script>
 import EditEnterprise from "src/components/enterprises/EditEnterprise.vue";
 import OperatorsList from "src/components/operators/OperatorsList.vue";
-import MenuCreateOperator from "src/components/MenuCreateOperator.vue";
+import MenuCreateOperator from "src/components/operators/MenuCreateOperator.vue";
 import { useRoute, useRouter } from "vue-router";
 import { ref } from "vue";
 import { api_base_backend } from "../helpers.js";
-import EnterpriseDocuments from "../components/documents/EnterpriseDocuments.vue";
+import EnterpriseDocuments from "../components/documents/Documents.vue";
 import {
   useEnterprise,
   useValidEnterprise,
   useNotValidEnterprise,
   useDeleteEnterprise,
 } from "src/hooks/api/enterprises.hooks";
-import ValidDeleteEnterpriseMenu from "src/components/ValidDeleteMenu.vue";
+import ValidDeleteEnterpriseMenu from "src/components/helpers/ValidDeleteMenu.vue";
+import { useUserStore } from "src/store/user.store.js";
 
 export default {
   components: {
@@ -135,9 +138,12 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const userStore = useUserStore();
     const { params } = useRoute();
 
     const { enterprise, isLoading, refetch } = useEnterprise(params.slug);
+
+    const user = userStore.getUser;
 
     const enterpriseNoExiste = ref(false);
     const enterpriseEditMenu = ref(false);
@@ -168,7 +174,8 @@ export default {
     };
 
     return {
-      isLoading: isLoading,
+      isLoading,
+      user,
       enterprise,
       showDeleteMenu,
       enterpriseNoExiste,

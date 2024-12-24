@@ -4,8 +4,7 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     token: localStorage.getItem("token"),
     auth: localStorage.getItem("auth"),
-    user: localStorage.getItem("user"),
-    users: [] // Aquí agregamos la lista de usuarios
+    user: localStorage.getItem('user')? JSON.parse(localStorage.getItem("user")): null,
   }),
   getters: {
     getToken() {
@@ -37,11 +36,8 @@ export const useUserStore = defineStore('user', {
       this.auth = auth;
     },
     setUser(user) {
-      localStorage.setItem("user", user);
-      this.user = user;
-    },
-    setUsers(users) {
-      this.users = users; // Nueva acción para establecer la lista de usuarios
+      localStorage.setItem("user", JSON.stringify(user));
+      this.user = JSON.parse(localStorage.getItem('user'));
     },
     clearSession() {
       localStorage.removeItem("token");

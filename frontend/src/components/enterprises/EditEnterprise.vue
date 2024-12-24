@@ -22,7 +22,13 @@
             <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
-          <q-file color="teal" filled label="image" v-model="image">
+          <q-file
+            class="q-mt-md"
+            color="teal"
+            filled
+            label="image"
+            v-model="image"
+          >
             <template v-slot:prepend>
               <q-icon name="cloud_upload" />
             </template>
@@ -36,18 +42,53 @@
             <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
           </div>
 
-          <p v-if="isLoadingUser">loading...</p>
-          <q-select
-            v-else
-            v-model="enterprise.user"
-            required
-            option-label="email"
-            :options="users"
-            label="Usuarios"
-          />
+          <div v-if="!isLoading && user.rol === 'Admin'" class="w-full">
+            <q-btn
+              :label="user_tag ? user_tag : 'Usuario'"
+              class="q-mt-md"
+              no-caps
+              style="width: 100%"
+            >
+              <span class="q-ml-auto mdi mdi-arrow-down-bold"></span>
+              <q-menu
+                v-model="menu_users"
+                anchor="bottom middle"
+                class="q-ml-xl"
+                self="top middle"
+                :offset="[0, 15]"
+              >
+                <q-list class="scroll" style="max-height: 250px; width: 300px">
+                  <q-infinite-scroll
+                    @load="handleUserScroll"
+                    :offset="15"
+                  >
+                    <q-item
+                      v-for="(user, index) in users"
+                      class="q-px-none"
+                      :key="index"
+                    >
+                      <q-item-section>
+                        <q-btn
+                          @click="
+                            () => {
+                              data.user_id = user.id;
+                              menu_users = false;
+                              user_tag = user.email;
+                            }
+                          "
+                        >
+                          {{ user.email }}
+                        </q-btn>
+                      </q-item-section>
+                    </q-item>
+                  </q-infinite-scroll>
+                </q-list>
+              </q-menu>
+            </q-btn>
+          </div>
 
           <div
-            v-for="(error, index) in error_edit?.user_id"
+            v-for="(error, index) in error_create?.user_id"
             :key="index"
             class="q-mt-sm"
           >
@@ -72,8 +113,9 @@
 
 <script>
 import { ref, toRef } from "vue";
-import { api } from "src/boot/axios";
 import { useUpdateEnterprise } from "src/hooks/api/enterprises.hooks";
+import { useUserStore } from "src/store/user.store";
+import { useUsers } from "src/hooks/api/users.hooks";
 
 export default {
   props: {
@@ -90,20 +132,23 @@ export default {
     const enterprise = toRef(props, "enterprise");
     const error_edit = ref(null);
     const image = ref(null);
+    const userStore = useUserStore();
 
-    const isLoadingUser = ref(true);
-    const users = ref(null);
+    const user = userStore.getUser;
 
-    api
-      .get("users", {
-        params: {
-          rol: "users_enterprise",
-        },
-      })
-      .then((response) => {
-        isLoadingUser.value = false;
-        users.value = response.data.users;
+    const { isLoading, users, paginate, refetch } = useUsers();
+
+    const menu_users = ref(false)
+    const user_tag = ref(null)
+
+    let users_old = null;
+
+    const handleUserScroll = () => {
+      users_old = users.value;
+      refetch().then((response) => {
+        users.value = [...users_old, ...response.data.users];
       });
+    };
 
     const handleClose = () => emit("handleCloseMenuEditEnterprise");
 
@@ -115,23 +160,28 @@ export default {
       } = await useUpdateEnterprise(enterprise.value.slug, {
         ...enterprise.value,
         image: image.value,
-      })
+      });
 
       if (!isError.value) {
-        enterprise.value.image = data.value.image
-        handleClose()
+        enterprise.value.image = data.value.image;
+        handleClose();
       } else {
         error_edit.value = error.value;
       }
     };
 
     return {
+      user,
       show,
       handleClose,
       enterprise,
       error_edit,
       handleUpdateEnterprise,
-      isLoadingUser,
+      isLoading,
+      paginate,
+      menu_users,
+      user_tag,
+      handleUserScroll,
       image,
       users,
     };

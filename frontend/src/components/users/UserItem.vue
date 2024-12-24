@@ -5,23 +5,12 @@
     @handleDeleteMenuAccept="handleDeleteUserMenuAccept"
   />
 
-  <EditUser
-    v-if="editUser"
-    :show="editUser"
-    @handleCloseEditUser="handleEditUserMenuClose"
-    :user="user"
-  />
-
   <tr class="cursor-pointer">
     <td class="text-left">{{ user.name }}</td>
     <td class="text-right">{{ user.email }}</td>
     <td class="text-right">{{ user.rol }}</td>
     <td class="text-right">
-      <q-btn
-        icon="edit"
-        class="text-primary q-mr-md"
-        @click="editUser = true"
-      />
+      <EditUser :user="user" @refetch="refetch"/>
       <q-btn
         icon="delete"
         class="text-negative"
@@ -33,9 +22,9 @@
 
 <script>
 import { ref } from "vue";
-import ValidDeleteUserMenu from "src/components/ValidDeleteMenu.vue";
-import EditUser from "src/components/EditUser.vue";
-import { useDeleteUser } from "src/hooks/api/users.hooks"
+import ValidDeleteUserMenu from "src/components/helpers/ValidDeleteMenu.vue";
+import EditUser from "src/components/users/EditUser.vue";
+import { useDeleteUser } from "src/hooks/api/users.hooks";
 
 export default {
   props: {
@@ -49,7 +38,6 @@ export default {
     EditUser,
   },
   setup(props, { emit }) {
-    const editUser = ref(false);
     const validDeleteMenu = ref(false);
 
     const handleDeleteUser = async (id) => {
@@ -66,17 +54,11 @@ export default {
       emit("refetch");
     };
 
-    const handleEditUserMenuClose = () => {
-      emit("refetch");
-      editUser.value = false;
-    };
-
     return {
-      editUser,
       validDeleteMenu,
       handleDeleteUserMenuAccept,
       handleDeleteUserMenuClose,
-      handleEditUserMenuClose,
+      refetch: () => emit("refetch"),
     };
   },
 };

@@ -1,48 +1,64 @@
 <template>
   <div>
     <q-toolbar class="column">
-      <q-input
-        style="width: 100%"
-        filled
-        class="custom-input"
-        v-model="search"
-        label="Busqueda"
+      <div class="row items-center q-mt-xl" style="width: 100%">
+        <q-input
+          style="width: 100%"
+          filled
+          class="col"
+          v-model="search"
+          label="Busqueda"
+        >
+          <template v-slot:prepend>
+            <q-btn flat round dense class="icono_de_busqueda" icon="search" />
+          </template>
+        </q-input>
+      </div>
+
+      <q-toolbar
+        class="q-my-lg w-full flex justify-between items-center"
+        style="width: 100%;"
       >
-        <template v-slot:prepend>
-          <q-btn flat round dense class="icono_de_busqueda" icon="search" />
-        </template>
-      </q-input>
+        <q-btn-dropdown
+          color="#000000"
+          :label="
+            filter === null
+              ? 'Todos'
+              : filter === true
+              ? 'Validadas'
+              : 'No Validadas'
+          "
+          class="q-mr-md"
+          text-color="#000000"
+        >
+          <q-list>
+            <q-item clickable v-close-popup @click="filter = null">
+              <q-item-section>
+                <q-item-label>Todos</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="filter = true">
+              <q-item-section>
+                <q-item-label>Validadas</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-close-popup @click="filter = false">
+              <q-item-section>
+                <q-item-label>No Validadss</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
 
-      <q-toolbar class="row justify-between">
-        <div>
-          <q-btn flat bordered @click="filter = null"> Todos </q-btn>
-          <q-btn flat bordered @click="filter = true">
-            <q-avatar icon="mdi-check" class="bg-green text-white" />Validados
-          </q-btn>
-          <q-btn flat bordered @click="filter = false">
-            <q-avatar icon="mdi-close" class="bg-red text-white" />No Validados
-          </q-btn>
-        </div>
-
-        <div>
-          <q-btn flat bordered @click="enterpriseCreateMenu = true">
-            <q-avatar icon="mdi-plus-circle-outline" />
-          </q-btn>
-          <create-empresa
-            v-if="enterpriseCreateMenu"
-            :show="enterpriseCreateMenu"
-            @handleCloseCreateEnterprise="handleCloseEnterpriseCreateMenu"
-          />
-        </div>
+        <create-empresa @refetch="refetch" />
       </q-toolbar>
     </q-toolbar>
-
     <div v-if="!isLoading">
-      <div class="q-pa-md row justify-center">
+      <div class="q-pa-md row justify-center q-px-lg">
         <div
           v-for="enterprise in enterprises"
           :key="enterprise.id"
-          class="q-mx-sm"
+          class="q-px-sm"
         >
           <card-enterprise :enterprise="enterprise" />
         </div>
@@ -76,8 +92,8 @@ export default {
 
     const filter = ref(true);
 
-    const handleRefetchPage = (page_tag) => {
-      refetch({ filter: filter.value, page: page_tag, search: search.value });
+    const handleRefetchPage = (page) => {
+      refetch({ filter: filter.value, page, search: search.value });
     };
 
     watch([search, filter], () => {

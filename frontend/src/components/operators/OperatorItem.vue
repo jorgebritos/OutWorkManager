@@ -36,7 +36,7 @@
 <script>
 import { useRoute, useRouter } from "vue-router";
 import { useDeleteOperator } from "src/hooks/api/operators.hooks";
-import ValidDeleteMenu from "src/components/ValidDeleteMenu.vue";
+import ValidDeleteMenu from "src/components/helpers/ValidDeleteMenu.vue";
 import { ref } from "vue"
 
 export default {

@@ -4,17 +4,31 @@
     :show="createOperator"
     @handleCloseCreateOperator="handleCloseCreateOperator"
   />
-  <div class="flex justify-between items-center q-my-md">
+
+  <div class="row items-center q-mt-xl">
+    <q-input
+      style="width: 100%"
+      filled
+      class="col"
+      v-model="search"
+      label="Busqueda"
+    >
+      <template v-slot:prepend>
+        <q-btn flat round dense class="icono_de_busqueda" icon="search" />
+      </template>
+    </q-input>
+  </div>
+  <div class="row justify-between items-center q-my-md">
     <h4 class="text-h4 q-my-none">Operarios:</h4>
     <q-btn
       label="Crear Operario"
-      class="q-mt-md q-mr-sm"
+      class="q-py-sm"
       type="button"
       color="primary"
       @click="handleOpenCreateOperator"
     />
   </div>
-  <q-markup-table flat bordered>
+  <q-markup-table flat bordered v-if="!isLoading">
     <thead class="bg-dark text-white">
       <tr>
         <th class="text-left">C.I.</th>
@@ -45,9 +59,9 @@
 
 <script>
 import { useOperators } from "src/hooks/api/operators.hooks";
-import MenuCreateOperator from "src/components/MenuCreateOperator.vue";
+import MenuCreateOperator from "src/components/operators/MenuCreateOperator.vue";
 import OperatorItem from "src/components/operators/OperatorItem.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import Pagination from "src/components/helpers/Pagination.vue";
 
 export default {
@@ -68,14 +82,17 @@ export default {
     );
 
     const createOperator = ref(false);
+    const search = ref(null);
 
     const handleOpenCreateOperator = () => {
       createOperator.value = true;
     };
 
-    const handleRefetchPage = (page) => {
-      refetch(page);
-    };
+    watch(search, () => {
+      refetch({ search: search.value });
+    });
+
+    const handleRefetchPage = (page) => refetch({ page, search: search.value });
 
     const handleCloseCreateOperator = () => {
       createOperator.value = false;
@@ -85,6 +102,7 @@ export default {
     return {
       handleRefetchPage,
       operators,
+      search,
       paginate,
       createOperator,
       handleOpenCreateOperator,
