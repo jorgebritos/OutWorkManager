@@ -86,7 +86,7 @@
           <span class="mdi mdi-trash-can"></span>
         </q-btn>
       </div>
-      <div style="width: 400px" v-if="enterprise.user && user.rol === 'Admin'">
+      <div style="max-width: 400px" v-if="enterprise.user && user.rol === 'Admin'">
         <h5 class="text-h5 q-my-none">Encargado de la Empresa</h5>
         <q-card>
           <q-card-section> Nombre: {{ enterprise.user.name }} </q-card-section>

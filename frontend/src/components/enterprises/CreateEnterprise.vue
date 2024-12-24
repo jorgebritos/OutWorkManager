@@ -109,7 +109,7 @@
     </q-card>
   </q-dialog>
   <q-btn bordered @click="show = true" class="bg-teal-6 text-white">
-    Registrar Empresa <q-avatar icon="mdi-plus-circle-outline" />
+    <q-avatar icon="mdi-plus-circle-outline" />
   </q-btn>
 </template>
 

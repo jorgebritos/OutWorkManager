@@ -47,7 +47,7 @@ export default {
 
 <style scoped>
 .my-card {
-  width: 380px; /* ajusta el ancho de la tarjeta */
+  width: 330px; /* ajusta el ancho de la tarjeta */
   height: auto; /* ajusta el alto de la tarjeta */
   margin-bottom: 20px; /* agrega un margen inferior a cada tarjeta */
   border-radius: 10px; /* agrega un borde redondeado a la tarjeta */
