@@ -4,7 +4,7 @@ import { fetch, create, update, deleteUser } from "../controllers/userController
 const userRouter = express.Router();
 
 userRouter.post("/create", create)
-userRouter.get("/getAllUsers", fetch);
+userRouter.get("/", fetch);
 userRouter.put("/update/:id", update)
 userRouter.delete("/delete/:id", deleteUser)
 

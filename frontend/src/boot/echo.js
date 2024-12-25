@@ -11,7 +11,7 @@ export default async ({ app, store, router }) => {
     forceTLS: false,
     encrypted: false,
     wsHost: "localhost",
-    wsPort: 8080,
+    wsPort: 8000,
     enabledTransports: ["ws"],
   });
 

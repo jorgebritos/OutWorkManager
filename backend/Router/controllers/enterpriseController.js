@@ -21,11 +21,7 @@ export const fetch = async (req, res) => {
     try {
         const enterprises = await Enterprise.find();
 
-        if (enterprises.length === 0) {
-            return res.status(404).json({ message: "No hay empresas registradas" });
-        }
-
-        res.status(200).json(users);
+        res.status(200).json(enterprises);
     } catch (error) {
         res.status(500).json({ error: "Internal Network Error" })
     }

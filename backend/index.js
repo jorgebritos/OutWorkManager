@@ -20,4 +20,4 @@ mongoose.connect(MONGOURL).then(() => {
     })
 }).catch((error) => console.error(error));
 
-app.use("/api", routes)
+app.use("/api/v1", routes)

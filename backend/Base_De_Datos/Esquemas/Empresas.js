@@ -58,8 +58,8 @@ const Enterprise = new mongoose.Schema({
                     fecha_entrada: { type: Date },
                     fecha_salida: { type: Date },
                     //solo se usa la hora, pero no existe un tipo de dato solo para la hora
-                    hora_entrada: { type: Time },
-                    hora_salida: { type: Time },
+                    hora_entrada: { type: Date },
+                    hora_salida: { type: Date },
                     estado_entrada: { type: String },
                     estado_entrada: { type: String }
                 }
@@ -93,9 +93,4 @@ const Enterprise = new mongoose.Schema({
         },
     ]
 }, { timestamps: true });
-
-const Empresas = mongoose.model('Empresas', Enterprise, "Empresas")
-
-export {
-    Empresas
-}
+export default mongoose.model('Empresas', Enterprise, "Empresas");

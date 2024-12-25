@@ -84,6 +84,7 @@ export default {
         .then(function (response) {
           userStore.setAuth(true);
           userStore.setToken(response.data.access_token);
+          console.log(response.data)
           userStore.setUser({
             ...response.data.user,
             enterprise: response.data.enterprise,

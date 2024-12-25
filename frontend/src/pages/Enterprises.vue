@@ -44,7 +44,7 @@
             </q-item>
             <q-item clickable v-close-popup @click="filter = false">
               <q-item-section>
-                <q-item-label>No Validadss</q-item-label>
+                <q-item-label>No Validadas</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
