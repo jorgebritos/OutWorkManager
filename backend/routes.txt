@@ -1,0 +1,52 @@
+
+  POST            api/v1/auth/login .................................................................................................................................................. Auth\AuthController@login
+  POST            api/v1/auth/register ............................................................................................................................................ Auth\AuthController@register
+  POST            api/v1/chat/send .................................................................................................................................................. ChatController@sendMessage
+  GET|HEAD        api/v1/chat/{receiverId} .......................................................................................................................................... ChatController@getMessages
+  GET|HEAD        api/v1/enterprises ......................................................................................................................... enterprises.index › v1\EnterpriseController@index
+  POST            api/v1/enterprises ......................................................................................................................... enterprises.store › v1\EnterpriseController@store
+  GET|HEAD        api/v1/enterprises/{enterprise} .............................................................................................................. enterprises.show › v1\EnterpriseController@show
+  PUT|PATCH       api/v1/enterprises/{enterprise} .......................................................................................................... enterprises.update › v1\EnterpriseController@update
+  DELETE          api/v1/enterprises/{enterprise} ........................................................................................................ enterprises.destroy › v1\EnterpriseController@destroy
+  GET|HEAD        api/v1/enterprises/{enterprise}/documents ............................................................................................ documents.index › v1\EnterpriseDocumentController@index
+  POST            api/v1/enterprises/{enterprise}/documents ............................................................................................ documents.store › v1\EnterpriseDocumentController@store
+  GET|HEAD        api/v1/enterprises/{enterprise}/documents/{document} ................................................................................... documents.show › v1\EnterpriseDocumentController@show
+  PUT|PATCH       api/v1/enterprises/{enterprise}/documents/{document} ............................................................................... documents.update › v1\EnterpriseDocumentController@update
+  DELETE          api/v1/enterprises/{enterprise}/documents/{document} ............................................................................. documents.destroy › v1\EnterpriseDocumentController@destroy
+  GET|HEAD        api/v1/enterprises/{enterprise}/jobs ........................................................................................................... jobs.index › v1\JobEnterpriseController@index
+  POST            api/v1/enterprises/{enterprise}/jobs ........................................................................................................... jobs.store › v1\JobEnterpriseController@store
+  GET|HEAD        api/v1/enterprises/{enterprise}/jobs/{job} ....................................................................................................... jobs.show › v1\JobEnterpriseController@show
+  PUT|PATCH       api/v1/enterprises/{enterprise}/jobs/{job} ................................................................................................... jobs.update › v1\JobEnterpriseController@update
+  DELETE          api/v1/enterprises/{enterprise}/jobs/{job} ................................................................................................. jobs.destroy › v1\JobEnterpriseController@destroy
+  GET|HEAD        api/v1/enterprises/{enterprise}/operators ...................................................................................................... operators.index › v1\OperatorController@index
+  POST            api/v1/enterprises/{enterprise}/operators ...................................................................................................... operators.store › v1\OperatorController@store
+  GET|HEAD        api/v1/enterprises/{enterprise}/operators/{operator} ............................................................................................. operators.show › v1\OperatorController@show
+  PUT|PATCH       api/v1/enterprises/{enterprise}/operators/{operator} ......................................................................................... operators.update › v1\OperatorController@update
+  DELETE          api/v1/enterprises/{enterprise}/operators/{operator} ....................................................................................... operators.destroy › v1\OperatorController@destroy
+  GET|HEAD        api/v1/enterprises/{enterprise}/operators/{operator}/documents ............................................................... operators.documents.index › v1\OperatorDocumentController@index
+  POST            api/v1/enterprises/{enterprise}/operators/{operator}/documents ............................................................... operators.documents.store › v1\OperatorDocumentController@store
+  GET|HEAD        api/v1/enterprises/{enterprise}/operators/{operator}/documents/{document} ...................................................... operators.documents.show › v1\OperatorDocumentController@show
+  PUT|PATCH       api/v1/enterprises/{enterprise}/operators/{operator}/documents/{document} .................................................. operators.documents.update › v1\OperatorDocumentController@update
+  DELETE          api/v1/enterprises/{enterprise}/operators/{operator}/documents/{document} ................................................ operators.documents.destroy › v1\OperatorDocumentController@destroy
+  GET|HEAD        api/v1/jobs .............................................................................................................................................. jobs.index › v1\JobController@index
+  POST            api/v1/jobs .............................................................................................................................................. jobs.store › v1\JobController@store
+  GET|HEAD        api/v1/jobs/{job} .......................................................................................................................................... jobs.show › v1\JobController@show
+  PUT|PATCH       api/v1/jobs/{job} ...................................................................................................................................... jobs.update › v1\JobController@update
+  DELETE          api/v1/jobs/{job} .................................................................................................................................... jobs.destroy › v1\JobController@destroy
+  GET|HEAD        api/v1/jobs/{job}/documents ............................................................................................................ jobs.documents.index › v1\JobDocumentController@index
+  POST            api/v1/jobs/{job}/documents ............................................................................................................ jobs.documents.store › v1\JobDocumentController@store
+  GET|HEAD        api/v1/jobs/{job}/documents/{document} ................................................................................................... jobs.documents.show › v1\JobDocumentController@show
+  PUT|PATCH       api/v1/jobs/{job}/documents/{document} ............................................................................................... jobs.documents.update › v1\JobDocumentController@update
+  DELETE          api/v1/jobs/{job}/documents/{document} ............................................................................................. jobs.documents.destroy › v1\JobDocumentController@destroy
+  GET|HEAD        api/v1/user ........................................................................................................................................................... Auth\AuthController@me
+  PATCH           api/v1/user ....................................................................................................................................................... Auth\AuthController@update
+  GET|HEAD        api/v1/users ........................................................................................................................................... users.index › v1\UserController@index
+  POST            api/v1/users ........................................................................................................................................... users.store › v1\UserController@store
+  PUT|PATCH       api/v1/users/{user} .................................................................................................................................. users.update › v1\UserController@update
+  DELETE          api/v1/users/{user} ................................................................................................................................ users.destroy › v1\UserController@destroy
+  GET|POST|HEAD   broadcasting/auth ................................................................................................................. Illuminate\Broadcasting › BroadcastController@authenticate
+  GET|HEAD        sanctum/csrf-cookie ........................................................................................................ sanctum.csrf-cookie › Laravel\Sanctum › CsrfCookieController@show
+  GET|HEAD        up ........................................................................................................................................................................................... 
+
+                                                                                                                                                                                             Showing [48] routes
+

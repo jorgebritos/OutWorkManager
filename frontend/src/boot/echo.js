@@ -10,7 +10,7 @@ export default async ({ app, store, router }) => {
     cluster: "your-cluster",
     forceTLS: false,
     encrypted: false,
-    wsHost: "localhost",
+    wsHost: "192.168.222.180",
     wsPort: 8080,
     enabledTransports: ["ws"],
   });

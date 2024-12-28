@@ -14,7 +14,9 @@ class Job extends Model
         'description',
         'date',
         'in_time',
+        'in_time_confirm',
         'out_time',
+        'out_time_confirm',
         'is_check',
         'is_check_enterprise',
         "enterprise_id"

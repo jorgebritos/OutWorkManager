@@ -63,6 +63,7 @@ import MenuCreateOperator from "src/components/operators/MenuCreateOperator.vue"
 import OperatorItem from "src/components/operators/OperatorItem.vue";
 import { ref, watch } from "vue";
 import Pagination from "src/components/helpers/Pagination.vue";
+import { useAutoRefetch } from "../../hooks/api/autorefetchs.hooks";
 
 export default {
   components: {
@@ -82,6 +83,7 @@ export default {
     );
 
     const createOperator = ref(false);
+    const page = ref(null);
     const search = ref(null);
 
     const handleOpenCreateOperator = () => {
@@ -92,13 +94,18 @@ export default {
       refetch({ search: search.value });
     });
 
-    const handleRefetchPage = (page) => refetch({ page, search: search.value });
+    const handleRefetchPage = (p) => {
+      page.value = p
+      refetch({ page, search: search.value })
+    }
 
     const handleCloseCreateOperator = () => {
       createOperator.value = false;
       refetch();
     };
 
+    useAutoRefetch(()=>refetch({page: page.value}))
+    
     return {
       handleRefetchPage,
       operators,

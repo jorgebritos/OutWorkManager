@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\v1\JobGuardController as V1JobGuardController;
 use App\Http\Controllers\v1\EnterpriseController as V1EnterpriseController;
 use App\Http\Controllers\v1\JobController as V1JobController;
 use App\Http\Controllers\v1\OperatorController as V1OperatorController;
@@ -37,6 +38,9 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix("jobs/{job:id}")->group(function () {
         Route::apiResource("/documents", V1JobDocumentController::class)->names("jobs.documents");
     });
+
+    Route::get('/guard', [V1JobGuardController::class, 'index']);
+    Route::put('/guard/{job:id}', [V1JobGuardController::class, 'update']);
 
     Route::apiResource("/users", V1UserController::class)->except(["show"]);
 });

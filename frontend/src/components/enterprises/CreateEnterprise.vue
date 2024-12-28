@@ -57,10 +57,7 @@
                 :offset="[0, 15]"
               >
                 <q-list class="scroll" style="max-height: 250px; width: 300px">
-                  <q-infinite-scroll
-                    @load="handleUserScroll"
-                    :offset="15"
-                  >
+                  <q-infinite-scroll @load="handleUserScroll" :offset="15">
                     <q-item
                       v-for="(user, index) in users"
                       class="q-px-none"
@@ -122,7 +119,9 @@ export default {
   setup(props, { emit }) {
     const show = ref(false);
 
-    const { isLoading, users, paginate, refetch } = useUsers();
+    const { isLoading, users, paginate, refetch } = useUsers({
+      role: "users_not_enterprise",
+    });
 
     const menu_users = ref(false)
     const user_tag = ref(null)
@@ -130,11 +129,22 @@ export default {
     let users_old = null;
 
     const handleUserScroll = () => {
-      users_old = users.value;
-      refetch().then((response) => {
-        users.value = [...users_old, ...response.data.users];
-      });
-    };
+      let next_page =
+        paginate.value.current_page !== paginate.value.last_page
+          ? paginate.value.current_page + 1
+          : null;
+
+      if (next_page) {
+        users_old = users.value;
+        
+        refetch({
+          role: "users_not_enterprise",
+          page: next_page,
+        }).then((response) => {
+          users.value = [...users_old, ...response.data.users];
+        });
+      }
+    };   
 
     const data = reactive({
       name: "",

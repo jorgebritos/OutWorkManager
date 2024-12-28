@@ -40,11 +40,10 @@ api.interceptors.response.use(
   },
   function (error) {
     const userStore = useUserStore();
-    const router = useRouter()
 
     if (error?.response?.status === 401) {
+      console.log(error)
       userStore.setAuth(false);
-      router.push('/login')
     } 
 
     return Promise.reject(error);

@@ -15,6 +15,7 @@ class ChatController extends Controller
             'content' => 'required|string',
         ]);
 
+
         $message = Message::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $validated['receiver_id'],

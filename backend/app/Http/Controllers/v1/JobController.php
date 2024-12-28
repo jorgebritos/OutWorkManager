@@ -41,11 +41,7 @@ class JobController extends Controller
             $now = Carbon::now();
 
             $query->where(function ($q) use ($now) {
-                $q->whereDate('date', '<', $now->toDateString())
-                    ->orWhere(function ($q2) use ($now) {
-                        $q2->whereDate('date', '=', $now->toDateString())
-                            ->whereTime('in_time', '<', $now->toTimeString());
-                    });
+                $q->where(DB::raw("CONCAT(date, ' ', in_time)"), '<', $now->toDateTimeString());
             });
         }
 

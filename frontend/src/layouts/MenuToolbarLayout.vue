@@ -56,7 +56,7 @@
   </q-page-container>
 </template>
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import Chat from "src/components/Chat.vue";
 import notificaciones from "src/components/Notificaciones.vue";
 import Notificaciones2 from "src/components/Notificaciones2.vue";
@@ -75,6 +75,7 @@ export default {
 
     const userStore = useUserStore();
     const user = computed(() => userStore.getUser);
+    const isAuth = computed(() => userStore.getAuth);
 
     const menuList = computed(() => {
       if (user.value.rol === "Admin") {
@@ -100,11 +101,6 @@ export default {
             label: "His. trabajo",
             icon: "mdi-folder-multiple",
             href: "his.jobs",
-          },
-          {
-            label: "Soporte",
-            icon: "mdi-chat-question-outline",
-            href: "soporte",
             separator: true,
           },
           {
@@ -133,13 +129,6 @@ export default {
         }
 
         menu.push({
-          label: "Soporte",
-          icon: "mdi-chat-question-outline",
-          href: "soporte",
-          separator: true,
-        });
-
-        menu.push({
           label: "Tú Cuenta",
           icon: "mdi-cog-outline",
           href: "user-config",
@@ -148,6 +137,11 @@ export default {
         return menu;
       }
     });
+
+    watchEffect(isAuth, ()=>{
+      console.log(isAuth)
+      router.push({ name: "login" });
+    })
 
     const handleLogout = () => {
       userStore.setToken(null);

@@ -137,6 +137,7 @@
             class="q-mt-md"
             type="submit"
             color="primary"
+            last_page
           />
         </q-form>
       </q-card-section>
@@ -152,9 +153,7 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-btn class="q-mx-sm bg-green-4" @click="show = true">
-    Edit
-  </q-btn>
+  <q-btn class="q-mx-sm bg-green-4" @click="show = true"> Edit </q-btn>
 </template>
 
 <script>
@@ -182,10 +181,21 @@ export default {
     let enterprises_old = null;
 
     const handleEnterprisesScroll = () => {
-      enterprises_old = enterprises.value;
-      refetch({ page: paginate.value.current_page + 1 }).then((response) => {
-        enterprises.value = [...enterprises_old, ...response.data.enterprises];
-      });
+      let next_page =
+        paginate.value.current_page !== paginate.value.last_page
+          ? paginate.value.current_page + 1
+          : null;
+
+      if (next_page) {
+        enterprises_old = enterprises.value;
+
+        refetch({ filter: true, page: next_page }).then((response) => {
+          enterprises.value = [
+            ...enterprises_old,
+            ...response.data.enterprises
+          ]
+        });
+      }
     };
 
     const error_create = ref(null);

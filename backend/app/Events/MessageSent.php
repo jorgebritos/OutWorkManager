@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Events;
 
 use App\Models\Message;
@@ -19,5 +20,5 @@ class MessageSent implements ShouldBroadcast
     {
         return new PrivateChannel('chat.' . $this->message->receiver_id);
     }
-}
 
+}
