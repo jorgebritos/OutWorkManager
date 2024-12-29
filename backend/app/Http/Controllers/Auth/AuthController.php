@@ -74,14 +74,14 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         Validator::make($request->all(), [
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|exists:users,id',
             'password' => 'required|string',
         ]);
 
         $credentials = request(['email', 'password']);
 
         if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Password invalid'], 401);
         }
 
         $user = User::where('email', $request->email)->first();

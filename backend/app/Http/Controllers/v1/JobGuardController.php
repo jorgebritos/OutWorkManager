@@ -49,7 +49,7 @@ class JobGuardController  extends Controller
 
         $job->update($data);
 
-        return response()->request([
+        return response()->json([
             'job' => JobResource::make($job)
         ]);
     }

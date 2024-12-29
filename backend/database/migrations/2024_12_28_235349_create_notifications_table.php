@@ -11,19 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jobs', function (Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->text("description");
-            $table->boolean("is_check")->default(false);
-            $table->boolean("is_check_enterprise")->default(false);
-
-            $table->date('date');
-
-            $table->time('in_time');
-            $table->boolean('in_time_confirm')->default(false);
-
-            $table->time('out_time');
-            $table->boolean('out_time_confirm')->default(false);
+            $table->string('content');
 
             $table->unsignedBigInteger('enterprise_id');
             $table->foreign('enterprise_id')
@@ -40,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('jobs');
+        Schema::dropIfExists('notifications');
     }
 };

@@ -111,7 +111,7 @@ export default {
 
     const handleRefetchPage = (p) => {
       page.value = p
-      refetch({ role: role.value, page, search: search.value });
+      refetch({ role: role.value, page: p, search: search.value });
     };
 
     useAutoRefetch(async () => await refetch({ role: role.value, page: page.value, search: search.value }));

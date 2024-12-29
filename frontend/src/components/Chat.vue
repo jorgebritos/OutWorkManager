@@ -28,7 +28,11 @@
               </q-avatar>
 
               <q-menu auto-close>
-                <q-infinite-scroll @load="handleUserScroll" :offset="15" v-model="isLoading" >
+                <q-infinite-scroll
+                  @load="handleUserScroll"
+                  :offset="15"
+                  v-model="isLoading"
+                >
                   <q-list>
                     <q-item
                       v-for="(user, index) in users"
@@ -61,7 +65,6 @@
             </span>
 
             <q-space />
-
             <q-btn dense flat icon="close" v-close-popup>
               <q-tooltip class="bg-white text-primary">Close</q-tooltip>
             </q-btn>
@@ -72,12 +75,20 @@
         <div class="bg-grey-5 chat-area">
           <q-scroll-area class="messages-area" :reverse="true">
             <div class="q-pa-md row justify-center">
-              <div style="width: 100%; max-width: 900px;">
+              <div style="width: 100%; max-width: 700px">
                 <q-chat-message
                   v-for="(msg, index) in messages"
+                  :avatar="
+                    msg.sender_id !== user.id
+                      ? received.image
+                        ? `${api_base_backend}/${received.image}`
+                        : user_default
+                      : undefined
+                  "
                   :key="index"
                   :text="[msg.content]"
                   :sent="msg.sender_id === user.id"
+                  class="text-subtitle1"
                   :bg-color="msg.sender_id === user.id ? 'green-3' : 'white'"
                 />
               </div>
@@ -136,7 +147,7 @@ export default {
           isLoading,
           paginate,
           refetch,
-        } = useEnterprises({filter: true, owner: true});
+        } = useEnterprises({ filter: true, owner: true });
 
         return { users, isLoading, paginate, refetch };
       }
