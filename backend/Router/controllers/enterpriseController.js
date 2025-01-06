@@ -18,14 +18,32 @@ export const create = async (req, res) => {
 }
 
 export const fetch = async (req, res) => {
+    const pagina = 1, limite = 1
     try {
-        const enterprises = await Enterprise.find();
+        const saltar = (pagina - 1) * limite;
 
-        res.status(200).json(enterprises);
+        const enterprises = await Enterprise.find()
+            .skip(saltar) // Saltar los primeros productos
+            .limit(limite) // Limitar la cantidad de productos por página
+            .exec();
+        console.log(enterprises)
+        const totalEnterprises = await Enterprise.countDocuments();
+
+        // Calcular el número de la última página
+        const last_page = Math.ceil(totalEnterprises / limite);
+
+        res.status(200).json({
+            enterprises,
+            meta: {
+                last_page,
+                current_page: pagina
+            },
+        });
     } catch (error) {
-        res.status(500).json({ error: "Internal Network Error" })
+        console.error('Error al obtener productos:', error);
+        return { error: 'No se pudieron obtener los productos' };
     }
-}
+};
 
 export const update = async (req, res) => {
     try {

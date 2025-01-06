@@ -14,8 +14,9 @@ export const useEnterprises = (params = { filter: true }) => {
       })
       .then((response) => {
         isLoading.value = false;
-        enterprises.value = response.data.enterprises;
-        paginate.value = response.data.meta;
+        console.log(response.data[0])
+        enterprises.value = response.data[0];
+        paginate.value = response.data[2];
         return response;
       });
   };
