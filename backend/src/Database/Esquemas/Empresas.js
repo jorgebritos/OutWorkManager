@@ -1,4 +1,4 @@
-import { bd, mongoose } from "../bd.js"
+import { bd, mongoose } from "../../config/bd.js"
 bd()
 
 const Enterprise = new mongoose.Schema({

@@ -1,4 +1,4 @@
-import Enterprise from "../../Base_De_Datos/Esquemas/Empresas.js"
+import Enterprise from "../Database/Esquemas/Empresas.js"
 
 export const create = async (req, res) => {
     try {

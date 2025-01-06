@@ -1,5 +1,5 @@
 import express from "express"
-import { fetch } from "../controllers/enterpriseController.js"
+import { fetch } from "../../controllers/enterpriseController.js"
 
 const enterpriseRouter = express.Router();
 
