@@ -1,7 +1,8 @@
 import express from "express"
-import userRouter from "./userRoute.js"
-import authRouter from "./authRoute.js"
-import enterprisesRouter from "./enterprisesRoute.js"
+import userRouter from "./routes/userRoute.js"
+import authRouter from "./routes/authRoute.js"
+import enterprisesRouter from "./routes/enterprisesRoute.js"
+import jobRouter from './routes/jobRoute.js'
 import cors from "cors"
 
 const routes = express.Router();
@@ -11,5 +12,6 @@ routes.use("/auth", authRouter)
 routes.use("/user", userRouter)
 routes.use("/enterprises", enterprisesRouter)
 routes.use("/users", userRouter)
+routes.use("/job" , jobRouter)
 
 export default routes;
