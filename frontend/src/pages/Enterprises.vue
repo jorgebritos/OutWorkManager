@@ -91,7 +91,7 @@ export default {
     const search = ref("");
 
     const filter = ref(true);
-
+    console.log(enterprises)
     const handleRefetchPage = (page) => {
       refetch({ filter: filter.value, page, search: search.value });
     };

@@ -21,11 +21,19 @@ export const create = async (req, res) => {
 export const fetch = async (req, res) => {
     try {
         const users = await User.find();
-
+        const meta = {
+            current_page: "",
+            from: "",
+            last_page: "",
+            path: "",
+            per_page: "",
+            last_item: "",
+            total: ""
+        }
         if (users.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
-        res.status(200).json(users);
+        res.status(200).json([users, meta]);
     } catch (error) {
         res.status(500).json({ error: "Internal Network error" })
     }
@@ -58,10 +66,10 @@ export const deleteUser = async (req, res) => {
 
         await User.findOneAndDelete(id);
 
-        res.status(201).json({message: "User deleted successfully."});
+        res.status(201).json({ message: "User deleted successfully." });
 
     } catch (error) {
-        
+
         res.status(500).json({ error: "Internal Network error" })
 
     }

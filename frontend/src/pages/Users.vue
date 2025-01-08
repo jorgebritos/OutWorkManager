@@ -96,6 +96,7 @@ export default {
   setup() {
     const { isLoading, refetch, users, paginate } = useUsers();
 
+    console.log(paginate)
     const search = ref("");
     const role = ref(null);
 
