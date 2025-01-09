@@ -7,17 +7,18 @@
 
       <q-card-section class="q-pt-none">
         <q-form @submit.prevent="handleCreateEnterprise">
-          <q-input name="RUT" required label="RUT" v-model="data.RUT" />
+          <q-input name="rut" required label="RUT" v-model="data.rut"/>
           <div
-            v-for="(error, index) in error_create?.RUT"
+            v-for="(error, index) in error_create?.rut"
             :key="index"
             class="q-mt-sm"
           >
+ }}
             <span class="q-pa-xs bg-negative text-white">
               {{ error }}
             </span>
           </div>
-          <q-input name="name" required label="nombre" v-model="data.name" />
+          <q-input name="nombre" required label="nombre" v-model="data.nombre" />
           <div
             v-for="(error, index) in error_create?.nombre"
             :key="index"
@@ -27,7 +28,7 @@
           </div>
           <q-checkbox label="Verificado" v-model="data.is_valid" />
 
-          <q-file color="teal" filled label="image" v-model="data.image">
+          <q-file color="teal" filled label="imagen" v-model="data.imagen">
             <template v-slot:prepend>
               <q-icon name="cloud_upload" />
             </template>
@@ -96,7 +97,6 @@
           <q-btn label="Crear" class="q-mt-md" type="submit" color="primary" />
         </q-form>
       </q-card-section>
-
       <q-card-actions align="right">
         <q-btn
           flat
@@ -136,30 +136,35 @@ export default {
       });
     };
 
+    const printData = () => {
+      console.log("asduhasiduh")
+    }
+
     const data = reactive({
-      name: "",
-      RUT: "",
+      nombre: "",
+      rut: "",
       is_valid: true,
-      image: null,
+      imagen: null,
       user_id: null,
     });
 
     const error_create = ref(null);
 
     const handleClose = () => {
-      data.name = "";
-      data.RUT = "";
+      data.rut = "";
+      data.nombre = "";
       data.is_valid = true;
-      data.image = null;
+      data.imagen = null;
       data.user_id = null;
       show.value = false;
     };
 
     const handleCreateEnterprise = async () => {
+      let realData = {...data}
       const { isError, error } = await useCreateEnterprise({
-        ...data,
+        ...realData
       });
-
+      
       if (!isError.value) {
         handleClose();
         emit("refetch");
@@ -170,6 +175,7 @@ export default {
 
     return {
       data,
+      printData,
       menu_users,
       user_tag,
       handleUserScroll,

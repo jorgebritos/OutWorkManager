@@ -3,16 +3,16 @@
     <q-card-section class="text-center" style="height: 200px">
       <div v-if="enterprise.image" style="width: 100%; height: 100%">
         <img
-          :src="`${api_base_backend}/${enterprise.image}`"
+          :src="`${api_base_backend}/${enterprise.imagen.__key}`"
           style="object-fit: cover;"
           width="100%"
           height="100%"
         />
-        <p class="w-full">{{ enterprise.name }}</p>
+        <p class="w-full">{{ enterprise.nombre }}</p>
       </div>
 
       <div v-else style="width: 100%; height: 100%" class="row justify-center items-center">
-        <p>{{ enterprise.name }}</p>
+        <p>{{ enterprise.nombre }}</p>
       </div>
     </q-card-section>
     <q-card-section class="text-right row items-center justify-between">

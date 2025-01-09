@@ -13,7 +13,6 @@ const Enterprise = new mongoose.Schema({
         type: String
     },
     imagen: {
-        type: String
     },
     is_valid: {
         type: Boolean

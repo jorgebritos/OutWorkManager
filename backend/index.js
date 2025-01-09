@@ -10,7 +10,7 @@ const app = express();
 //express.json
 app.use(bodyParser.json());
 dotenv.config();
-const PORT =  5000;
+const PORT =  process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server is running on port http://localhost:${PORT}`)
 })

@@ -2,23 +2,42 @@ import Enterprise from "../Database/Esquemas/Empresas.js"
 
 export const create = async (req, res) => {
     try {
+        console.log(req.body)
         const enterpriseData = new Enterprise(req.body);
         const { rut } = enterpriseData;
         const enterpriseExist = await Enterprise.findOne({ rut });
-
         if (enterpriseExist) {
             return res.status(400).json({ message: "La empresa ya existe" });
         }
 
         const savedEnterprise = await enterpriseData.save();
-        res.status(200).json(savedEnterprise)
+        console.log(savedEnterprise)
+        const pagina = 1, limite = 15
+        const saltar = (pagina - 1) * limite;
+
+        const enterprises = await Enterprise.find()
+            .skip(saltar) // Saltar los primeros productos
+            .limit(limite) // Limitar la cantidad de productos por página
+            .exec();
+        const totalEnterprises = await Enterprise.countDocuments();
+
+        // Calcular el número de la última página
+        const last_page = Math.ceil(totalEnterprises / limite);
+
+        res.status(200).json({
+            enterprises,
+            meta: {
+                last_page,
+                current_page: pagina
+            },
+        });
     } catch (error) {
-        res.status(500).jso({ error: "Internal Network Error" })
+        res.status(500).json({ error: "Internal Network Error" })
     }
 }
 
 export const fetch = async (req, res) => {
-    const pagina = 1, limite = 1
+    const pagina = 1, limite = 15
     try {
         const saltar = (pagina - 1) * limite;
 
@@ -26,7 +45,6 @@ export const fetch = async (req, res) => {
             .skip(saltar) // Saltar los primeros productos
             .limit(limite) // Limitar la cantidad de productos por página
             .exec();
-        console.log(enterprises)
         const totalEnterprises = await Enterprise.countDocuments();
 
         // Calcular el número de la última página

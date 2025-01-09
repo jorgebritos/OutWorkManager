@@ -1,6 +1,7 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
 import { useAutoRefetch } from "./autorefetchs.hooks";
+import TableDocuments from "src/components/TableDocuments.vue";
 
 export const useEnterprises = (params = { filter: true }) => {
   const isLoading = ref(true);
@@ -14,9 +15,8 @@ export const useEnterprises = (params = { filter: true }) => {
       })
       .then((response) => {
         isLoading.value = false;
-        console.log(response.data[0])
-        enterprises.value = response.data[0];
-        paginate.value = response.data[2];
+        enterprises.value = response.data.enterprises;
+        paginate.value = response.data.meta;
         return response;
       });
   };
@@ -84,25 +84,24 @@ export const useCreateEnterprise = async (data) => {
   const isError = ref(false);
   const error = ref(null);
 
-  const formData = new FormData();
+  const formData = {};
 
-  formData.append("RUT", data.RUT);
-  formData.append("nombre", data.name);
-  formData.append("is_valid", data.is_valid);
-
+  formData.rut = data.rut
+  formData.nombre = data.nombre
+  formData.is_valid = data.is_valid
+  formData.slug = data.rut + data.nombre
   if (data.user_id) {
-    formData.append("user_id", data.user_id);
+    formData.user_id = data.user_id
   }
-
-  if (data.image) {
-    formData.append("image", data.image);
+  
+  if (data.imagen) {
+    formData.imagen = data.imagen
   }
-
+  console.log(formData)
   await api
-    .post("enterprises", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
+    .post("enterprises/create", formData)
     .then((response) => {
+
       enterprise.value = response.data.enterprise;
     })
     .catch((err) => {
@@ -137,7 +136,7 @@ export const useUpdateEnterprise = async (slug, data) => {
   }
 
   await api
-    .post(`enterprises/${slug}`, formData, {
+    .post(`enterprises/create`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
