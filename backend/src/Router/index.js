@@ -12,6 +12,6 @@ routes.use("/auth", authRouter)
 routes.use("/user", userRouter)
 routes.use("/enterprises", enterprisesRouter)
 routes.use("/users", userRouter)
-routes.use("/job" , jobRouter)
+routes.use("/jobs" , jobRouter)
 
 export default routes;

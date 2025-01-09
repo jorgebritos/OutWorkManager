@@ -11,19 +11,19 @@ import {
 const router = express.Router();
 
 // Crear un nuevo trabajo
-router.post('/jobs', createJob);
+router.post('/', createJob);
 
 // Agregar una fecha a un trabajo
-router.post('/jobs/:jobId/dates', addDateToJob);
+router.post('/:jobId/dates', addDateToJob);
 
 // Eliminar una fecha de un trabajo
-router.delete('/jobs/:jobId/dates/:dateId', removeDateFromJob);
+router.delete('/:jobId/dates/:dateId', removeDateFromJob);
 
 // Actualizar una fecha de un trabajo
-router.put('/jobs/:jobId/dates/:dateId', updateDateInJob);
+router.put('/:jobId/dates/:dateId', updateDateInJob);
 
 // Obtener todos los trabajos
-router.get('/jobs', getJobs);
+router.get('/', getJobs);
 
 // Obtener un trabajo por ID
 router.get('/jobs/:jobId', getJobById);

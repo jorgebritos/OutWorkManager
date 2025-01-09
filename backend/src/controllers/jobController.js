@@ -78,8 +78,23 @@ export const updateDateInJob = async (req, res) => {
 
 export const getJobs = async (req, res) => {
     try {
-        const jobs = await Job.find().populate("enterpriseId");
-        res.status(200).json(jobs);
+        const pagina = 1;
+        const limite = 15;
+        const saltar = (pagina - 1) * limite;
+
+        const jobs = await Job.find()
+            .skip(saltar)
+            .limit(limite)
+            .populate("enterpriseId", "name") // Only populate the name field from Enterprise
+            .exec();
+
+        console.log(jobs)
+
+        const totalJobs = await Job.countDocuments();
+
+        const last_page = Math.ceil(totalJobs / limite);
+
+        res.status(200).json({ jobs, meta: { last_page, current_page: pagina } });
     } catch (error) {
         res.status(500).json({ error: "Internal Network Error" });
     }
@@ -88,7 +103,7 @@ export const getJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
     try {
         const { jobId } = req.params;
-        const job = await Job.findById(jobId).populate("enterpriseId");
+        const job = await Job.findById(jobId).populate("enterpriseId", "name"); // Only populate the name field from Enterprise
         if (!job) {
             return res.status(404).json({ message: "Job not found" });
         }

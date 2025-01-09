@@ -8,8 +8,9 @@
     />
 
     <div v-if="!isLoading">
+      {{ console.log(enterprise) }}
       <q-img
-        :src="`${api_base_backend}/${enterprise.image}`"
+        :src="`${api_base_backend}/${enterprise.imagen}`"
         alt="esta enterprise no pose imagen"
         style="height: 350px"
         fit="cover"
@@ -140,7 +141,7 @@ export default {
     const router = useRouter();
     const userStore = useUserStore();
     const { params } = useRoute();
-
+    
     const { enterprise, isLoading, refetch } = useEnterprise(params.slug);
 
     const user = userStore.getUser;

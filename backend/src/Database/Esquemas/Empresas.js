@@ -90,6 +90,9 @@ const Enterprise = new mongoose.Schema({
                 }
             ],
         },
+    ],
+    operadores: [
+        
     ]
 }, { timestamps: true });
 export default mongoose.model('Empresas', Enterprise, "Empresas");

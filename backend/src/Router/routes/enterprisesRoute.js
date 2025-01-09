@@ -5,6 +5,7 @@ const enterpriseRouter = express.Router();
 
 enterpriseRouter.post("/create", create)
 enterpriseRouter.get("/", fetch);
+enterpriseRouter.get("/:slug", fetch);
 // userRouter.put("/update/:id", update)
 // userRouter.delete("/delete/:id", deleteUser)
 

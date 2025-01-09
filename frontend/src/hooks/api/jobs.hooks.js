@@ -46,7 +46,7 @@ export const useJobs = (params = { valid: true }) => {
 
   const refetch = (params = {}) => {
     api
-      .get("jobs", {
+      .get("/jobs", {
         params,
       })
       .then((response) => {
@@ -57,7 +57,7 @@ export const useJobs = (params = { valid: true }) => {
   };
 
   api
-    .get("jobs", {
+    .get("/jobs", {
       params,
     })
     .then((response) => {

@@ -40,8 +40,8 @@
       </tbody>
     </q-markup-table>
     <Pagination
-      :currentPage="paginate.current_page"
-      :maxPages="paginate.last_page"
+      :currentPage="documents.meta.current_page"
+      :maxPages="documents.meta.last_page"
       @handleRefetchPage="handleRefetchPage"
     />
   </div>
@@ -71,9 +71,9 @@ export default {
     },
   },
   setup(props) {
-    const { documents, paginate, isLoading, refetch } =
+    const { documents, isLoading, refetch } =
       handleToggleFetchDocuments(props.entity, props.params);
-
+    console.log(documents)
     const search = ref(null);
 
     watch(search, () => {
@@ -87,7 +87,6 @@ export default {
     return {
       handleRefetchPage,
       documents,
-      paginate,
       isLoading,
       refetch,
       search,

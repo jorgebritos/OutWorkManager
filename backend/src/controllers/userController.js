@@ -20,20 +20,20 @@ export const create = async (req, res) => {
 
 export const fetch = async (req, res) => {
     try {
-        const users = await User.find();
-        const meta = {
-            current_page: "",
-            from: "",
-            last_page: "",
-            path: "",
-            per_page: "",
-            last_item: "",
-            total: ""
-        }
-        if (users.length === 0) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        res.status(200).json([users, meta]);
+        const pagina = 1;
+        const limite = 15;
+        const saltar = (pagina - 1) * limite;
+
+        const users = await User.find()
+            .skip(saltar)
+            .limit(limite)
+            .exec();
+
+        const totalUsers = await User.countDocuments();
+
+        const last_page = Math.ceil(totalUsers / limite);
+
+        res.status(200).json({ users, meta: { last_page, current_page: pagina } });
     } catch (error) {
         res.status(500).json({ error: "Internal Network error" })
     }

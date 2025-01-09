@@ -1,13 +1,13 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import {useAutoRefetch} from "./autorefetchs.hooks";
+import { useAutoRefetch } from "./autorefetchs.hooks";
 
 export const useOperators = (enterprise) => {
   const isLoading = ref(true);
   const operators = ref(null);
   const paginate = ref(null);
 
-  const refetch = (params={}) => {
+  const refetch = (params = {}) => {
     api.get(`enterprises/${enterprise}/operators`, {
       params,
     }).then((response) => {
@@ -17,14 +17,14 @@ export const useOperators = (enterprise) => {
     });
   };
 
-  api.get(`enterprises/${enterprise}/operators`).then((response) => {
+  api.get(`enterprises/${enterprise}`).then((response) => {
     isLoading.value = false;
-    operators.value = response.data.operators;
-    paginate.value = response.data.meta;
+    operators.value = response.data.operators.operators;
+    paginate.value = response.data.operators.meta;
   });
 
   useAutoRefetch(refetch)
-  
+
   return {
     operators,
     paginate,

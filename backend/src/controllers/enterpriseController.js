@@ -37,6 +37,41 @@ export const create = async (req, res) => {
 }
 
 export const fetch = async (req, res) => {
+    let { slug } = req.params;
+
+    if (slug) {
+        try {
+            const enterprise = await Enterprise.findOne({ slug });
+            if (!enterprise) {
+                return res.status(404).json({ message: "La empresa no existe" });
+            }
+            let pagina = 1, limite = 15
+            let saltar = (pagina - 1) * limite;
+            let totalDocuments = enterprise.documentos.length
+            let totalOperators = enterprise.operadores.length
+            let last_page_documents = Math.ceil(totalDocuments / limite);
+            let last_page_operators = Math.ceil(totalOperators / limite);
+            return res.status(200).json({
+                enterprise,
+                operators: {
+                    operators: [enterprise.operadores],
+                    meta: {
+                        last_page: last_page_operators,
+                        current_page: pagina
+                    }
+                },
+                documents: {
+                    documents: [enterprise.documentos],
+                    meta: {
+                        last_page: last_page_documents,
+                        current_page: pagina
+                    }
+                }
+            });
+        } catch (error) {
+            res.status(500).json({ error: "Internal Network Error" })
+        }
+    }
     const pagina = 1, limite = 15
     try {
         const saltar = (pagina - 1) * limite;
