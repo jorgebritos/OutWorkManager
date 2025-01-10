@@ -14,9 +14,8 @@ export const useUsers = () => {
       })
       .then((response) => {
         isLoading.value = false;
-        console.log(response.data[0])
-        users.value = response.data[0];
-        paginate.value = response.data[1];
+        users.value = response.data.users;
+        paginate.value = response.data.meta;
 
         return response
       });

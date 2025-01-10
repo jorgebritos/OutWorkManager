@@ -73,11 +73,11 @@
                             () => {
                               data.user_id = user.id;
                               menu_users = false;
-                              user_tag = user.email;
+                              user_tag = user.correo;
                             }
                           "
                         >
-                          {{ user.email }}
+                          {{ user.correo }}
                         </q-btn>
                       </q-item-section>
                     </q-item>

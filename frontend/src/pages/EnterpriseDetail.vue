@@ -8,7 +8,6 @@
     />
 
     <div v-if="!isLoading">
-      {{ console.log(enterprise) }}
       <q-img
         :src="`${api_base_backend}/${enterprise.imagen}`"
         alt="esta enterprise no pose imagen"

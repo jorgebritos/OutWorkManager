@@ -54,14 +54,14 @@ export const fetch = async (req, res) => {
             return res.status(200).json({
                 enterprise,
                 operators: {
-                    operators: [enterprise.operadores],
+                    operators: [...enterprise.operadores],
                     meta: {
                         last_page: last_page_operators,
                         current_page: pagina
                     }
                 },
                 documents: {
-                    documents: [enterprise.documentos],
+                    documents: [...enterprise.documentos],
                     meta: {
                         last_page: last_page_documents,
                         current_page: pagina
@@ -117,7 +117,7 @@ export const update = async (req, res) => {
 export const deleteEnterprise = async (req, res) => {
     try {
         const id = req.params.id;
-        const enterpriseExist = await Enterprise.findOne({ _id: id });
+        const enterpriseExist = await Enterprise.findOne({ slug: id });
 
         if (!enterpriseExist) {
             return res.status(404).json({ message: "La empresa no existe" });

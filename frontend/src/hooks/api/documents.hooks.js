@@ -41,8 +41,8 @@ const useDocumentsEnterprise = (enterprise) => {
       .get(`enterprises/${enterprise}`)
       .then((response) => {
         isLoading.value = false;
-        console.log(response.data)
-        documents.value = response.data.documents.documents;
+        console.log(response.data.documents.meta)
+        documents.value = response.data.documents;
         paginate.value = response.data.documents.meta;
       });
   };

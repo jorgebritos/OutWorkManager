@@ -8,17 +8,18 @@ export const useOperators = (enterprise) => {
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
-    api.get(`enterprises/${enterprise}/operators`, {
+    api.get(`enterprises/${enterprise}`, {
       params,
     }).then((response) => {
       isLoading.value = false;
-      operators.value = response.data.operators;
-      paginate.value = response.data.meta;
+      operators.value = response.data.operators.operators;
+      paginate.value = response.data.operators.meta;
     });
   };
 
   api.get(`enterprises/${enterprise}`).then((response) => {
     isLoading.value = false;
+    console.log(response.data.operators.operators)
     operators.value = response.data.operators.operators;
     paginate.value = response.data.operators.meta;
   });

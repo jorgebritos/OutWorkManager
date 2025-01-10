@@ -28,7 +28,7 @@
       </thead>
       <tbody
         :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
-        v-for="document in documents"
+        v-for="document in documents.documents"
         :key="document.id"
       >
         <document-item
@@ -71,9 +71,9 @@ export default {
     },
   },
   setup(props) {
-    const { documents, isLoading, refetch } =
+    const { documents, paginate, isLoading, refetch } =
       handleToggleFetchDocuments(props.entity, props.params);
-    console.log(documents)
+    console.log(paginate)
     const search = ref(null);
 
     watch(search, () => {
