@@ -14,7 +14,6 @@ use App\Http\Controllers\v1\JobDocumentController as V1JobDocumentController;
 use App\Http\Controllers\v1\OperatorDocumentController as V1OperatorDocumentController;
 use App\Http\Controllers\v1\JobEnterpriseController as V1JobEnterpriseController;
 
-
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [AuthController::class, "me"]);
     Route::patch('/user', [AuthController::class, "update"]);
@@ -49,3 +48,4 @@ Route::middleware(["guest"])->prefix("auth/")->group(function () {
     Route::post("register/", [AuthController::class, "register"]);
     Route::post("login/", [AuthController::class, "login"]);
 });
+

@@ -38,29 +38,23 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        try {
-            $newToken = auth()->refresh();
+        $newToken = auth()->refresh();
 
-            return response()->json([
-                'token' => $newToken
-            ]);
-        } catch (JWTException $e) {
-            return response()->json([
-                'error' => 'Token no valid or expired'
-            ], 401);
-        }
+        return response()->json([
+            'token' => $newToken
+        ]);
     }
 
     public function update(UserUpdateRequest $request)
     {
-        $user = $request->user(); 
+        $user = $request->user();
 
         $data = $request->validated();
 
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
-       
+
         if ($request->hasFile('image')) {
             $data['image'] = "storage/" . $request->file('image')->store('users', 'public');
         }
@@ -81,7 +75,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Password invalid'], 401);
+            return response()->json(['error' => 'Password invalid'], 402);
         }
 
         $user = User::where('email', $request->email)->first();

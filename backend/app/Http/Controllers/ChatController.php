@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MessageSent;
+use App\Events\MessageEvent;
 use App\Models\Message;
 use Illuminate\Http\Request;
 
@@ -15,14 +15,13 @@ class ChatController extends Controller
             'content' => 'required|string',
         ]);
 
-
         $message = Message::create([
             'sender_id' => auth()->id(),
             'receiver_id' => $validated['receiver_id'],
             'content' => $validated['content'],
         ]);
 
-        broadcast(new MessageSent($message))->toOthers();
+        broadcast(new MessageEvent($message));
 
         return response()->json($message);
     }

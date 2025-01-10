@@ -42,8 +42,8 @@ api.interceptors.response.use(
     const userStore = useUserStore();
 
     if (error?.response?.status === 401) {
-      console.log(error)
       userStore.setAuth(false);
+      //window.location.href = '/login';
     } 
 
     return Promise.reject(error);

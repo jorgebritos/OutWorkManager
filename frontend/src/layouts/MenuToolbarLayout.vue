@@ -75,7 +75,6 @@ export default {
 
     const userStore = useUserStore();
     const user = computed(() => userStore.getUser);
-    const isAuth = computed(() => userStore.getAuth);
 
     const menuList = computed(() => {
       if (user.value.rol === "Admin") {
@@ -138,16 +137,8 @@ export default {
       }
     });
 
-    watchEffect(isAuth, ()=>{
-      console.log(isAuth)
-      router.push({ name: "login" });
-    })
-
     const handleLogout = () => {
-      userStore.setToken(null);
       userStore.setAuth(false);
-      userStore.setUser(null);
-
       router.push({ name: "login" });
     };
 
