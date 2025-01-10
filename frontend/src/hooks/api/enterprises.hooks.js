@@ -1,7 +1,6 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
 import { useAutoRefetch } from "./autorefetchs.hooks";
-import TableDocuments from "src/components/TableDocuments.vue";
 
 export const useEnterprises = (params = { filter: true }) => {
   const isLoading = ref(true);
