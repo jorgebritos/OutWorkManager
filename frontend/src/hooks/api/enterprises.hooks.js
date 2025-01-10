@@ -3,14 +3,17 @@ import { api } from "src/boot/axios";
 import { useAutoRefetch } from "./autorefetchs.hooks";
 
 export const useEnterprises = (params = { filter: true }) => {
+  const filter = ref(params);
   const isLoading = ref(true);
   const enterprises = ref(null);
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
+    filter.value = params
+
     return api
       .get("enterprises", {
-        params,
+        params: filter.value,
       })
       .then((response) => {
         isLoading.value = false;

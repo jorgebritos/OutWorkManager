@@ -78,7 +78,12 @@
           </div>
 
           <div v-if="!isLoading" class="w-full">
-            <q-btn :label="enterprise_tag ? enterprise_tag: 'Empresa'" class="q-mt-md" no-caps style="width: 100%">
+            <q-btn
+              :label="enterprise_tag ? enterprise_tag : 'Empresa'"
+              class="q-mt-md"
+              no-caps
+              style="width: 100%"
+            >
               <span class="q-ml-auto mdi mdi-arrow-down-bold"></span>
               <q-menu
                 v-model="menu_enterprises"
@@ -99,7 +104,13 @@
                     >
                       <q-item-section>
                         <q-btn
-                          @click="() => {data.enterprise_id = enterprise.id; menu_enterprises=false; enterprise_tag=enterprise.name}"
+                          @click="
+                            () => {
+                              data.enterprise_id = enterprise.id;
+                              menu_enterprises = false;
+                              enterprise_tag = enterprise.name;
+                            }
+                          "
                         >
                           {{ enterprise.name }}
                         </q-btn>
@@ -158,16 +169,27 @@ export default {
 
     const { isLoading, enterprises, paginate, refetch } = useEnterprises();
 
-    const menu_enterprises = ref(false)
-    const enterprise_tag = ref(null)
+    const menu_enterprises = ref(false);
+    const enterprise_tag = ref(null);
 
     let enterprises_old = null;
 
     const handleEnterprisesScroll = () => {
-      enterprises_old = enterprises.value;
-      refetch({ page: paginate.value.current_page + 1 }).then((response) => {
-        enterprises.value = [...enterprises_old, ...response.data.enterprises];
-      });
+      let next_page =
+        paginate.value.current_page !== paginate.value.last_page
+          ? paginate.value.current_page + 1
+          : null;
+
+      if (next_page) {
+        enterprises_old = enterprises.value;
+
+        refetch({ filter: true, page: next_page }).then((response) => {
+          enterprises.value = [
+            ...enterprises_old,
+            ...response.data.enterprises
+          ]
+        });
+      }
     };
 
     const data = reactive({

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Events\NotificationSent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobEnterpriseStoreRequest;
 use App\Http\Requests\JobEnterpriseUpdateRequest;
@@ -9,6 +10,7 @@ use App\Http\Resources\JobResource;
 use App\Http\Resources\Pagination\JobPaginatedCollection;
 use App\Models\Enterprise;
 use App\Models\Job;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -80,6 +82,13 @@ class JobEnterpriseController extends Controller
         Gate::authorize('view', $enterprise);
 
         $data =  $request->validated();
+
+        $notification = Notification::create([
+            'content' => 'La Empresa ' . $enterprise . ' programo un nuevo trabajo',
+            'enterprise_id' => $enterprise->id
+        ]);
+
+        broadcast(new NotificationSent($notification));
 
         $job = $enterprise->jobs()->create($data);
 

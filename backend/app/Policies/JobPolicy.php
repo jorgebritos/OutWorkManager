@@ -7,6 +7,11 @@ use App\Models\User;
 
 class JobPolicy
 {
+    public function viewGuard(User $user): bool
+    {
+        return $user->rol === 'Guard';
+    }
+
     /**
      * Determine whether the user can view any models.
      */

@@ -23,14 +23,12 @@ class UserController extends Controller
         $query = User::query();
 
         if($request->role){
-            // not enterprise
             if($request->role === "users_not_enterprise"){
+                $query->where('rol', 'Enterprise');
                 $query->doesntHave('enterprise');
             }else{
-
                 $query->where("rol", "=", $request->role);
             }
-
         }
 
         $search = $request->input('search', null);

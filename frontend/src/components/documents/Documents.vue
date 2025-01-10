@@ -53,6 +53,7 @@ import Pagination from "../helpers/Pagination.vue";
 import AddDocument from "./AddDocument.vue";
 import { ref, watch } from "vue";
 import DocumentItem from "./DocumentItem.vue";
+import { useAutoRefetch } from "../../hooks/api/autorefetchs.hooks";
 
 export default {
   components: {
@@ -74,16 +75,20 @@ export default {
     const { documents, paginate, isLoading, refetch } =
       handleToggleFetchDocuments(props.entity, props.params);
 
+    const page = ref(null);
     const search = ref(null);
 
     watch(search, () => {
       refetch({ search: search.value });
     });
 
-    const handleRefetchPage = (page) => {
-      refetch({ page, search: search.value });
+    const handleRefetchPage = (p) => {
+      page.value = p
+      refetch({ page: p, search: search.value });
     };
 
+    useAutoRefetch(()=>refetch({page: page.value}))
+  
     return {
       handleRefetchPage,
       documents,

@@ -56,7 +56,7 @@
   </q-page-container>
 </template>
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import Chat from "src/components/Chat.vue";
 import notificaciones from "src/components/Notificaciones.vue";
 import Notificaciones2 from "src/components/Notificaciones2.vue";
@@ -100,11 +100,6 @@ export default {
             label: "His. trabajo",
             icon: "mdi-folder-multiple",
             href: "his.jobs",
-          },
-          {
-            label: "Soporte",
-            icon: "mdi-chat-question-outline",
-            href: "soporte",
             separator: true,
           },
           {
@@ -133,13 +128,6 @@ export default {
         }
 
         menu.push({
-          label: "Soporte",
-          icon: "mdi-chat-question-outline",
-          href: "soporte",
-          separator: true,
-        });
-
-        menu.push({
           label: "Tú Cuenta",
           icon: "mdi-cog-outline",
           href: "user-config",
@@ -150,10 +138,7 @@ export default {
     });
 
     const handleLogout = () => {
-      userStore.setToken(null);
       userStore.setAuth(false);
-      userStore.setUser(null);
-
       router.push({ name: "login" });
     };
 

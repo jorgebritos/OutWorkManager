@@ -24,7 +24,8 @@ class UserEnterpriseSeeder extends Seeder
         ]);
 
         $enterprises = Enterprise::factory()->create([
-            'user_id' => $users->first()->id
+            'user_id' => $users->first()->id,
+            'is_valid' => true
         ]);
 
         Operator::factory(5)->create([

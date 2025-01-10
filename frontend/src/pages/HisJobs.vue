@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <h2 class="q-mt-md q-mb-sm text-center">Historial Trabajos</h2>
+    <h2 class="q-mt-md q-mb-sm text-center">Historial de Trabajos</h2>
 
     <div class="row items-center" style="width: 100%">
       <q-input

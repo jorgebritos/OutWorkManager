@@ -1,13 +1,14 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import { useAutoRefetch } from "./autorefetchs.hooks";
 
 export const useEnterpriseJobs = (enterprise, params = { valid: true }) => {
+  const filter = ref(params);
   const isLoading = ref(true);
   const jobs = ref(null);
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
+    filter.value = params
     api
       .get(`enterprises/${enterprise}/jobs`, {
         params,
@@ -29,8 +30,6 @@ export const useEnterpriseJobs = (enterprise, params = { valid: true }) => {
       paginate.value = response.data.meta;
     });
 
-  useAutoRefetch(() => refetch(params));
-
   return {
     jobs,
     paginate,
@@ -40,11 +39,13 @@ export const useEnterpriseJobs = (enterprise, params = { valid: true }) => {
 };
 
 export const useJobs = (params = { valid: true }) => {
+  const filter = ref(params);
   const isLoading = ref(true);
   const jobs = ref(null);
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
+    filter.value = params
     api
       .get("jobs", {
         params,

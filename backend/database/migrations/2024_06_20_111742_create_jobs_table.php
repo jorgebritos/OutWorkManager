@@ -18,11 +18,18 @@ return new class extends Migration
             $table->boolean("is_check_enterprise")->default(false);
 
             $table->date('date');
+
             $table->time('in_time');
+            $table->boolean('in_time_confirm')->default(false);
+
             $table->time('out_time');
+            $table->boolean('out_time_confirm')->default(false);
 
             $table->unsignedBigInteger('enterprise_id');
-            $table->foreign('enterprise_id')->references('id')->on('enterprises')->onDelete('cascade');
+            $table->foreign('enterprise_id')
+                  ->references('id')
+                  ->on('enterprises')
+                  ->onDelete('cascade');
 
             $table->timestamps();
         });

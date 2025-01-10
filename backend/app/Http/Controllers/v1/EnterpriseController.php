@@ -31,6 +31,14 @@ class EnterpriseController extends Controller
             $query->where('is_valid', 0);
         }
 
+        $owner = $request->input('owner');
+
+        if ($owner === 'true') {
+            $query->where('user_id', '!=', null);
+        } else if ($filter === 'false') {
+            $query->where('user_id', '=', null);
+        }
+
         $search = $request->input('search', null);
 
         if ($search !== null) {

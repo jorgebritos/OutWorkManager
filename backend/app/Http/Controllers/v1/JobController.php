@@ -25,7 +25,7 @@ class JobController extends Controller
         // uso las politicas de empresas para que
         // solo el admin pueda usar estre controllador
         Gate::authorize('viewAny', Enterprise::class);
-        
+
         $query = Job::query();
 
         $valid = $request->input('valid');
@@ -36,16 +36,11 @@ class JobController extends Controller
             $query->where(function ($q) use ($now) {
                 $q->where(DB::raw("CONCAT(date, ' ', in_time)"), '>', $now->toDateTimeString());
             });
-
         } else if ($valid === 'false') {
             $now = Carbon::now();
 
             $query->where(function ($q) use ($now) {
-                $q->whereDate('date', '<', $now->toDateString())
-                    ->orWhere(function ($q2) use ($now) {
-                        $q2->whereDate('date', '=', $now->toDateString())
-                            ->whereTime('in_time', '<', $now->toTimeString());
-                    });
+                $q->where(DB::raw("CONCAT(date, ' ', in_time)"), '<', $now->toDateTimeString());
             });
         }
 
