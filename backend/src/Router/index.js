@@ -9,7 +9,7 @@ const routes = express.Router();
 routes.use(cors())
 
 routes.use("/auth", authRouter)
-routes.use("/user", userRouter)
+routes.use("/users", userRouter)
 routes.use("/enterprises", enterprisesRouter)
 routes.use("/users", userRouter)
 routes.use("/jobs" , jobRouter)

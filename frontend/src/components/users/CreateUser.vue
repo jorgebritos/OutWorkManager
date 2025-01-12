@@ -7,9 +7,9 @@
 
       <q-card-section class="q-pt-none">
         <q-form @submit.prevent="handleCreateUser">
-          <q-input name="name" required label="name" v-model="data.name" />
+          <q-input name="name" required label="name" v-model="data.usuario" />
           <div
-            v-for="(error, index) in error_create?.name"
+            v-for="(error, index) in error_create?.usuario"
             :key="index"
             class="q-mt-sm"
           >
@@ -21,7 +21,7 @@
             required
             type="email"
             label="email"
-            v-model="data.email"
+            v-model="data.correo"
           />
           <div
             v-for="(error, index) in error_create?.email"
@@ -36,7 +36,7 @@
             required
             type="password"
             label="password"
-            v-model="data.password"
+            v-model="data.contra"
           />
           <div
             v-for="(error, index) in error_create?.password"
@@ -97,9 +97,9 @@ export default {
     const show = ref(false);
 
     const data = reactive({
-      email: "",
-      name: "",
-      password: "",
+      correo: "",
+      usuario: "",
+      contra: "",
       rol: roles[0],
     });
 

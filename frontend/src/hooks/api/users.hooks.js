@@ -70,6 +70,8 @@ export const useCreateUser = async (data) => {
   const isError = ref(false);
   const error = ref(null);
 
+  console.log(data)
+
   await api
     .post("users/", data, {
       headers: { "Content-Type": "application/json" },

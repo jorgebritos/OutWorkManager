@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
 const User = new mongoose.Schema({
     usuario: {
@@ -22,7 +22,7 @@ const User = new mongoose.Schema({
     },
     rol: {
         type: String,
-        enum: ['prevencionista', 'guarda', 'empresa', 'usuario'], // Valores permitidos
+        enum: ['prevencionista', 'Admin', 'Guard', 'Enterprise', 'usuario'], // Valores permitidos
         required: true, // Opcional: asegúrate de que el campo sea obligatorio
     },
     documentos: [
