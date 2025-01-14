@@ -25,8 +25,8 @@ class JobEnterpriseUpdateRequest extends FormRequest
             "description" => ["string"],
             "is_check_enterprise" => ["boolean"],
             "date" => ["date", 'date_format:Y-m-d'],
-            "in_time" => ["date", 'date_format:H:i'],
-            "out_time" => ["date", 'date_format:H:i'],
+            "in_time" => ['date_format:H:i'],
+            "out_time" => ['date_format:H:i'],
         ];
     }
 }

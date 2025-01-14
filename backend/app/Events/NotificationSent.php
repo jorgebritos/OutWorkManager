@@ -34,4 +34,9 @@ class NotificationSent
     {
         return new PrivateChannel('jobs');
     }
+
+    public function broadcastAs(): string
+    {
+        return 'notification';
+    }
 }

@@ -9,11 +9,12 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-
 use App\Models\Message;
 
 class MessageEvent implements ShouldBroadcast
 {
+    use SerializesModels;
+
     public $message;
 
     public function __construct(Message $message)
@@ -21,19 +22,19 @@ class MessageEvent implements ShouldBroadcast
         $this->message = $message;
     }
 
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
-        return new PrivateChannel('chat.' . $this->message->receiver_id);
+        return [new PrivateChannel('chat.' . $this->message->receiver_id)];
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return [
             'message' => $this->message
         ];
     }
 
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return 'MessageEvent';
     }

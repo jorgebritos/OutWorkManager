@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Events\NotificationSent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\JobStoreRequest;
 use App\Http\Requests\JobUpdateRequest;
@@ -9,8 +10,10 @@ use App\Http\Resources\JobResource;
 use App\Http\Resources\Pagination\JobPaginatedCollection;
 use App\Models\Enterprise;
 use App\Models\Job;
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -22,9 +25,7 @@ class JobController extends Controller
 
     public function index(Request $request)
     {
-        // uso las politicas de empresas para que
-        // solo el admin pueda usar estre controllador
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('viewAdmin', Job::class);
         
         $query = Job::query();
 
@@ -66,7 +67,8 @@ class JobController extends Controller
 
     public function show(Job $job)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('viewAdmin', Job::class);
+        
         return response()->json(['job' => JobResource::make($job)]);
     }
     /**
@@ -74,10 +76,21 @@ class JobController extends Controller
      */
     public function store(JobStoreRequest $request)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('viewAdmin', Job::class);
+        
         $data =  $request->validated();
 
+
+        $user = Auth::user();
+
         $job = Job::create($data);
+
+        $notification = Notification::create([
+            'content' => 'El/La Prevencionista ' . $user->name . ' programo un nuevo trabajo',
+            'enterprise_id' => $data->enterprise_id
+        ]);
+
+        broadcast(new NotificationSent($notification));
 
         return response()->json(JobResource::make($job), 201);
     }
@@ -87,7 +100,8 @@ class JobController extends Controller
      */
     public function update(JobUpdateRequest $request, Job $job)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('viewAdmin', Job::class);
+        
         $data = $request->validated();
 
         $job->update($data);
@@ -100,7 +114,8 @@ class JobController extends Controller
      */
     public function destroy(Job $job)
     {
-        Gate::authorize('viewAny', Enterprise::class);
+        Gate::authorize('viewAdmin', Job::class);
+        
         $job->delete();
 
         return response()->json();
