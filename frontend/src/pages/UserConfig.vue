@@ -228,10 +228,12 @@ export default {
       if (data.email !== user.value.email) {
         formData.append("email", data.email);
       }
-      formData.append("password", data.password);
-      formData.append("confirm_name", data.confirm_password);
 
-      console.log(data)
+      if (data.password) {
+        formData.append("password", data.password);
+        formData.append("confirm_name", data.confirm_password);
+      }
+
       api
         .post("user", formData)
         .then((response) => {

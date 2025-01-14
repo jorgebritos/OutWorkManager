@@ -1,16 +1,18 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import { useAutoRefetch } from "./autorefetchs.hooks";
 
 export const useEnterprises = (params = { filter: true }) => {
+  const filter = ref(params);
   const isLoading = ref(true);
   const enterprises = ref(null);
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
+    filter.value = params
+
     return api
       .get("enterprises", {
-        params,
+        params: filter.value,
       })
       .then((response) => {
         isLoading.value = false;
@@ -29,8 +31,6 @@ export const useEnterprises = (params = { filter: true }) => {
       enterprises.value = response.data.enterprises;
       paginate.value = response.data.meta;
     });
-
-  useAutoRefetch(async () => await refetch(params));
 
   return {
     enterprises,
@@ -83,24 +83,25 @@ export const useCreateEnterprise = async (data) => {
   const isError = ref(false);
   const error = ref(null);
 
-  const formData = {};
+  const formData = new FormData();
 
-  formData.rut = data.rut
-  formData.nombre = data.nombre
-  formData.is_valid = data.is_valid
-  formData.slug = data.rut + data.nombre
+  formData.append("RUT", data.RUT);
+  formData.append("nombre", data.name);
+  formData.append("is_valid", data.is_valid);
+
   if (data.user_id) {
-    formData.user_id = data.user_id
+    formData.append("user_id", data.user_id);
   }
 
-  if (data.imagen) {
-    formData.imagen = data.imagen
+  if (data.image) {
+    formData.append("image", data.image);
   }
-  console.log(formData)
+
   await api
-    .post("enterprises/create", formData)
+    .post("enterprises", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
     .then((response) => {
-
       enterprise.value = response.data.enterprise;
     })
     .catch((err) => {
@@ -135,7 +136,7 @@ export const useUpdateEnterprise = async (slug, data) => {
   }
 
   await api
-    .post(`enterprises/create`, formData, {
+    .post(`enterprises/${slug}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {

@@ -17,7 +17,7 @@
 
       <q-toolbar
         class="q-my-lg w-full flex justify-between items-center"
-        style="width: 100%;"
+        style="width: 100%"
       >
         <q-btn-dropdown
           color="#000000"
@@ -44,7 +44,7 @@
             </q-item>
             <q-item clickable v-close-popup @click="filter = false">
               <q-item-section>
-                <q-item-label>No Validadas</q-item-label>
+                <q-item-label>No Validadss</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -79,6 +79,7 @@ import CreateEmpresa from "src/components/enterprises/CreateEnterprise.vue";
 import { useEnterprises } from "src/hooks/api/enterprises.hooks";
 import { ref, watch } from "vue";
 import Pagination from "src/components/helpers/Pagination.vue";
+import { useAutoRefetch } from "../hooks/api/autorefetchs.hooks";
 
 export default {
   components: {
@@ -88,10 +89,14 @@ export default {
   },
   setup() {
     const { isLoading, enterprises, paginate, refetch } = useEnterprises();
+    
     const search = ref("");
+    const page = ref("");
     const filter = ref(true);
-    const handleRefetchPage = (page) => {
-      refetch({ filter: filter.value, page, search: search.value });
+
+    const handleRefetchPage = (p) => {
+      page.value = p
+      refetch({ filter: filter.value, page: p, search: search.value });
     };
 
     watch([search, filter], () => {
@@ -102,6 +107,15 @@ export default {
     });
 
     const enterpriseCreateMenu = ref(false);
+
+    useAutoRefetch(
+      async () =>
+        await refetch({
+          filter: filter.value,
+          page: page.value,
+          search: search.value,
+        })
+    );
 
     const handleCloseEnterpriseCreateMenu = () => {
       enterpriseCreateMenu.value = false;

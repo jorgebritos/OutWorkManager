@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import { useAutoRefetch } from "./autorefetchs.hooks";
+import {useAutoRefetch} from "./autorefetchs.hooks";
 
 const useDocumentsJob = (job) => {
   const isLoading = ref(true);
@@ -8,7 +8,7 @@ const useDocumentsJob = (job) => {
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
-    api.get(`jobs/${job}/documents`, { params }).then((response) => {
+    api.get(`jobs/${job}/documents`, {params}).then((response) => {
       isLoading.value = false;
       documents.value = response.data.documents;
       paginate.value = response.data.meta;
@@ -20,8 +20,6 @@ const useDocumentsJob = (job) => {
     documents.value = response.data.documents;
     paginate.value = response.data.meta;
   });
-
-  useAutoRefetch(refetch)
 
   return {
     documents,
@@ -38,22 +36,21 @@ const useDocumentsEnterprise = (enterprise) => {
 
   const refetch = (params = {}) => {
     api
-      .get(`enterprises/${enterprise}`)
+      .get(`enterprises/${enterprise}/documents`, {
+        params,
+      })
       .then((response) => {
         isLoading.value = false;
-        console.log(response.data.documents.meta)
         documents.value = response.data.documents;
-        paginate.value = response.data.documents.meta;
+        paginate.value = response.data.meta;
       });
   };
 
-  api.get(`enterprises/${enterprise}`).then((response) => {
+  api.get(`enterprises/${enterprise}/documents`).then((response) => {
     isLoading.value = false;
     documents.value = response.data.documents;
     paginate.value = response.data.meta;
   });
-
-  useAutoRefetch(refetch)
 
   return {
     documents,
@@ -65,7 +62,7 @@ const useDocumentsEnterprise = (enterprise) => {
 
 const useDocumentsOperators = (enterprise, operator) => {
   const isLoading = ref(true);
-  const documents = ref(null); "The route api/v1/job/7/documents/16907 could not be found."
+  const documents = ref(null);"The route api/v1/job/7/documents/16907 could not be found."
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
@@ -88,8 +85,6 @@ const useDocumentsOperators = (enterprise, operator) => {
       paginate.value = response.data.meta;
     });
 
-  useAutoRefetch(refetch)
-
   return {
     documents,
     paginate,
@@ -102,7 +97,6 @@ export const handleToggleFetchDocuments = (entity = null, props = {}) => {
   if (entity === "enterprise") {
     return useDocumentsEnterprise(props.enterprise);
   }
-  console.log(props)
 
   if (entity === "job") {
     return useDocumentsJob(props.job);

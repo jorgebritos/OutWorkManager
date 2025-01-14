@@ -65,9 +65,15 @@ const routes = [
       },
       {
         path: "enterprise/",
-        component: () => import("src/pages/JobEnterprise.vue"),
+        component: () => import("src/pages/JobsEnterprise.vue"),
         meta: { requiresAuth: true },
         name: "jobs-enterprise",
+      },
+      {
+        path: "enterprise/:pk/",
+        component: () => import("src/pages/EnterpriseJobDetail.vue"),
+        meta: { requiresAuth: true },
+        name: "enterprise-job-detail",
       },
       {
         path: "his.trabajos/",

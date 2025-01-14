@@ -9,7 +9,7 @@
 
     <div v-if="!isLoading">
       <q-img
-        :src="`${api_base_backend}/${enterprise.imagen}`"
+        :src="`${api_base_backend}/${enterprise.image}`"
         alt="esta enterprise no pose imagen"
         style="height: 350px"
         fit="cover"
@@ -86,7 +86,7 @@
           <span class="mdi mdi-trash-can"></span>
         </q-btn>
       </div>
-      <div style="max-width: 400px" v-if="enterprise.user && user.rol === 'Admin'">
+      <div style="max-width: 400px" v-if="user.rol === 'Admin'">
         <h5 class="text-h5 q-my-none">Encargado de la Empresa</h5>
         <q-card>
           <q-card-section> Nombre: {{ enterprise.user.name }} </q-card-section>
@@ -140,7 +140,7 @@ export default {
     const router = useRouter();
     const userStore = useUserStore();
     const { params } = useRoute();
-    
+
     const { enterprise, isLoading, refetch } = useEnterprise(params.slug);
 
     const user = userStore.getUser;

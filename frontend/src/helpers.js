@@ -1,1 +1,1 @@
-export const api_base_backend = "http://localhost:8000"
+export const api_base_backend = process.env.API_BASE

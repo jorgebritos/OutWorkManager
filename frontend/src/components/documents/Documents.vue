@@ -28,7 +28,7 @@
       </thead>
       <tbody
         :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
-        v-for="document in documents.documents"
+        v-for="document in documents"
         :key="document.id"
       >
         <document-item
@@ -40,8 +40,8 @@
       </tbody>
     </q-markup-table>
     <Pagination
-      :currentPage="documents.meta.current_page"
-      :maxPages="documents.meta.last_page"
+      :currentPage="paginate.current_page"
+      :maxPages="paginate.last_page"
       @handleRefetchPage="handleRefetchPage"
     />
   </div>
@@ -53,6 +53,7 @@ import Pagination from "../helpers/Pagination.vue";
 import AddDocument from "./AddDocument.vue";
 import { ref, watch } from "vue";
 import DocumentItem from "./DocumentItem.vue";
+import { useAutoRefetch } from "../../hooks/api/autorefetchs.hooks";
 
 export default {
   components: {
@@ -73,20 +74,25 @@ export default {
   setup(props) {
     const { documents, paginate, isLoading, refetch } =
       handleToggleFetchDocuments(props.entity, props.params);
-    console.log(paginate)
+
+    const page = ref(null);
     const search = ref(null);
 
     watch(search, () => {
       refetch({ search: search.value });
     });
 
-    const handleRefetchPage = (page) => {
-      refetch({ page, search: search.value });
+    const handleRefetchPage = (p) => {
+      page.value = p
+      refetch({ page: p, search: search.value });
     };
 
+    useAutoRefetch(()=>refetch({page: page.value}))
+  
     return {
       handleRefetchPage,
       documents,
+      paginate,
       isLoading,
       refetch,
       search,

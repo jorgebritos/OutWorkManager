@@ -7,18 +7,17 @@
 
       <q-card-section class="q-pt-none">
         <q-form @submit.prevent="handleCreateEnterprise">
-          <q-input name="rut" required label="RUT" v-model="data.rut"/>
+          <q-input name="RUT" required label="RUT" v-model="data.RUT" />
           <div
-            v-for="(error, index) in error_create?.rut"
+            v-for="(error, index) in error_create?.RUT"
             :key="index"
             class="q-mt-sm"
           >
- }}
             <span class="q-pa-xs bg-negative text-white">
               {{ error }}
             </span>
           </div>
-          <q-input name="nombre" required label="nombre" v-model="data.nombre" />
+          <q-input name="name" required label="nombre" v-model="data.name" />
           <div
             v-for="(error, index) in error_create?.nombre"
             :key="index"
@@ -28,7 +27,7 @@
           </div>
           <q-checkbox label="Verificado" v-model="data.is_valid" />
 
-          <q-file color="teal" filled label="imagen" v-model="data.imagen">
+          <q-file color="teal" filled label="image" v-model="data.image">
             <template v-slot:prepend>
               <q-icon name="cloud_upload" />
             </template>
@@ -58,10 +57,7 @@
                 :offset="[0, 15]"
               >
                 <q-list class="scroll" style="max-height: 250px; width: 300px">
-                  <q-infinite-scroll
-                    @load="handleUserScroll"
-                    :offset="15"
-                  >
+                  <q-infinite-scroll @load="handleUserScroll" :offset="15">
                     <q-item
                       v-for="(user, index) in users"
                       class="q-px-none"
@@ -73,11 +69,11 @@
                             () => {
                               data.user_id = user.id;
                               menu_users = false;
-                              user_tag = user.correo;
+                              user_tag = user.email;
                             }
                           "
                         >
-                          {{ user.correo }}
+                          {{ user.email }}
                         </q-btn>
                       </q-item-section>
                     </q-item>
@@ -97,6 +93,7 @@
           <q-btn label="Crear" class="q-mt-md" type="submit" color="primary" />
         </q-form>
       </q-card-section>
+
       <q-card-actions align="right">
         <q-btn
           flat
@@ -122,7 +119,9 @@ export default {
   setup(props, { emit }) {
     const show = ref(false);
 
-    const { isLoading, users, paginate, refetch } = useUsers();
+    const { isLoading, users, paginate, refetch } = useUsers({
+      role: "users_not_enterprise",
+    });
 
     const menu_users = ref(false)
     const user_tag = ref(null)
@@ -130,41 +129,47 @@ export default {
     let users_old = null;
 
     const handleUserScroll = () => {
-      users_old = users.value;
-      refetch().then((response) => {
-        users.value = [...users_old, ...response.data.users];
-      });
-    };
+      let next_page =
+        paginate.value.current_page !== paginate.value.last_page
+          ? paginate.value.current_page + 1
+          : null;
 
-    const printData = () => {
-      console.log("asduhasiduh")
-    }
+      if (next_page) {
+        users_old = users.value;
+        
+        refetch({
+          role: "users_not_enterprise",
+          page: next_page,
+        }).then((response) => {
+          users.value = [...users_old, ...response.data.users];
+        });
+      }
+    };   
 
     const data = reactive({
-      nombre: "",
-      rut: "",
+      name: "",
+      RUT: "",
       is_valid: true,
-      imagen: null,
+      image: null,
       user_id: null,
     });
 
     const error_create = ref(null);
 
     const handleClose = () => {
-      data.rut = "";
-      data.nombre = "";
+      data.name = "";
+      data.RUT = "";
       data.is_valid = true;
-      data.imagen = null;
+      data.image = null;
       data.user_id = null;
       show.value = false;
     };
 
     const handleCreateEnterprise = async () => {
-      let realData = {...data}
       const { isError, error } = await useCreateEnterprise({
-        ...realData
+        ...data,
       });
-      
+
       if (!isError.value) {
         handleClose();
         emit("refetch");
@@ -175,7 +180,6 @@ export default {
 
     return {
       data,
-      printData,
       menu_users,
       user_tag,
       handleUserScroll,

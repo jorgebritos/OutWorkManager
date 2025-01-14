@@ -85,6 +85,7 @@ import CreateUser from "src/components/users/CreateUser.vue";
 import Pagination from "src/components/helpers/Pagination.vue";
 import UserItem from "src/components/users/UserItem.vue";
 import { useUsers } from "src/hooks/api/users.hooks.js";
+import { useAutoRefetch } from "../hooks/api/autorefetchs.hooks";
 
 export default {
   components: {
@@ -96,8 +97,8 @@ export default {
   setup() {
     const { isLoading, refetch, users, paginate } = useUsers();
 
-    console.log(paginate)
     const search = ref("");
+    const page = ref("");
     const role = ref(null);
 
     watch([role, search], () => {
@@ -108,9 +109,12 @@ export default {
       });
     });
 
-    const handleRefetchPage = (page) => {
-      refetch({ role: role.value, page, search: search.value });
+    const handleRefetchPage = (p) => {
+      page.value = p
+      refetch({ role: role.value, page: p, search: search.value });
     };
+
+    useAutoRefetch(async () => await refetch({ role: role.value, page: page.value, search: search.value }));
 
     return {
       refetch,

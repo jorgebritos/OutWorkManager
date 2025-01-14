@@ -6,8 +6,8 @@
   />
 
   <tr class="cursor-pointer">
-    <td class="text-left">{{ user.usuario }}</td>
-    <td class="text-right">{{ user.correo }}</td>
+    <td class="text-left">{{ user.name }}</td>
+    <td class="text-right">{{ user.email }}</td>
     <td class="text-right">{{ user.rol }}</td>
     <td class="text-right">
       <EditUser :user="user" @refetch="refetch"/>

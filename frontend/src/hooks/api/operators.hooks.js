@@ -1,31 +1,30 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import { useAutoRefetch } from "./autorefetchs.hooks";
+import {useAutoRefetch} from "./autorefetchs.hooks";
 
 export const useOperators = (enterprise) => {
   const isLoading = ref(true);
   const operators = ref(null);
   const paginate = ref(null);
 
-  const refetch = (params = {}) => {
-    api.get(`enterprises/${enterprise}`, {
+  const refetch = (params={}) => {
+    api.get(`enterprises/${enterprise}/operators`, {
       params,
     }).then((response) => {
       isLoading.value = false;
-      operators.value = response.data.operators.operators;
-      paginate.value = response.data.operators.meta;
+      operators.value = response.data.operators;
+      paginate.value = response.data.meta;
     });
   };
 
-  api.get(`enterprises/${enterprise}`).then((response) => {
+  api.get(`enterprises/${enterprise}/operators`).then((response) => {
     isLoading.value = false;
-    console.log(response.data.operators.operators)
-    operators.value = response.data.operators.operators;
-    paginate.value = response.data.operators.meta;
+    operators.value = response.data.operators;
+    paginate.value = response.data.meta;
   });
 
   useAutoRefetch(refetch)
-
+  
   return {
     operators,
     paginate,

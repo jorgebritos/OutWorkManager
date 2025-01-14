@@ -58,7 +58,7 @@ export default route(function (/* { store, ssrContext } */) {
       return next({ name: "access-denied" });
     }
 
-    const restrictedRoutesEnterprise = ["enterprise_home", "jobs-enterprise"];
+    const restrictedRoutesEnterprise = ["enterprise_home", "jobs-enterprise", 'enterprise-job-detail'];
 
     if (!isEnterprise && restrictedRoutesEnterprise.includes(to.name)) {
       return next({ name: "access-denied-enterprise" });
