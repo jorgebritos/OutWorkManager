@@ -217,13 +217,9 @@ export default {
       .private("chat." + user.id)
       .listen("MessageEvent", (event) => {
         console.log("Nuevo mensaje");
-        if (
-          received.value &&
-          event.message.sender_id ===
-            (user.rol === "Admin" ? received.value.user.id : received.value.id)
-        ) {
-          messages.value.push(event.message);
-        }
+      })
+      .error((error) => {
+        console.error("Error en la suscripción:", error);
       });
 
     const message = ref("");

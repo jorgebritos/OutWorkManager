@@ -18,7 +18,7 @@ export default async ({ app, store, router }) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     },
-    debug: true,
+    debug: true
   });
 
   app.config.globalProperties.$echo = echo;

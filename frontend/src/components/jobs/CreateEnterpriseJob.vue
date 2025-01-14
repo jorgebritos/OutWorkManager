@@ -1,379 +1,155 @@
 <template>
-    <q-btn flat  icon="mdi-chat" @click="dialog = true" color="white" class="q-mr-md">
-        
-         <q-dialog
-          v-model="dialog"
-          persistent
-          :maximized="maximizedToggle"
-          transition-show="slide-up"
-          transition-hide="slide-down">    
-          <q-card class="bg-teal-10 text-white">
-        <div class="header">
-    <q-toolbar class="bg-grey-3 text-black">
-      <div round flat @click="isMobile && (menu = !menu)">
-        <q-avatar>
-          <img :src="currentConversation.avatar" />
-        </q-avatar>
-      </div>
+  <q-dialog v-model="show">
+    <q-card style="width: 900px">
+      <q-card-section>
+        <div class="text-h6">Crear Trabajo</div>
+      </q-card-section>
 
-      <span class="q-subtitle-1 q-pl-md" @click="isMobile && (menu = !menu)">
-        {{ currentConversation.person }}
-      </span>
+      <q-card-section class="q-pt-none">
+        <q-form @submit.prevent="handleCreate">
+          <q-input
+            placeholder="Descripcion del trabajo"
+            v-model="data.description"
+            required
+            label="no resize arrow"
+            type="textarea"
+          />
 
-      <q-space />
+          <div
+            v-for="(error, index) in error_create?.description"
+            :key="index"
+            class="q-mt-sm"
+          >
+            <span class="q-pa-xs bg-negative text-white">
+              {{ error }}
+            </span>
+          </div>
 
-      <q-btn dense flat icon="close" v-close-popup>
-        <q-tooltip class="bg-white text-primary">Close</q-tooltip>
-      </q-btn>
-    </q-toolbar>
-  </div>
+          <q-checkbox v-model="data.is_check_enterprise" label="Confirmarcion" />
 
+          <q-input v-model="data.date" type="date" label="Fecha" required />
 
-  <!-- Sidebar / Drawer -->
-  <div class="Drawer">
-    <q-toolbar class="bg-grey-3">
-      <q-avatar class="cursor-pointer"></q-avatar>
-      <q-space />
-    </q-toolbar>
+          <div
+            v-for="(error, index) in error_create?.date"
+            :key="index"
+            class="q-mt-sm"
+          >
+            <span class="q-pa-xs bg-negative text-white">
+              {{ error }}
+            </span>
+          </div>
 
-    <!-- Menú desplegable para móviles -->
-    <q-menu v-if="isMobile" v-model="menu" auto-close>
-      <q-list>
-        <q-item
-          v-for="(conversation, index) in conversations"
-          :key="conversation.id"
-          clickable
-          @click="setCurrentConversation(index); menu = false"
-        >
-          <q-item-section avatar>
-            <q-avatar>
-              <img :src="conversation.avatar" />
-            </q-avatar>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{ conversation.person }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-menu>
+          <p class="q-mt-md">Horarios:</p>
+          <div class="flex gap-md">
+            <q-input
+              v-model="data.in_time"
+              required
+              type="time"
+              class="q-mr-xl"
+              label="Entrada"
+            />
 
-    <q-scroll-area style="height: calc(100% - 100px)">
-      <q-list>
-        <q-item
-          v-for="(conversation, index) in conversations"
-          :key="conversation.id"
-          clickable
-          v-ripple
-          @click="setCurrentConversation(index)"
-        >
-          <q-item-section avatar>
-            <q-avatar>
-              <img :src="conversation.avatar" />
-            </q-avatar>
-          </q-item-section>
+            <div
+              v-for="(error, index) in error_create?.in_time"
+              :key="index"
+              class="q-mt-sm"
+            >
+              <span class="q-pa-xs bg-negative text-white">
+                {{ error }}
+              </span>
+            </div>
 
-          <q-item-section>
-            <q-item-label lines="1">
-              {{ conversation.person }}
-            </q-item-label>
-            <q-item-label class="conversation__summary" caption>
-              <q-icon name="check" v-if="conversation.sent" />
-              <q-icon name="not_interested" v-if="conversation.deleted" />
-              {{ conversation.caption }}
-            </q-item-label>
-          </q-item-section>
+            <q-input
+              v-model="data.out_time"
+              type="time"
+              label="Salida"
+              required
+            />
 
-          <q-item-section side>
-            <q-item-label caption>
-              {{ conversation.time }}
-            </q-item-label>
-            <q-icon name="keyboard_arrow_down" />
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-scroll-area>
-  </div>
+            <div
+              v-for="(error, index) in error_create?.out_time"
+              :key="index"
+              class="q-mt-sm"
+            >
+              <span class="q-pa-xs bg-negative text-white">
+                {{ error }}
+              </span>
+            </div>
+          </div>
 
-  <!-- Chat Messages Area -->
-  <q-page-container class="bg-grey-5 chat-area">
-    <q-scroll-area class="messages-area">
-      <q-list>
-        <q-item
-          v-for="(msg, index) in currentConversation.messages"
-          :key="index"
-          class="message-item"
-          :class="{ 'sent-message': msg.isSender, 'received-message': !msg.isSender }"
-        >
-          <q-item-section>
-            <q-item-label>{{ msg.text }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-scroll-area>
-  </q-page-container>
+          <q-btn
+            label="Registrar Trabajo"
+            class="q-mt-md"
+            type="submit"
+            color="primary"
+          />
+        </q-form>
+      </q-card-section>
 
-  <!-- Message Input Bar -->
-  <div @keydown="sendMessage2">
-    <q-toolbar class="BarraTexto bg-grey-3 text-black row">
-      <q-btn
-        round
-        flat
-        icon="insert_emoticon"
-        class="q-mr-sm"
-        @click="toggleEmojiPicker"
-      />
-      <!-- Contenedor del selector de emojis -->
-      <emoji-picker
-        v-if="showEmojiPicker"
-        @emoji-click="addEmoji"
-        class="emoji-picker"
-      ></emoji-picker>
-      <q-input
-        rounded
-        outlined
-        dense
-        class="WAL__field col-grow q-mr-sm"
-        bg-color="white"
-        v-model="message"
-        placeholder="Type a message"
-      />
-      <q-btn round flat icon="send" @click="sendMessage" />
-    </q-toolbar>
-  </div>
-      </q-card>
-    </q-dialog>
- </q-btn>
+      <q-card-actions align="right">
+        <q-btn
+          flat
+          label="Cerrar"
+          color="primary"
+          v-close-popup
+          @click="show = false"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
+  <q-btn class="q-mx-sm bg-green-4" @click="show = true">
+    Registrar Trabajo
+  </q-btn>
 </template>
-<style scoped>
 
-.q-dialog__inner--maximized > div {
-    width: 80%;
-    height: 80%;
-    overflow-y:hidden
+<script>
+import { reactive, ref } from "vue";
+import { useCreateEnterpriseJob } from "src/hooks/api/jobs.hooks";
+import { useUserStore } from "src/store/user.store";
 
-}
-.Drawer {
-  width: 25%;
-  height: 100%;
-  background-color: white;
-  color: #000;
-  top: 0;
-  position: absolute;
-  z-index: 8;
-}
+export default {
+  setup(props, { emit }) {
+    const userStore = useUserStore()
 
-.header {
-  right: 0;
-  top: 0;
-  width: 75%;
-  height: 8%;
-  position: absolute;
-  z-index: 10;
-}
+    const show = ref(false);
+    const users = ref(null);
 
-.BarraTexto {
-  right: 0;
-  bottom: 0;
-  position: absolute;
-  width: 75%;
-  height: 9%;
-  background-color: black;
-  z-index: 9;
-}
+    const user = userStore.getUser
 
-.chat-area {
-  width: 90%;
-  height: 86%;
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: #000;
-  margin-top: 43px;
-
-}
-
-.messages-area {
-  height: 100%;
-  padding: 10px;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-.message-item {
-  max-width: 30%;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  white-space: pre-wrap;
-  overflow-x: hidden;
-  box-sizing: border-box;
-}
-
-.sent-message {
-  background-color: #dcf8c6;
-  margin-left: auto;
-}
-
-.received-message {
-  background-color: #fff;
-  margin-right: auto;
-}
-
-.emoji-picker {
-  position: absolute;
-  bottom: 60px;
-  left: 0;
-  z-index: 1000;
-  background-color: white;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  width: 300px;
-  height: 400px;
-  overflow-y: auto;
-}
-
-@media (max-width: 768px) {
-  .Drawer {
-    width: 100%;
-    height: auto;
-    position: relative;
-  }
-
-  .header,
-  .BarraTexto,
-  .chat-area {
-    width: 100%;
-  }
-
-  .messages-area {
-    padding: 5px;
-  }
-
-  .message-item {
-    max-width: 80%;
-  }
-
-  .BarraTexto {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  q-btn {
-    min-width: 40px;
-  }
-
-  q-input {
-    min-height: 40px;
-  }
-}
-</style>
-<script setup>
-import { provide, ref } from 'vue'
-import { computed } from 'vue';
-import 'emoji-picker-element' ; // Importa el selector de emojis
-
-const conversations = ref([
-  {
-    id: 1,
-    person: 'Razvan Stoenescu',
-    avatar: 'https://cdn.quasar.dev/team/razvan_stoenescu.jpeg',
-    caption: "I'm working on Quasar!",
-    time: '15:00',
-    sent: true,
-    messages: [],
-  },
-  {
-    id: 2,
-    person: 'Dan Popescu',
-    avatar: 'https://cdn.quasar.dev/team/dan_popescu.jpg',
-    caption: "I'm working on Quasar!",
-    time: '16:00',
-    sent: true,
-    messages: [],
-  },
-  {
-    id: 3,
-    person: 'Jeff Galbraith',
-    avatar: 'https://cdn.quasar.dev/team/jeff_galbraith.jpg',
-    caption: "I'm working on Quasar!",
-    time: '18:00',
-    sent: true,
-    messages: [],
-  },
-  {
-    id: 4,
-    person: 'Allan Gaunt',
-    avatar: 'https://cdn.quasar.dev/team/allan_gaunt.png',
-    caption: "I'm working on Quasar!",
-    time: '17:00',
-    sent: true,
-    messages: [],
-  },
-
-]);
-
-const currentConversationIndex = ref(0);
-const currentConversation = computed(() => {
-  return conversations.value[currentConversationIndex.value];
-});
-
-const message = ref('');
-const menu = ref(false);
-const isMobile = ref(window.innerWidth < 768); // Detecta si es móvil
-const showEmojiPicker = ref(false); // Controla la visibilidad del selector de emojis
-
-function sendMessage() {
-  if (message.value.trim() !== '') {
-    currentConversation.value.messages.push({
-      text: message.value,
-      isSender: true,
+    const data = reactive({
+      description: null,
+      is_check_enterprise: true,
+      date: null,
+      in_time: null,
+      out_time: null,
     });
-    message.value = '';
-  }
-}
 
-function sendMessage2(event) {
-  if (event.key === 'Enter') {
-    sendMessage();
-  }
-}
-function handleClickOutside(event) {
-  if (
-    emojiPickerRef.value &&
-    !emojiPickerRef.value.contains(event.target)
-  ) {
-    showEmojiPicker.value = false;
-  }
-}
+    const error_create = ref(null);
 
-function setCurrentConversation(index) {
-  currentConversationIndex.value = index;
-}
+    const handleClose = () => {
+      show.value = false;
+      emit("refetch");
+    };
 
-// Alterna el selector de emojis
-function toggleEmojiPicker() {
-  showEmojiPicker.value = !showEmojiPicker.value;
-}
+    const handleCreate = async () => {
+      const { isError, error } = await useCreateEnterpriseJob(user.enterprise.slug, {
+        ...data,
+      });
 
-// Agrega el emoji al campo de texto
-function addEmoji(event) {
-  message.value += event.detail.unicode;
-}
+      if (!isError.value) {
+        handleClose();
+      } else {
+        error_create.value = error.value;
+      }
+    };
 
-// Listener para cambios de tamaño de la ventana
-window.addEventListener('resize', () => {
-  isMobile.value = window.innerWidth < 768;
-});
-const text = ref('')
-const dialog = ref(false)
-const maximizedToggle = ref(true)
-
+    return {
+      data,
+      handleCreate,
+      show,
+      users,
+      error_create,
+    };
+  },
+};
 </script>

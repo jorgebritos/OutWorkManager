@@ -16,7 +16,7 @@
           />
 
           <div
-            v-for="(error, index) in error_create?.description"
+            v-for="(error, index) in error_edit?.description"
             :key="index"
             class="q-mt-sm"
           >
@@ -30,7 +30,7 @@
           <q-input v-model="job.date" type="date" label="Fecha" required />
 
           <div
-            v-for="(error, index) in error_create?.date"
+            v-for="(error, index) in error_edit?.date"
             :key="index"
             class="q-mt-sm"
           >
@@ -50,7 +50,7 @@
             />
 
             <div
-              v-for="(error, index) in error_create?.in_time"
+              v-for="(error, index) in error_edit?.in_time"
               :key="index"
               class="q-mt-sm"
             >
@@ -67,7 +67,7 @@
             />
 
             <div
-              v-for="(error, index) in error_create?.out_time"
+              v-for="(error, index) in error_edit?.out_time"
               :key="index"
               class="q-mt-sm"
             >
@@ -123,7 +123,7 @@
           </div>
 
           <div
-            v-for="(error, index) in error_create?.enterprise_id"
+            v-for="(error, index) in error_edit?.enterprise_id"
             :key="index"
             class="q-mt-sm"
           >
@@ -133,7 +133,7 @@
           </div>
 
           <q-btn
-            label="Registrar Trabajo"
+            label="Editar Trabajo"
             class="q-mt-md"
             type="submit"
             color="primary"
@@ -158,9 +158,8 @@
 
 <script>
 import { ref, toRef } from "vue";
-import { useUpdateJob, useUpdateEnterpriseJob } from "src/hooks/api/jobs.hooks";
+import { useUpdateJob } from "src/hooks/api/jobs.hooks";
 import { useEnterprises } from "src/hooks/api/enterprises.hooks";
-import { useUserStore } from "src/store/user.store";
 
 export default {
   props: {
@@ -192,43 +191,28 @@ export default {
         refetch({ filter: true, page: next_page }).then((response) => {
           enterprises.value = [
             ...enterprises_old,
-            ...response.data.enterprises
-          ]
+            ...response.data.enterprises,
+          ];
         });
       }
     };
 
-    const error_create = ref(null);
+    const error_edit = ref(null);
 
     const handleClose = () => {
       show.value = false;
       emit("refetch");
     };
 
-    const handleToggleUpdateJob = () => {
-      const userStore = useUserStore();
-      const user = userStore.getUser;
-
-      if (user.rol === "Admin") {
-        return useUpdateJob({
-          ...job.value,
-        });
-      }
-
-      return useUpdateEnterpriseJob({
-        ...job.value,
-      });
-    };
-
     const handleEdit = async () => {
-      const { isError, error } = await handleToggleUpdateJob({
+      const { isError, error } = await useUpdateJob(job.value.id, {
         ...job.value,
       });
 
       if (!isError.value) {
         handleClose();
       } else {
-        error_create.value = error.value;
+        error_edit.value = error.value;
       }
     };
 
@@ -241,7 +225,7 @@ export default {
       handleEdit,
       handleClose,
       show,
-      error_create,
+      error_edit,
     };
   },
 };

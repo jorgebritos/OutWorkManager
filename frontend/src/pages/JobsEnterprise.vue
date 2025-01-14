@@ -15,7 +15,7 @@
       </q-input>
     </div>
     <div class="q-my-lg w-full flex justify-center items-center">
-      <CreateJob @refetch="() => refetch({})" />
+      <CreateJob @refetch="() => refetch({valid: true})" />
 
       <q-btn-dropdown
         color="#000000"
@@ -92,7 +92,7 @@ export default {
     const user = userStore.getUser;
 
     const { isLoading, jobs, refetch, paginate } = useEnterpriseJobs(
-      user.enterprise.slug
+      user.enterprise.slug, {valid: true}
     );
 
     const filter = ref(null);

@@ -56,7 +56,7 @@
   </q-page-container>
 </template>
 <script>
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import Chat from "src/components/Chat.vue";
 import notificaciones from "src/components/Notificaciones.vue";
 import Notificaciones2 from "src/components/Notificaciones2.vue";
