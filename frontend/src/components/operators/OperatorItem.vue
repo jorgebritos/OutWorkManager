@@ -15,12 +15,13 @@
     <td class="text-left">
       {{ operator.name }}
     </td>
+    {{ console.log(operator) }}
     <td class="text-left">
-      <p :class="operator.is_valid ? 'text-green' : 'text-red'">
-        {{ operator.is_valid ? "Autorizado" : "No Autorizado" }}
+      <p :class="operator.authorized ? 'text-green' : 'text-red'">
+        {{ operator.authorized ? "Autorizado" : "No Autorizado" }}
       </p>
     </td>
-    <td class="text-left">{{ operator.cargo }}</td>
+    <td class="text-left">{{ operator.role_description }}</td>
     <td class="text-center">
       <q-btn
         type="button"

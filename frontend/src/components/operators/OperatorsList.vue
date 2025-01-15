@@ -41,7 +41,6 @@
     <tbody
       :class="$q.dark.isActive ? 'bg-grey-91973-08-07 00:00:00' : 'bg-grey-3'"
     >
-    {{ console.log(operators) }}
       <operator-item
         v-for="operator in operators"
         :key="operator.id"
@@ -84,6 +83,7 @@ export default {
 
     const createOperator = ref(false);
     const search = ref(null);
+    console.log(operators)
 
     const handleOpenCreateOperator = () => {
       createOperator.value = true;

@@ -19,7 +19,6 @@ export const useOperators = (enterprise) => {
 
   api.get(`enterprises/${enterprise}`).then((response) => {
     isLoading.value = false;
-    console.log(response.data.operators.operators)
     operators.value = response.data.operators.operators;
     paginate.value = response.data.operators.meta;
   });

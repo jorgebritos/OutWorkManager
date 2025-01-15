@@ -73,7 +73,6 @@ export default {
   setup(props) {
     const { documents, paginate, isLoading, refetch } =
       handleToggleFetchDocuments(props.entity, props.params);
-    console.log(paginate)
     const search = ref(null);
 
     watch(search, () => {

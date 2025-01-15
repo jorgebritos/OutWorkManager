@@ -108,7 +108,7 @@ export default {
 
     const handleCreateOperator = () => {
       api
-        .post(
+        .put(
           `enterprises/${params.slug}/operators`,
           dataCreateOperator,
         )

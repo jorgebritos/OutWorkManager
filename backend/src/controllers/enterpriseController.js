@@ -100,14 +100,16 @@ export const fetch = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
-        const id = req.params.id;
-        const enterpriseExist = await Enterprise.findOne({ _id: id });
-
+        const slug = req.params.slug;
+        const enterpriseExist = await Enterprise.findOne({ slug: slug });
+        
         if (!enterpriseExist) {
             return res.status(404).json({ message: "La empresa no existe" });
         }
-
-        const updateEnterprise = await Enterprise.findByIdAndUpdate(id, req.body, { new: true });
+        enterpriseExist.operadores.push(req.body)
+        console.log(enterpriseExist)
+        const updateEnterprise = await Enterprise.findOneAndUpdate({slug}, enterpriseExist, { new: true });
+        console.log(updateEnterprise)
         res.status(201).json(updateEnterprise)
     } catch (error) {
         res.status(500).json({ error: "Internal Network Error" })
