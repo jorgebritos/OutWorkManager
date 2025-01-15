@@ -1,5 +1,5 @@
-import { Job } from "../Database/Esquemas/Job.js"
-// Controladores
+import Job from "../Database/Esquemas/Job.js"
+
 export const createJob = async (req, res) => {
     try {
         const jobData = new Job(req.body);

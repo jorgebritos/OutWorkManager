@@ -1,4 +1,4 @@
-import User from "../Database/Esquemas/Usuarios.js"
+import User from "../Database/Esquemas/Usuario.js"
 
 export const create = async (req, res) => {
     try {

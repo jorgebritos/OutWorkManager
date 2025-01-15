@@ -1,16 +1,15 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
-// Definir el esquema para 'RequestedDocument'
 const requestedDocumentSchema = new Schema({
   document_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Document',  // Relación con el modelo 'Document'
+    ref: 'Document',
     required: true,
   },
   job_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Job',  // Relación con el modelo 'Job'
+    ref: 'Job',
     required: true,
   },
   solicitado_por: {
