@@ -113,6 +113,7 @@ import { ref, toRef } from "vue";
 import { useUpdateEnterprise } from "src/hooks/api/enterprises.hooks";
 import { useUserStore } from "src/store/user.store";
 import { useUsers } from "src/hooks/api/users.hooks";
+import { useRouter } from "vue-router";
 
 export default {
   props: {
@@ -130,6 +131,7 @@ export default {
     const error_edit = ref(null);
     const image = ref(null);
     const userStore = useUserStore();
+    const router = useRouter()
 
     const user = userStore.getUser;
 
@@ -174,7 +176,8 @@ export default {
 
       if (!isError.value) {
         enterprise.value.image = data.value.image;
-        handleClose();
+        handleClose()
+        router.push(`/enterprises`);
       } else {
         error_edit.value = error.value;
       }

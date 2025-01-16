@@ -105,7 +105,6 @@ export const useCreateEnterprise = async (data) => {
       enterprise.value = response.data.enterprise;
     })
     .catch((err) => {
-      console.error(err);
       if (err.response.status === 422) {
         const messages = err.response.data.errors;
         isError.value = true;
@@ -128,15 +127,16 @@ export const useUpdateEnterprise = async (slug, data) => {
   const formData = new FormData();
 
   formData.append("_method", "PUT");
-  formData.append("nombre", data.name);
-  formData.append("user_id", data.user?.id);
-
+  formData.append("name", data.name);
+  if (data.user_id !== null) {
+    formData.append("user_id", data.user_id);
+  }
   if (data.image !== null) {
     formData.append("image", data.image);
   }
 
   await api
-    .post(`enterprises/${slug}`, formData, {
+    .put(`enterprises/${slug}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
@@ -145,9 +145,9 @@ export const useUpdateEnterprise = async (slug, data) => {
       }
     })
     .catch((err) => {
+      isError.value = true;
       if (err?.response?.status === 422) {
         const messages = err.response.data.errors;
-        isError.value = true;
         error.value = messages;
       }
     });

@@ -86,7 +86,7 @@
           <span class="mdi mdi-trash-can"></span>
         </q-btn>
       </div>
-      <div style="max-width: 400px" v-if="user.rol === 'Admin'">
+      <div style="max-width: 400px" v-if="user.rol === 'Admin' && enterprise.user">
         <h5 class="text-h5 q-my-none">Encargado de la Empresa</h5>
         <q-card>
           <q-card-section> Nombre: {{ enterprise.user.name }} </q-card-section>
@@ -127,6 +127,7 @@ import {
 } from "src/hooks/api/enterprises.hooks";
 import ValidDeleteEnterpriseMenu from "src/components/helpers/ValidDeleteMenu.vue";
 import { useUserStore } from "src/store/user.store.js";
+import slugify from "slugify";
 
 export default {
   components: {
@@ -160,7 +161,6 @@ export default {
 
     const handleCloseMenuEditEnterprise = () => {
       enterpriseEditMenu.value = false;
-      refetch();
     };
 
     const handleNotValidEnterprise = async () => {
