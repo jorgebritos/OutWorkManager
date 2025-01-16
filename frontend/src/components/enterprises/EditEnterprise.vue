@@ -71,13 +71,13 @@
                         <q-btn
                           @click="
                             () => {
-                              data.user_id = user.id;
+                              user_id = user._id;
                               menu_users = false;
-                              user_tag = user.email;
+                              user_tag = user.correo;
                             }
                           "
                         >
-                          {{ user.email }}
+                          {{ user.correo }}
                         </q-btn>
                       </q-item-section>
                     </q-item>
@@ -140,16 +140,16 @@ export default {
 
     const menu_users = ref(false)
     const user_tag = ref(null)
-
+    
     let users_old = null;
-
+    
     const handleUserScroll = () => {
       users_old = users.value;
       refetch().then((response) => {
         users.value = [...users_old, ...response.data.users];
       });
     };
-
+    
     const handleClose = () => emit("handleCloseMenuEditEnterprise");
 
     const handleUpdateEnterprise = async () => {
@@ -163,7 +163,8 @@ export default {
       });
 
       if (!isError.value) {
-        enterprise.value.image = data.value.image;
+        console.log(data.value)
+        enterprise.value.imagen = data.value.imagen;
         handleClose();
       } else {
         error_edit.value = error.value;

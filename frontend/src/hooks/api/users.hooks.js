@@ -70,7 +70,6 @@ export const useCreateUser = async (data) => {
   const isError = ref(false);
   const error = ref(null);
 
-  console.log(data)
 
   await api
     .post("users/", data, {
@@ -96,5 +95,5 @@ export const useCreateUser = async (data) => {
 };
 
 export const useDeleteUser = async (id) => {
-  return await api.delete(`users/${id}}`);
+  return await api.delete(`users/${id}`);
 };

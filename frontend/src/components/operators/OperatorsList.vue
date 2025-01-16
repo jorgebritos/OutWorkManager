@@ -83,7 +83,6 @@ export default {
 
     const createOperator = ref(false);
     const search = ref(null);
-    console.log(operators)
 
     const handleOpenCreateOperator = () => {
       createOperator.value = true;

@@ -2,7 +2,6 @@ import Enterprise from "../Database/Esquemas/Empresas.js"
 
 export const create = async (req, res) => {
     try {
-        console.log(req.body)
         const enterpriseData = new Enterprise(req.body);
         const { rut } = enterpriseData;
         const enterpriseExist = await Enterprise.findOne({ rut });
@@ -11,7 +10,6 @@ export const create = async (req, res) => {
         }
 
         const savedEnterprise = await enterpriseData.save();
-        console.log(savedEnterprise)
         const pagina = 1, limite = 15
         const saltar = (pagina - 1) * limite;
 
@@ -107,9 +105,7 @@ export const update = async (req, res) => {
             return res.status(404).json({ message: "La empresa no existe" });
         }
         enterpriseExist.operadores.push(req.body)
-        console.log(enterpriseExist)
         const updateEnterprise = await Enterprise.findOneAndUpdate({slug}, enterpriseExist, { new: true });
-        console.log(updateEnterprise)
         res.status(201).json(updateEnterprise)
     } catch (error) {
         res.status(500).json({ error: "Internal Network Error" })

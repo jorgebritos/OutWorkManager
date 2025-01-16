@@ -225,10 +225,10 @@ export const useCreateJob = async (data) => {
   const job = ref(null);
   const isError = ref(false);
   const error = ref(null);
-
+  console.log(data)
   await api
     .post("jobs", data, {
-      headers: { "Content-Type": "content-type:application/json" },
+      headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
       if (response.status === 200) {

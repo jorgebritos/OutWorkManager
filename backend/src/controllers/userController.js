@@ -61,13 +61,12 @@ export const update = async (req, res) => {
 export const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
-        const userExist = await User.findById({ _id: id });
+        const userExist = await User.findOne({ _id: id });
 
         if (!userExist) {
             return res.status(404).json({ message: "User not found" });
         }
-
-        await User.findOneAndDelete(id);
+        await User.findOneAndDelete({_id: id});
 
         res.status(201).json({ message: "User deleted successfully." });
 

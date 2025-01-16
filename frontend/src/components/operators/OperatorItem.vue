@@ -15,7 +15,6 @@
     <td class="text-left">
       {{ operator.name }}
     </td>
-    {{ console.log(operator) }}
     <td class="text-left">
       <p :class="operator.authorized ? 'text-green' : 'text-red'">
         {{ operator.authorized ? "Autorizado" : "No Autorizado" }}
