@@ -58,5 +58,5 @@ export const useOperator = (enterprise, pk) => {
 };
 
 export const useDeleteOperator = async (enterprise, pk) => {
-  return await api.delete(`enterprises/${enterprise}/operators/${pk}`)
+  return await api.put(`enterprises/${enterprise}/operators/${pk}`)
 };
