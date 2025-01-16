@@ -3,7 +3,7 @@ import User from "../Database/Esquemas/Usuario.js";
 import Enterprise from "../Database/Esquemas/Empresa.js";
 
 export const createEnterpriseValidate = [
-  body("nombre")
+  body("name")
     .isString()
     .withMessage("El campo 'nombre' debe ser una cadena de texto.")
     .notEmpty()
@@ -59,7 +59,7 @@ export const createEnterpriseValidate = [
 ];
 
 export const updateEnterpriseValidate = [
-  body("nombre")
+  body("name")
     .optional()
     .isString()
     .withMessage("El campo 'nombre' debe ser una cadena de texto.")

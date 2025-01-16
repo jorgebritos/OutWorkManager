@@ -8,7 +8,7 @@ import User from "../Database/Esquemas/Usuario.js";
 //};
 
 export const generate_user = async () => {
-  console.log('Created Users')
+  console.log('Creating Users...')
   const admin = new User({
     name: "admin",
     email: "admin@gmail.com",

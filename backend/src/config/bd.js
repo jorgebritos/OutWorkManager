@@ -1,7 +1,7 @@
 import { mongoose } from "mongoose";
 import dotenv from "dotenv";
 
-const bd = async () => {
+const connect = async () => {
   dotenv.config();
   await mongoose
     .connect(process.env.DB_URL)
@@ -10,5 +10,14 @@ const bd = async () => {
     });
 };
 
-export default bd;
+export const closeConnect = async (callback) => {
+  try {
+    await mongoose.connection.close();
+    callback()
+  } catch (err) {
+    console.error("Error al cerrar la conexión:", err);
+  }
+};
+
+export default connect;
 
