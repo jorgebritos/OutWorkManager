@@ -7,6 +7,7 @@ enterpriseRouter.post("/create", create)
 enterpriseRouter.get("/", fetch);
 enterpriseRouter.get("/:slug", fetch);
 enterpriseRouter.get("/:slug/operators/:ci", fetch);
+enterpriseRouter.put("/:slug", update);
 enterpriseRouter.put("/:slug/operators", update)
 enterpriseRouter.put("/:slug/operators/:ci", update)
 enterpriseRouter.put("/:slug/operators/:ci", update)

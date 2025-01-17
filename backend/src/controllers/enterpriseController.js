@@ -112,11 +112,19 @@ export const fetch = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
+        let { is_valid } = req.body
+        console.log(req.body)
         const { slug, ci } = req.params;
         const enterpriseExist = await Enterprise.findOne({ slug: slug });
 
         if (!enterpriseExist) {
             return res.status(404).json({ message: "La empresa no existe" });
+        }
+
+        if (is_valid != undefined) {
+            enterpriseExist.is_valid = is_valid
+            const updateEnterprise = await Enterprise.findOneAndUpdate({ slug }, enterpriseExist, { new: true });
+            return res.status(201).json(updateEnterprise)
         }
 
         if (ci) {
@@ -127,7 +135,6 @@ export const update = async (req, res) => {
                     enterpriseExist.operadores = enterpriseExist.operadores.filter(item => item !== element)
                 }
             });
-            console.log(filterOperators)
             const updateEnterprise = await Enterprise.findOneAndUpdate({ slug }, enterpriseExist, { new: true });
             return res.status(201).json(updateEnterprise)
 
@@ -172,7 +179,6 @@ export const editOperator = async (req, res) => {
         }
         enterpriseExist.operadores = enterpriseExist.operadores.filter(item => item !== operatorExist)
         enterpriseExist.operadores.push(newOperator)
-        console.log(enterpriseExist.operadores)
         const updateEnterprise = await Enterprise.findOneAndUpdate({ slug }, enterpriseExist, { new: true });
         return res.status(201).json(updateEnterprise)
     } catch (error) {

@@ -64,13 +64,13 @@ export const useEnterprise = (slug) => {
 };
 
 export const useValidEnterprise = async (slug) => {
-  return await api.patch(`enterprises/${slug}`, {
+  return await api.put(`enterprises/${slug}`, {
     is_valid: true,
   });
 };
 
 export const useNotValidEnterprise = async (slug) => {
-  return await api.patch(`enterprises/${slug}`, {
+  return await api.put(`enterprises/${slug}`, {
     is_valid: false,
   });
 };
