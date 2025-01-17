@@ -113,7 +113,7 @@ export default {
     const handleUpdateOperator = () => {
       api
         .put(
-          `enterprises/${params.enterprise}/operators/${props.operator.id}`,
+          `enterprises/${params.enterprise}/edit/${props.operator.ci}`,
           dataUpdateOperator
         )
         .then(() => {

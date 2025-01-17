@@ -35,8 +35,8 @@
             <tr>
               <td class="text-left">{{ operator.ci }}</td>
               <td class="text-right">{{ operator.name }}</td>
-              <td class="text-right">{{ operator.is_valid }}</td>
-              <td class="text-right">{{ operator.cargo }}</td>
+              <td class="text-right">{{ operator.authorized }}</td>
+              <td class="text-right">{{ operator.role_description }}</td>
             </tr>
           </tbody>
         </q-markup-table>
@@ -45,8 +45,8 @@
         <operator-documents
           entity="operator"
           :params="{
-            enterprise: operator.enterprise,
-            operator: operator.id,
+            enterprise: 'empresa',
+            operator: operator.ci,
           }"
         />
       </div>

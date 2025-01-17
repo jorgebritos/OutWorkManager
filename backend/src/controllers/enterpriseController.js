@@ -35,7 +35,7 @@ export const create = async (req, res) => {
 }
 
 export const fetch = async (req, res) => {
-    let { slug } = req.params;
+    let { slug, ci } = req.params;
 
     if (slug) {
         try {
@@ -43,6 +43,20 @@ export const fetch = async (req, res) => {
             if (!enterprise) {
                 return res.status(404).json({ message: "La empresa no existe" });
             }
+
+            if (ci) {
+                var filterOperators = []
+                const enterprise = await Enterprise.findOne({ slug });
+                var operator;
+                enterprise.operadores.forEach(element => {
+                    if (element.ci === ci) {
+                        operator = element
+                    }
+                });
+                return res.status(201).json({ operator })
+
+            }
+
             let pagina = 1, limite = 15
             let saltar = (pagina - 1) * limite;
             let totalDocuments = enterprise.documentos.length
@@ -143,6 +157,25 @@ export const deleteEnterprise = async (req, res) => {
     } catch (error) {
 
         res.status(500).json({ error: "Internal Network Error" })
+
+    }
+}
+
+export const editOperator = async (req, res) => {
+    try {
+        let { slug, ci } = req.params;
+        let enterpriseExist = await Enterprise.findOne({ slug: slug });
+        let newOperator = req.body;
+        let operatorExist = enterpriseExist.operadores.find(item => item.ci === ci)
+        if (!operatorExist) {
+            return res.status(404).json({ message: "El operador no existe" });
+        }
+        enterpriseExist.operadores = enterpriseExist.operadores.filter(item => item !== operatorExist)
+        enterpriseExist.operadores.push(newOperator)
+        console.log(enterpriseExist.operadores)
+        const updateEnterprise = await Enterprise.findOneAndUpdate({ slug }, enterpriseExist, { new: true });
+        return res.status(201).json(updateEnterprise)
+    } catch (error) {
 
     }
 }
