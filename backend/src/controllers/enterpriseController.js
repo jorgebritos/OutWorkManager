@@ -43,7 +43,6 @@ export const fetch = async (req, res) => {
             if (!enterprise) {
                 return res.status(404).json({ message: "La empresa no existe" });
             }
-
             if (ci) {
                 var filterOperators = []
                 const enterprise = await Enterprise.findOne({ slug });
@@ -94,6 +93,21 @@ export const fetch = async (req, res) => {
             .exec();
         const totalEnterprises = await Enterprise.countDocuments();
 
+        if (req.query.search) {
+            const query = req.query.search;
+            const filteredEnterprise = enterprises.filter(enterprise => enterprise.nombre.includes(query))
+            console.log(filteredEnterprise)
+            const totalEnterprises = await Enterprise.countDocuments();
+            const last_page = Math.ceil(totalEnterprises / limite);
+            return res.status(200).json({
+                enterprises: filteredEnterprise,
+                meta: {
+                    last_page,
+                    current_page: pagina
+                },
+            })
+        }
+
         // Calcular el número de la última página
         const last_page = Math.ceil(totalEnterprises / limite);
 
@@ -113,7 +127,6 @@ export const fetch = async (req, res) => {
 export const update = async (req, res) => {
     try {
         let { is_valid } = req.body
-        console.log(req.body)
         const { slug, ci } = req.params;
         const enterpriseExist = await Enterprise.findOne({ slug: slug });
 
@@ -128,10 +141,8 @@ export const update = async (req, res) => {
         }
 
         if (ci) {
-            var filterOperators = []
             enterpriseExist.operadores.forEach(element => {
                 if (element.ci === ci) {
-                    console.log(element)
                     enterpriseExist.operadores = enterpriseExist.operadores.filter(item => item !== element)
                 }
             });

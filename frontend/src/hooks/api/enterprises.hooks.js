@@ -8,6 +8,7 @@ export const useEnterprises = (params = { filter: true }) => {
   const enterprises = ref(null);
   const paginate = ref(null);
 
+  
   const refetch = (params = {}) => {
     return api
       .get("enterprises", {
