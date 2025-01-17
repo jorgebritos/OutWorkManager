@@ -4,7 +4,8 @@ import Pusher from "pusher-js";
 window.Pusher = Pusher;
 
 export default async ({ app, store, router }) => {
-  const echo = new Echo({
+  console.log("hola")
+  window.Echo = new Echo({
     broadcaster: "reverb",
     key: process.env.REVERB_APP_KEY,
     wsHost: process.env.REVERB_HOST,
@@ -18,8 +19,7 @@ export default async ({ app, store, router }) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     },
-    debug: true
+    debug: true,
   });
 
-  app.config.globalProperties.$echo = echo;
 };

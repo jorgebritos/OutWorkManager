@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\ChatController;
+use App\Http\Controllers\v1\ChatController;
 use App\Http\Controllers\v1\JobGuardController as V1JobGuardController;
 use App\Http\Controllers\v1\EnterpriseController as V1EnterpriseController;
 use App\Http\Controllers\v1\JobController as V1JobController;
@@ -13,10 +13,13 @@ use App\Http\Controllers\v1\EnterpriseDocumentController as V1EnterpriseDocument
 use App\Http\Controllers\v1\JobDocumentController as V1JobDocumentController;
 use App\Http\Controllers\v1\OperatorDocumentController as V1OperatorDocumentController;
 use App\Http\Controllers\v1\JobEnterpriseController as V1JobEnterpriseController;
+use App\Http\Controllers\v1\NotificationController;
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [AuthController::class, "me"]);
     Route::patch('/user', [AuthController::class, "update"]);
+    
+    Route::get('/notifications', [NotificationController::class, 'index']);
 
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
     Route::get('/chat/{receiverId}', [ChatController::class, 'getMessages']);

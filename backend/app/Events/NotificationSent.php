@@ -32,11 +32,18 @@ class NotificationSent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('jobs');
+        return new PrivateChannel('notification');
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'notification' => $this->notification
+        ];
     }
 
     public function broadcastAs(): string
     {
-        return 'notification';
+        return 'NotificationSent';
     }
 }

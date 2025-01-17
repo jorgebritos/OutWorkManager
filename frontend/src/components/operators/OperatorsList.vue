@@ -96,7 +96,7 @@ export default {
 
     const handleRefetchPage = (p) => {
       page.value = p
-      refetch({ page, search: search.value })
+      refetch({ page: p, search: search.value })
     }
 
     const handleCloseCreateOperator = () => {

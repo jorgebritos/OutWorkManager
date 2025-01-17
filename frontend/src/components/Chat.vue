@@ -210,13 +210,9 @@ export default {
         });
     });
 
-    const instance = getCurrentInstance();
-    const echo = instance.appContext.config.globalProperties.$echo;
-
-    echo
-      .private("chat." + user.id)
-      .listen("MessageEvent", (event) => {
-        console.log("Nuevo mensaje");
+    window.Echo.private("chat." + user.id)
+      .listen(".MessageEvent", (event) => {
+        messages.value.push(event.message)
       })
       .error((error) => {
         console.error("Error en la suscripción:", error);
