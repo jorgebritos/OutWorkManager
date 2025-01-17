@@ -85,8 +85,7 @@ export const useCreateEnterprise = async (data) => {
 
   const formData = new FormData();
 
-  formData.append("RUT", data.RUT);
-  formData.append("nombre", data.name);
+  formData.append("name", data.name);
   formData.append("is_valid", data.is_valid);
 
   if (data.user_id) {
@@ -102,12 +101,14 @@ export const useCreateEnterprise = async (data) => {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
+      console.log(response)
       enterprise.value = response.data.enterprise;
     })
     .catch((err) => {
+      console.error(err)
+      isError.value = true;
       if (err.response.status === 422) {
         const messages = err.response.data.errors;
-        isError.value = true;
         error.value = messages;
       }
     });

@@ -50,7 +50,7 @@
           </q-list>
         </q-btn-dropdown>
 
-        <create-empresa @refetch="refetch" />
+        <create-empresa @refetch="refetch({filter: true})" />
       </q-toolbar>
     </q-toolbar>
     <div v-if="!isLoading">

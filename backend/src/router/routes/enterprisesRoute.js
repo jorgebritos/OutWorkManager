@@ -22,6 +22,7 @@ enterpriseRouter.get("/", index);
 enterpriseRouter.get("/:enterprise", enterprise_not_found, show);
 enterpriseRouter.post(
   "/",
+  upload.single("image"),
   createEnterpriseValidate,
   handleValidatorErrors,
   create
