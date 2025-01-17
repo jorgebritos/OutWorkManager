@@ -96,7 +96,6 @@ export const fetch = async (req, res) => {
         if (req.query.search) {
             const query = req.query.search;
             const filteredEnterprise = enterprises.filter(enterprise => enterprise.nombre.includes(query))
-            console.log(filteredEnterprise)
             const totalEnterprises = await Enterprise.countDocuments();
             const last_page = Math.ceil(totalEnterprises / limite);
             return res.status(200).json({
@@ -106,6 +105,50 @@ export const fetch = async (req, res) => {
                     current_page: pagina
                 },
             })
+        }
+
+        if (req.query.filter) {
+            const totalEnterprises = await Enterprise.countDocuments();
+            const query = req.query.filter;
+            const last_page = Math.ceil(totalEnterprises / limite);
+            const enterprises = await Enterprise.find()
+                .skip(saltar) // Saltar los primeros productos
+                .limit(limite) // Limitar la cantidad de productos por página
+                .exec();
+            var filteredEnterprise = []
+            switch (query) {
+                case "null":
+                    return res.status(200).json({
+                        enterprises: filteredEnterprise,
+                        meta: {
+                            last_page,
+                            current_page: pagina
+                        },
+                    });
+                case "true":
+                    filteredEnterprise = enterprises.filter(enterprise => enterprise.is_valid === true);
+                    return res.status(200).json({
+                        enterprises: filteredEnterprise,
+                        meta: {
+                            last_page,
+                            current_page: pagina
+                        },
+                    })
+                case "false":
+                    filteredEnterprise = enterprises.filter(enterprise => enterprise.is_valid === false)
+                    return res.status(200).json({
+                        enterprises: filteredEnterprise,
+                        meta: {
+                            last_page,
+                            current_page: pagina
+                        },
+                    })
+
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         // Calcular el número de la última página

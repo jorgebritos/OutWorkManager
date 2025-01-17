@@ -98,7 +98,6 @@ export const useCreateEnterprise = async (data) => {
   if (data.imagen) {
     formData.imagen = data.imagen
   }
-  console.log(formData)
   await api
     .post("enterprises/create", formData)
     .then((response) => {
@@ -127,7 +126,6 @@ export const useUpdateEnterprise = async (slug, data) => {
   const error = ref(null);
 
   const formData = new FormData();
-  console.log(data)
   formData.append("_method", "PUT");
   formData.append("nombre", data.name);
   formData.append("user_id", data.user?.id);
