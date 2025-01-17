@@ -7,39 +7,45 @@
     class="q-mr-md"
   />
   <q-dialog v-model="showNotifications" persistent>
-    <q-card class="q-pa-md" style="min-width: 400px">
+    <q-card class="q-pa-md" style="width: 100%; max-width: 500px">
       <q-toolbar class="bg-grey-3 text-black">
         <q-toolbar-title>Notificaciones</q-toolbar-title>
         <q-btn icon="close" flat round @click="showNotifications = false" />
       </q-toolbar>
-      <q-list>
-        <h5 class="text-center" v-if="notifications.length === 0">No ahi notificaciones</h5>
-        <q-item
-          v-for="(notification, index) in notifications"
-          :key="notification.id"
-          clickable
-          v-ripple
-          @click="showNotificationDetails(index)"
-        >
-          <q-item-section>
-            <q-item-label>{{ notification.title }}</q-item-label>
-            <q-item-label caption>{{ notification.description }}</q-item-label>
-          </q-item-section>
 
-          <q-item-section side>
-            <q-item-label caption>{{ notification.time }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
+      <q-scroll-area
+        style="height: 500px; max-height: 300px; overflow: auto"
+      >
+        <q-list>
+          <h5 class="text-center" v-if="notifications.length === 0">
+            No ahi notificaciones
+          </h5>
 
+          <q-item
+            v-for="(notification, index) in notifications"
+            :key="index"
+            clickable
+            v-ripple
+            @click="showNotificationDetails(notification)"
+          >
+            <q-item-section>
+              <q-item-label caption>{{ notification.content }}</q-item-label>
+            </q-item-section>
+
+            <q-item-section side>
+              <q-item-label caption>{{
+                notification.created_at.split("T")[0]
+              }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
       <q-card-section v-if="selectedNotification">
         <q-separator spaced />
         <q-item>
           <q-item-section>
-            <q-item-label>{{ selectedNotification.title }}</q-item-label>
-            <q-item-label caption>{{
-              selectedNotification.description
-            }}</q-item-label>
+            <q-item-label>{{ selectedNotification.content }}</q-item-label>
+            <router-link :key="'/jobs/'+selectedNotification.job.id" :to="'/jobs/'+selectedNotification.job.id">Ver detalles del trabajo</router-link>
           </q-item-section>
         </q-item>
         <q-list>
@@ -71,7 +77,7 @@ export default {
     axios
       .get(`${api_base_backend}/api/v1/notifications`)
       .then((response) => {
-        notifications.value = response.data.notifications
+        notifications.value = response.data.notifications;
       })
       .catch((err) => {
         console.error(err);
@@ -79,8 +85,16 @@ export default {
 
     const selectedNotification = ref(null);
 
-    function showNotificationDetails(index) {
-      selectedNotification.value = notifications.value[index];
+    window.Echo.private("notification")
+      .listen(".NotificationSent", (event) => {
+        notifications.value.unshift(event.notification);
+      })
+      .error((error) => {
+        console.error("Error en la suscripción:", error);
+      });
+
+    function showNotificationDetails(notification) {
+      selectedNotification.value = notification;
     }
 
     return {

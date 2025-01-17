@@ -12,5 +12,10 @@ class Notification extends Model
     protected $fillable = [
         'content',
         'enterprise_id',
+        'job_id',
     ];
+
+    public function job() {
+        return $this->belongsTo(Job::class);
+    }
 }

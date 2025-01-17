@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { getCurrentInstance, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import user_default from "../../public/imagenes/user.png";
 import { useEnterprises } from "src/hooks/api/enterprises.hooks";
 import { useUserStore } from "src/store/user.store";
@@ -226,6 +226,7 @@ export default {
     const handleToggleMenuMobile = () => {
       menuMobile.value = !menuMobile.value;
     };
+
     async function sendMessage() {
       if (message.value.trim() !== "") {
         const receiver_id =

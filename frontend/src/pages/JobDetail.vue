@@ -73,7 +73,7 @@ import {
   useEnterpriseJob,
 } from "src/hooks/api/jobs.hooks";
 import ValidDeleteOperatorMenu from "src/components/helpers/ValidDeleteMenu.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useUserStore } from "src/store/user.store";
 import EditJob from "src/components/jobs/EditJob.vue";
 
@@ -90,12 +90,20 @@ export default {
     const userStore = useUserStore();
     const user = userStore.getUser;
 
-    const { job, isLoading } =
+    const { job, isLoading, refetch } =
       user.rol === "Admin"
         ? useJob(params.pk)
         : useEnterpriseJob(user.enterprise.slug, params.pk);
 
     const handleOutClick = () => router.go(-1);
+
+    watch(
+      params.pk,
+      () => {
+        parametro.value = nuevoId;
+        refetch();
+      }
+    );
 
     const showDeleteMenu = ref(false);
 

@@ -83,14 +83,16 @@ class JobEnterpriseController extends Controller
 
         $data =  $request->validated();
 
+        $job = $enterprise->jobs()->create($data);
+        
         $notification = Notification::create([
-            'content' => 'La Empresa ' . $enterprise . ' programo un nuevo trabajo',
-            'enterprise_id' => $enterprise->id
+            'content' => 'La Empresa ' . $enterprise->nombre . ' programo un nuevo trabajo',
+            'enterprise_id' => $enterprise->id,
+            'job_id' => $job->id
         ]);
 
         broadcast(new NotificationSent($notification));
 
-        $job = $enterprise->jobs()->create($data);
 
         return response()->json(JobResource::make($job), 201);
     }

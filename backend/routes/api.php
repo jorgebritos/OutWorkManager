@@ -15,11 +15,11 @@ use App\Http\Controllers\v1\OperatorDocumentController as V1OperatorDocumentCont
 use App\Http\Controllers\v1\JobEnterpriseController as V1JobEnterpriseController;
 use App\Http\Controllers\v1\NotificationController;
 
+Route::get('/notifications', [NotificationController::class, 'index']);
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [AuthController::class, "me"]);
     Route::patch('/user', [AuthController::class, "update"]);
     
-    Route::get('/notifications', [NotificationController::class, 'index']);
 
     Route::post('/chat/send', [ChatController::class, 'sendMessage']);
     Route::get('/chat/{receiverId}', [ChatController::class, 'getMessages']);

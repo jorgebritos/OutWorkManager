@@ -127,6 +127,7 @@ export default {
     const error_create = ref(null);
 
     const handleClose = () => {
+      data.value = {}
       show.value = false;
       emit("refetch");
     };

@@ -8,7 +8,7 @@
       class="q-ml-xl"
     />
     <div class="menu_toolbar">
-      <Notification />
+      <Notification v-if="user.rol === 'Admin'" />
       <chat />
       <q-btn flat icon="person" class="q-mr-md">
         <q-menu>
@@ -142,6 +142,7 @@ export default {
 
     return {
       drawer: ref(false),
+      user,
       search,
       menuList,
       handleLogout,
