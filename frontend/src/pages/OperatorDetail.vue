@@ -35,7 +35,11 @@
             <tr>
               <td class="text-left">{{ operator.ci }}</td>
               <td class="text-right">{{ operator.name }}</td>
-              <td class="text-right">{{ operator.is_valid }}</td>
+              <td class="text-right">
+                <p :class="operator.is_valid ? 'text-green' : 'text-red'">
+                  {{ operator.is_valid ? "Autorizado" : "No Autorizado" }}
+                </p>
+              </td>
               <td class="text-right">{{ operator.cargo }}</td>
             </tr>
           </tbody>

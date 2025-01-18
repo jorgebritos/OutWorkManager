@@ -45,7 +45,7 @@
         <q-item>
           <q-item-section>
             <q-item-label>{{ selectedNotification.content }}</q-item-label>
-            <router-link :key="'/jobs/'+selectedNotification.job.id" :to="'/jobs/'+selectedNotification.job.id">Ver detalles del trabajo</router-link>
+            <router-link :key="selectedNotification.job.id" :to="'/jobs/'+selectedNotification.job.id">Ver detalles del trabajo</router-link>
           </q-item-section>
         </q-item>
         <q-list>

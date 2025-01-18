@@ -45,7 +45,7 @@ class OperatorDocumentController extends Controller
 
         $request->validated();
 
-        $path = $request->file('document')->store('documents', 'public');
+        $path = "storage/" . $request->file('document')->store('documents', 'public');
 
         $document = $operator->documents()->create([
             'url_document' => $path,

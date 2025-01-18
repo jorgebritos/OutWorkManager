@@ -28,7 +28,7 @@ COPY . .
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Exponer el puerto 80 para la aplicación
-EXPOSE 80
+EXPOSE 8000 8080
 
 # Iniciar Apache cuando se ejecute el contenedor
 CMD ["php", "artisan", "serve", "--host", "0.0.0.0", "--port", "8000"]

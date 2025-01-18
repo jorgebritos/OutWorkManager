@@ -30,8 +30,16 @@
         </thead>
         <tbody>
           <tr>
-            <td class="text-center">{{ job.is_check }}</td>
-            <td class="text-center">{{ job.is_check_enterprise }}</td>
+            <td class="text-center">
+              <p :class="job.is_check ? 'text-green' : 'text-red'">
+                {{ job.is_check ? "Autorizado" : "No Autorizado" }}
+              </p>
+            </td>
+            <td class="text-center">
+              <p :class="job.is_check_enterprise ? 'text-green' : 'text-red'">
+                {{ job.is_check_enterprise ? "Autorizado" : "No Autorizado" }}
+              </p>
+            </td>
             <td class="text-right">{{ job.date }}</td>
             <td class="text-right">{{ job.in_time }}</td>
             <td class="text-right">{{ job.out_time }}</td>
@@ -96,14 +104,6 @@ export default {
         : useEnterpriseJob(user.enterprise.slug, params.pk);
 
     const handleOutClick = () => router.go(-1);
-
-    watch(
-      params.pk,
-      () => {
-        parametro.value = nuevoId;
-        refetch();
-      }
-    );
 
     const showDeleteMenu = ref(false);
 

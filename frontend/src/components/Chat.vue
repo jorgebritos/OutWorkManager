@@ -73,7 +73,12 @@
 
         <!-- Chat Messages Area -->
         <div class="bg-grey-5 chat-area">
-          <q-scroll-area class="messages-area" :reverse="true">
+          <q-scroll-area
+            class="messages-area"
+            id="chatScroll"
+            :reverse="true"
+            style="scroll-behavior: smooth"
+          >
             <div class="q-pa-md row justify-center">
               <div style="width: 100%; max-width: 700px">
                 <q-chat-message
@@ -126,7 +131,7 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
 import user_default from "../../public/imagenes/user.png";
 import { useEnterprises } from "src/hooks/api/enterprises.hooks";
 import { useUserStore } from "src/store/user.store";
@@ -212,7 +217,7 @@ export default {
 
     window.Echo.private("chat." + user.id)
       .listen(".MessageEvent", (event) => {
-        messages.value.push(event.message)
+        messages.value.push(event.message);
       })
       .error((error) => {
         console.error("Error en la suscripción:", error);
@@ -249,15 +254,24 @@ export default {
       received.value = user_received;
     }
 
-    // Alterna el selector de emojis
     function toggleEmojiPicker() {
       showEmojiPicker.value = !showEmojiPicker.value;
     }
 
-    // Agrega el emoji al campo de texto
     function addEmoji(event) {
       message.value += event.detail.unicode;
     }
+
+    const scrollToBottom = () => {
+      const chat = document.getElementById('chatScroll')
+      console.log(chat)
+    };
+
+    onMounted(() => {
+      nextTick(() => {
+        scrollToBottom();
+      });
+    });
 
     return {
       user,

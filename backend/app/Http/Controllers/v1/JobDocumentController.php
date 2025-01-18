@@ -43,7 +43,7 @@ class JobDocumentController extends Controller
 
         $request->validated();
 
-        $path = $request->file('document')->store('documents', 'public');
+        $path = "storage/" . $request->file('document')->store('documents', 'public');
 
         if ($request->hasFile('document')) {
             $data['document'] = "storage/" . $request->file('document')->store('documents', 'public');

@@ -25,7 +25,10 @@
             </span>
           </div>
 
-          <q-checkbox v-model="data.is_check_enterprise" label="Confirmarcion" />
+          <q-checkbox
+            v-model="data.is_check_enterprise"
+            label="Confirmarcion"
+          />
 
           <q-input v-model="data.date" type="date" label="Fecha" required />
 
@@ -127,8 +130,14 @@ export default {
     const error_create = ref(null);
 
     const handleClose = () => {
-      data.value = {}
+      data.description = null,
+      data.is_check_enterprise = true,
+      data.date = null,
+      data.in_time = null,
+      data.out_time = null,
+        
       show.value = false;
+
       emit("refetch");
     };
 
