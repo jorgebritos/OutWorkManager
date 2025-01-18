@@ -12,8 +12,9 @@ export const index = async (req, res) => {
     const query = {};
     if (filter !== undefined && filter !== null) {
       query.is_valid = filter === "true";
-      if(search) query.name = { $regex: search, $options: "i" };
     }
+
+    if(search) query.name = { $regex: search, $options: "i" };
 
     const enterprises = await Enterprise.find(query)
       .skip(skip)

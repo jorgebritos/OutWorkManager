@@ -112,7 +112,7 @@ export default {
       validDeleteMenu.value = false;
       await handleToggleFetchDeleteDocuments(props.entity, {
         ...props.params,
-        pk: props.document.id,
+        pk: props.document._id,
       });
       emit("refetch");
     };
