@@ -2,9 +2,9 @@ import Enterprise from "../Database/Esquemas/Empresa.js";
 import slugify from "slugify";
 
 export const index = async (req, res) => {
-  const page = Number(req.query.page ? req.query.page : 1);
-  const { filter, search } = req.query;
+  const { filter, search, page } = req.query;
 
+  const current_page = Number(page ? page : 1);
   const limit = 15;
   const skip = (page - 1) * limit;
 
@@ -12,12 +12,13 @@ export const index = async (req, res) => {
     const query = {};
     if (filter !== undefined && filter !== null) {
       query.is_valid = filter === "true";
-      query.name = { $regex: search, $options: "i" };
+      if(search) query.name = { $regex: search, $options: "i" };
     }
 
     const enterprises = await Enterprise.find(query)
       .skip(skip)
       .limit(limit)
+      .sort({ createdAt: -1 })
       .exec();
 
     const total = await Enterprise.countDocuments(query);
@@ -29,7 +30,7 @@ export const index = async (req, res) => {
       meta: {
         last_page,
         total,
-        current_page: page,
+        current_page,
       },
     });
   } catch (error) {
@@ -90,8 +91,10 @@ export const update = async (req, res) => {
 };
 
 export const destroy = async (req, res) => {
+  const { enterprise } = req.params
+
   try {
-    await Enterprise.findOneAndDelete({ slug });
+    await Enterprise.findOneAndDelete({ slug: enterprise });
 
     res.status(200).json({ message: "Empresa eliminada con éxito" });
   } catch (error) {

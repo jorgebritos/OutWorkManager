@@ -6,9 +6,9 @@ import routes from "./src/router/index.js";
 import connect_db from "./src/config/bd.js";
 import morgan from "morgan";
 
-dotenv.config();
 connect_db();
 
+dotenv.config();
 const app = express();
 
 app.use(cors());
