@@ -2,7 +2,7 @@ import Job from "../Database/Esquemas/Job.js"
 
 export const createJob = async (req, res) => {
     try {
-        const jobData = new Job(req.body);
+        const jobData = new Job({...req});
         const savedJob = await jobData.save();
         res.status(200).json(savedJob);
     } catch (error) {
@@ -88,7 +88,6 @@ export const getJobs = async (req, res) => {
             .populate("enterpriseId", "name") // Only populate the name field from Enterprise
             .exec();
 
-        console.log(jobs)
 
         const totalJobs = await Job.countDocuments();
 

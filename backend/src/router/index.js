@@ -9,7 +9,11 @@ import {enterprise_not_found} from "../middleware/enterprise_not_found.js"
 const routes = express.Router();
 
 routes.use("/auth", authRouter)
+<<<<<<< HEAD:backend/src/router/index.js
 
+=======
+routes.use("/users", userRouter)
+>>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b:backend/src/Router/index.js
 routes.use("/enterprises", enterprisesRouter)
 routes.use("/enterprises/:enterprise/documents", enterprise_not_found, enterprisesDocumentsRouter)
 

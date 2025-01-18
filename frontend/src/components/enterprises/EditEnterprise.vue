@@ -68,13 +68,13 @@
                         <q-btn
                           @click="
                             () => {
-                              data.user_id = user.id;
+                              user_id = user._id;
                               menu_users = false;
-                              user_tag = user.email;
+                              user_tag = user.correo;
                             }
                           "
                         >
-                          {{ user.email }}
+                          {{ user.correo }}
                         </q-btn>
                       </q-item-section>
                     </q-item>
@@ -139,11 +139,17 @@ export default {
       role: "users_not_enterprise",
     });
 
+<<<<<<< HEAD
     const menu_users = ref(false);
     const user_tag = ref(null);
 
+=======
+    const menu_users = ref(false)
+    const user_tag = ref(null)
+    
+>>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
     let users_old = null;
-
+    
     const handleUserScroll = () => {
       let next_page =
         paginate.value.current_page !== paginate.value.last_page
@@ -161,7 +167,7 @@ export default {
         });
       }
     };
-
+    
     const handleClose = () => emit("handleCloseMenuEditEnterprise");
 
     const handleUpdateEnterprise = async () => {
@@ -175,9 +181,15 @@ export default {
       });
 
       if (!isError.value) {
+<<<<<<< HEAD
         enterprise.value.image = data.value.image;
         handleClose()
         router.push(`/enterprises`);
+=======
+        console.log(data.value)
+        enterprise.value.imagen = data.value.imagen;
+        handleClose();
+>>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
       } else {
         error_edit.value = error.value;
       }

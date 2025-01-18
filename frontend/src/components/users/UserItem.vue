@@ -50,7 +50,7 @@ export default {
 
     const handleDeleteUserMenuAccept = () => {
       validDeleteMenu.value = false;
-      handleDeleteUser(props.user.id);
+      handleDeleteUser(props.user._id);
       emit("refetch");
     };
 

@@ -19,8 +19,13 @@ export const useOperators = (enterprise) => {
 
   api.get(`enterprises/${enterprise}/operators`).then((response) => {
     isLoading.value = false;
+<<<<<<< HEAD
     operators.value = response.data.operators;
     paginate.value = response.data.meta;
+=======
+    operators.value = response.data.operators.operators;
+    paginate.value = response.data.operators.meta;
+>>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
   });
 
   useAutoRefetch(refetch)
@@ -38,7 +43,6 @@ export const useOperator = (enterprise, pk) => {
   const operator = ref(null);
 
   const refetch = () => {
-    console.log("hola")
     api.get(`enterprises/${enterprise}/operators/${pk}`).then((response) => {
       operator.value = response.data.operator;
       isLoading.value = false;
@@ -58,5 +62,5 @@ export const useOperator = (enterprise, pk) => {
 };
 
 export const useDeleteOperator = async (enterprise, pk) => {
-  return await api.delete(`enterprises/${enterprise}/operators/${pk}`)
+  return await api.put(`enterprises/${enterprise}/operators/${pk}`)
 };

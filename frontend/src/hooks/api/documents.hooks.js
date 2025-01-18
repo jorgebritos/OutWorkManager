@@ -41,8 +41,13 @@ const useDocumentsEnterprise = (enterprise) => {
       })
       .then((response) => {
         isLoading.value = false;
+<<<<<<< HEAD
         documents.value = response.data.documents;
         paginate.value = response.data.meta;
+=======
+          documents.value = response.data.documents;
+        paginate.value = response.data.documents.meta;
+>>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
       });
   };
 

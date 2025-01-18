@@ -7,6 +7,7 @@ export const useEnterprises = (params = { filter: true }) => {
   const enterprises = ref(null);
   const paginate = ref(null);
 
+  
   const refetch = (params = {}) => {
     filter.value = params
 
@@ -63,13 +64,13 @@ export const useEnterprise = (slug) => {
 };
 
 export const useValidEnterprise = async (slug) => {
-  return await api.patch(`enterprises/${slug}`, {
+  return await api.put(`enterprises/${slug}`, {
     is_valid: true,
   });
 };
 
 export const useNotValidEnterprise = async (slug) => {
-  return await api.patch(`enterprises/${slug}`, {
+  return await api.put(`enterprises/${slug}`, {
     is_valid: false,
   });
 };
@@ -95,7 +96,10 @@ export const useCreateEnterprise = async (data) => {
   if (data.image) {
     formData.append("image", data.image);
   }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
   await api
     .post("enterprises", formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -126,7 +130,6 @@ export const useUpdateEnterprise = async (slug, data) => {
   const error = ref(null);
 
   const formData = new FormData();
-
   formData.append("_method", "PUT");
   formData.append("name", data.name);
   if (data.user_id !== null) {

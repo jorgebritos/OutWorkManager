@@ -13,18 +13,20 @@
             :key="index"
             class="q-mt-sm"
           >
-            <span class="q-pa-xs bg-negative text-white">{{ error }}</span>
+            <span  class="q-pa-xs bg-negative text-white">{{
+              error
+            }}</span>
           </div>
 
           <q-input
-            name="email"
+            name="correo"
             required
             type="email"
             label="email"
             v-model="data.correo"
           />
           <div
-            v-for="(error, index) in error_create?.email"
+            v-for="(error, index) in error_create?.correo"
             :key="index"
             class="q-mt-sm"
           >
@@ -36,7 +38,7 @@
             required
             type="password"
             label="password"
-            v-model="data.contra"
+            v-model="data.password"
           />
           <div
             v-for="(error, index) in error_create?.password"
@@ -72,62 +74,77 @@
           label="Cerrar"
           color="primary"
           v-close-popup
-          @click="handleClose"
+          @click="handleCloseCreateUser"
         />
       </q-card-actions>
     </q-card>
   </q-dialog>
-  <q-btn class="bg-primary text-white q-mr-md" @click="handleOpen">
-    Crear
-  </q-btn>
 </template>
 
 <script>
-import { reactive, ref } from "vue";
-import { useCreateUser } from "src/hooks/api/users.hooks";
+import { reactive, toRef, ref } from "vue";
+import { api } from "src/boot/axios";
 
 export default {
+  props: {
+    show: {
+      type: Boolean,
+      required: true,
+    },
+  },
   setup(props, { emit }) {
+
     const roles = [
       { label: "Empresario", value: "Enterprise" },
       { label: "Guardia", value: "Guard" },
       { label: "Admin", value: "Admin" },
     ];
 
-    const show = ref(false);
+    const show = toRef(props, "show");
 
     const data = reactive({
       correo: "",
       usuario: "",
-      contra: "",
+      password: "",
       rol: roles[0],
     });
 
     const error_create = ref(null);
 
-    const handleOpen = () => show.value = true
-    const handleClose = () => show.value = false
+    const handleCloseCreateUser = () => {
+      emit("handleCreateUserMenuClose");
+    };
 
-    const handleCreateUser = async () => {
-      const { isError, error } = await useCreateUser({
-        ...data,
-        rol: data.rol.value,
-      });
+    const handleCreateUser = () => {
 
-      if (isError.value) {
-        error_create.value = error.value;
-      } else {
-        emit("refetch")
-        handleClose()
-      }
+      api
+        .post(
+          "users",
+          {
+            ...data,
+            rol: data.rol.value,
+          },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+        .then(() => {
+          handleCloseCreateUser();
+        })
+        .catch((err) => {
+            console.error(err)
+          if (err?.response?.status === 422) {
+            const messages = err.response.data.errors;
+            error_create.value = messages;
+          }
+        });
     };
 
     return {
       data,
       handleCreateUser,
       show,
-      handleClose,
-      handleOpen,
+      handleCloseCreateUser,
       roles,
       error_create,
     };
