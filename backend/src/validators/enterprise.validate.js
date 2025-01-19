@@ -1,6 +1,6 @@
 import { body } from "express-validator";
-import User from "../Database/Esquemas/Usuario.js";
-import Enterprise from "../Database/Esquemas/Empresa.js";
+import User from "../database/Models/User.js";
+import Enterprise from "../database/Models/Enterprise.js";
 
 export const createEnterpriseValidate = [
   body("name")

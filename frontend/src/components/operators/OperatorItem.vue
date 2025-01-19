@@ -57,7 +57,7 @@ export default {
 
     const handleDeleteMenuAccept = async () => {
       validDeleteMenu.value = false;
-      await useDeleteOperator(params.slug, props.operator.ci)
+      await useDeleteOperator(params.slug, props.operator._id)
       emit("refetch")
     };    
 
@@ -72,7 +72,7 @@ export default {
       router.push({
         name: "operators-detail",
         params: {
-          pk: props.operator.ci,
+          pk: props.operator._id,
           enterprise: params.slug,
         },
       });

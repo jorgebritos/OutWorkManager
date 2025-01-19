@@ -29,5 +29,4 @@ const schemaEnterprise = new mongoose.Schema(
 
 schemaEnterprise.index({ user_id: 1 }, { unique: true, partialFilterExpression: { user_id: { $ne: null } } });
 
-
 export default mongoose.model("Enterprise", schemaEnterprise);

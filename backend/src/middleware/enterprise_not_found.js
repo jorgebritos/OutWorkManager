@@ -1,4 +1,4 @@
-import Enterprise from "../Database/Esquemas/Empresa.js";
+import Enterprise from "../database/Models/Enterprise.js";
 
 export const enterprise_not_found = async (req, res, next) => {
   const params = req.params;

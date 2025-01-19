@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import User from "../Database/Esquemas/Usuario.js";
+import User from "../database/Models/User.js";
 
 export const loginValidate = [
   body("email")

@@ -1,4 +1,4 @@
-import Document from "../Database/Esquemas/Document.js";
+import Document from "../database/Models/Document.js";
 import mongoose from "mongoose";
 
 export const document_not_found = async (req, res, next) => {

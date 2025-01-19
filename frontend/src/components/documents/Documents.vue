@@ -40,6 +40,7 @@
       </tbody>
     </q-markup-table>
     <Pagination
+      v-if="paginate"
       :currentPage="paginate.current_page"
       :maxPages="paginate.last_page"
       @handleRefetchPage="handleRefetchPage"
@@ -74,11 +75,8 @@ export default {
   setup(props) {
     const { documents, paginate, isLoading, refetch } =
       handleToggleFetchDocuments(props.entity, props.params);
-<<<<<<< HEAD
 
     const page = ref(null);
-=======
->>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
     const search = ref(null);
 
     watch(search, () => {

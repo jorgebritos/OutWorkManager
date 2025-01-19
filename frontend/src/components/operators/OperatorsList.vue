@@ -50,7 +50,7 @@
     </tbody>
   </q-markup-table>
   <pagination
-    v-if="!isLoading"
+    v-if="paginate"
     :currentPage="paginate.current_page"
     :maxPages="paginate.last_page"
     @handleRefetchPage="handleRefetchPage"
@@ -96,7 +96,7 @@ export default {
 
     const handleRefetchPage = (p) => {
       page.value = p
-      refetch({ page, search: search.value })
+      refetch({ page: p, search: search.value })
     }
 
     const handleCloseCreateOperator = () => {

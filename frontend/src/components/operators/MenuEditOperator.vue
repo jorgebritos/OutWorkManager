@@ -9,7 +9,6 @@
         <q-form @submit.prevent="handleUpdateOperator">
           <q-input
             name="Cédula"
-            required
             label="Cédula"
             v-model="dataUpdateOperator.ci"
           />
@@ -25,7 +24,6 @@
 
           <q-input
             name="Nombre"
-            required
             label="Nombre"
             v-model="dataUpdateOperator.name"
           />
@@ -46,7 +44,6 @@
 
           <q-input
             name="Cargo"
-            required
             label="Cargo"
             v-model="dataUpdateOperator.role_description"
           />
@@ -79,7 +76,7 @@
 
 <script>
 import { reactive, toRef, ref } from "vue";
-import { api } from "src/boot/axios";
+import { useUpdateOperator } from '../../hooks/api/operators.hooks.js'
 import { useRoute } from "vue-router";
 
 export default {
@@ -110,22 +107,15 @@ export default {
       emit("handleCloseUpdateOperator");
     };
 
-    const handleUpdateOperator = () => {
-      api
-        .put(
-          `enterprises/${params.enterprise}/edit/${props.operator.ci}`,
-          dataUpdateOperator
-        )
-        .then(() => {
-          handleCloseUpdateOperator();
-        })
-        .catch((err) => {
-          console.log(err);
-          if (err.response.status === 422) {
-            const messages = err.response.data.errors;
-            error_update.value = messages;
-          }
-        });
+    const handleUpdateOperator = async () => {
+      const {isError, error} = await useUpdateOperator(params.enterprise, props.operator._id, dataUpdateOperator)
+
+      if(isError.value === true) {
+        error_update.value = error
+      }else {
+        handleCloseUpdateOperator()
+      }
+      
     };
 
     return {

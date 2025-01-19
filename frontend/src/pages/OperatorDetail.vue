@@ -45,8 +45,8 @@
         <operator-documents
           entity="operator"
           :params="{
-            enterprise: 'empresa',
-            operator: operator.ci,
+            enterprise: enterprise,
+            operator: operator._id,
           }"
         />
       </div>
@@ -84,7 +84,6 @@ export default {
       params.enterprise,
       params.pk
     );
-
     const handleOutClick = () => router.go(-1);
 
     const showDeleteMenu = ref(false);
@@ -110,6 +109,7 @@ export default {
       updateOperator,
       handleCloseUpdateOperator,
       handleOpenUpdateOperator,
+      enterprise: params.enterprise,
       operator,
       isLoading: isLoading,
       handleOutClick,
