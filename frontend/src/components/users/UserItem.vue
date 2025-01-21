@@ -1,5 +1,6 @@
 <template>
   <ValidDeleteUserMenu
+    v-if="validDeleteMenu"
     :show="validDeleteMenu"
     @handleDeleteMenuClose="handleDeleteUserMenuClose"
     @handleDeleteMenuAccept="handleDeleteUserMenuAccept"

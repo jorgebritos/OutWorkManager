@@ -101,7 +101,7 @@ export default {
     const error_edit = ref(null);
 
     const handleEditUser = async () => {
-      const { isError, error } = await useEditUser(props.user.id, {
+      const { isError, error } = await useEditUser(props.user._id, {
         ...data,
         rol: data.rol.value,
         email: data.email === props.user.email ? undefined : data.email,

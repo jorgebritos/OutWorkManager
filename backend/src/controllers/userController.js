@@ -1,78 +1,61 @@
-import User from "../database/Models/User.js"
+import userDao from "../database/dao/userDao.js";
+
+export const index = async (req, res) => {
+  const { search, page, role } = req.query;
+
+  const current_page = Number(page ? page : 1);
+  const limit = 15;
+  console.log(page)  
+  const skip = (page - 1) * limit;
+
+  const query = {};
+
+  try {
+    if (search) query.name = { $regex: search, $options: "i" };
+    if (role) query.rol = role;
+
+    const { users, total } = await userDao.index(skip, limit, query);
+
+    const last_page = Math.ceil(total / limit);
+
+    res.status(200).json({ users, meta: { last_page, current_page, total } });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 export const create = async (req, res) => {
-    try {
-        const userData = new User(req.body);
-        const { correo } = userData;
-        const userExist = await User.findOne({ correo })
+  const data = req.body;
 
+  try {
+    const user = await userDao.create(data);
 
-        if (userExist) {
-            return res.status(400).json({ message: "User already exists." });
-        }
-
-        const savedUser = await userData.save();
-
-        res.status(200).json(savedUser)
-
-    } catch (error) {
-        res.status(500).json({ error: "Internal Network error" })
-    }
-}
-
-export const fetch = async (req, res) => {
-    try {
-        const pagina = 1;
-        const limite = 20;
-        const saltar = (pagina - 1) * limite;
-
-        const users = await User.find()
-            .skip(saltar)
-            .limit(limite)
-            .exec();
-
-
-        const totalUsers = await User.countDocuments();
-
-        const last_page = Math.ceil(totalUsers / limite);
-
-        res.status(200).json({ users, meta: { last_page, current_page: pagina } });
-    } catch (error) {
-        res.status(500).json({ error: "Internal Network error" })
-    }
-}
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 export const update = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const userExist = await User.findOne({ _id: id });
+  const pk = req.params.user;
+  const data = req.body;
 
-        if (!userExist) {
-            return res.status(404).json({ message: "User not found" });
-        }
+  try {
+    const user = await userDao.update(pk, data);
 
-        const updateUser = await User.findByIdAndUpdate(id, req.body, { new: true });
-        res.status(201).json(updateUser)
-    } catch (error) {
-        res.status(500).json({ error: "Internal Network error" })
-    }
-}
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-export const deleteUser = async (req, res) => {
-    try {
-        const id = req.params.id;
-        const userExist = await User.findOne({ _id: id });
+export const destroy = async (req, res) => {
+  const id = req.params.user;
+  try {
+    await userDao.destroy(id);
 
-        if (!userExist) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        await User.findOneAndDelete({_id: id});
-
-        res.status(201).json({ message: "User deleted successfully." });
-
-    } catch (error) {
-
-        res.status(500).json({ error: "Internal Network error" })
-
-    }
-}
+    res.json({ message: "OK" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

@@ -15,18 +15,13 @@ export const index = async (req, res) => {
 
     if (search) query.name = { $regex: search, $options: "i" };
 
-    const { enterprises: data, total } = await enterpriseDao.index(
+    const { enterprises, total } = await enterpriseDao.index(
       skip,
       limit,
       query
     );
 
     const last_page = Math.ceil(total / limit);
-
-    const enterprises = data.map((item) => ({
-      ...item,
-      user: item.user_id,
-    }));
 
     res.status(200).json({
       enterprises,
@@ -48,7 +43,11 @@ export const show = async (req, res) => {
     const enterprise = await enterpriseDao.show(params.enterprise);
 
     res.status(200).json({
-      enterprise,
+      enterprise: {
+        ...enterprise.toObject(),
+        user_id: undefined,
+        user: enterprise.user_id,
+      },
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

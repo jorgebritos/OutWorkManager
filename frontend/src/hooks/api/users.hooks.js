@@ -1,6 +1,5 @@
 import { api } from "src/boot/axios";
 import { ref } from "vue";
-import {useAutoRefetch} from "./autorefetchs.hooks";
 
 export const useUsers = (params = {}) => {
   const filter = ref(params);
@@ -43,7 +42,7 @@ export const useEditUser = async (id, data) => {
   const error = ref(null);
 
   await api
-    .patch("users/" + id, data, {
+    .put("users/" + id, data, {
       headers: { "Content-Type": "application/json" },
     })
     .then((response) => {
@@ -69,7 +68,6 @@ export const useCreateUser = async (data) => {
   const user = ref(null);
   const isError = ref(false);
   const error = ref(null);
-
 
   await api
     .post("users/", data, {

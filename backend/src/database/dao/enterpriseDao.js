@@ -15,7 +15,7 @@ class enterpriseDao {
   }
 
   async show(slug) {
-    return await Enterprise.findOne({ slug });
+    return await Enterprise.findOne({ slug }).populate("user_id");
   }
 
   async create(data) {

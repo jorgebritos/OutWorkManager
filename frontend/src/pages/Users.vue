@@ -98,7 +98,7 @@ export default {
     const { isLoading, refetch, users, paginate } = useUsers();
 
     const search = ref("");
-    const page = ref("");
+    const page = ref(1);
     const role = ref(null);
 
     watch([role, search], () => {

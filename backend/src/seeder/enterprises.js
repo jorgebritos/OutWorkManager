@@ -1,19 +1,38 @@
 import { faker } from "@faker-js/faker";
 import Enterprise from "../database/Models/Enterprise.js";
 import Document from "../database/Models/Document.js";
+import User from "../database/Models/User.js";
 import Operator from "../database/Models/Operator.js";
 import slugify from "slugify";
+
+const generate_user = async () => {
+  const data = {
+    name: faker.person.fullName(),
+    email: faker.internet.email(),
+    password: faker.internet.password(),
+  };
+
+  const user = new User({ ...data, rol: "Enterprise" });
+
+  return await user.save();
+};
 
 export const generate_enterprise = async () => {
   console.log("Creating Enterprises...");
   for (let i = 1; i <= 30; i++) {
     let name = faker.person.fullName();
+
+    let user = null;
+    if (faker.datatype.boolean()) {
+      user = await generate_user();
+    }
+
     const data = {
       name: name,
       slug: slugify(name, { lower: true, strict: true }),
       is_valid: faker.datatype.boolean(),
       image: null,
-      user_id: null,
+      user_id: user ? user.id : null,
     };
 
     const enterprise = new Enterprise(data);

@@ -1,14 +1,8 @@
 import { faker } from "@faker-js/faker";
 import User from "../database/Models/User.js";
 
-//const data = {
-//name: faker.name.findName(),
-//email: faker.internet.email(),
-//password: faker.internet.password(),
-//};
-
 export const generate_user = async () => {
-  console.log('Creating Users...')
+  console.log("Creating Users...");
   const admin = new User({
     name: "admin",
     email: "admin@gmail.com",
@@ -35,8 +29,17 @@ export const generate_user = async () => {
   });
 
   await enterprise.save();
-  console.log('Done')
-  //for (let i = 0; i <= 30; i++) {
-  // TOOD: usuarios aleatorios
-  //}
+  for (let i = 0; i <= 10; i++) {
+    const data = {
+      name: faker.person.fullName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+
+    const user = new User({ ...data, rol: "Enterprise" });
+
+    await user.save();
+  }
+
+  console.log("Done");
 };
