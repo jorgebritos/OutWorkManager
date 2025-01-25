@@ -1,6 +1,5 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import {useAutoRefetch} from "./autorefetchs.hooks";
 
 const useDocumentsJob = (job) => {
   const isLoading = ref(true);
@@ -8,7 +7,7 @@ const useDocumentsJob = (job) => {
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
-    api.get(`jobs/${job}/documents`, {params}).then((response) => {
+    api.get(`jobs/${job}/documents`, { params }).then((response) => {
       isLoading.value = false;
       documents.value = response.data.documents;
       paginate.value = response.data.meta;
@@ -40,9 +39,9 @@ const useDocumentsEnterprise = (enterprise) => {
         params,
       })
       .then((response) => {
+        documents.value = response.data.documents;
+        paginate.value = response.data.meta;
         isLoading.value = false;
-          documents.value = response.data.documents;
-        paginate.value = response.data.documents.meta;
       });
   };
 
@@ -62,7 +61,8 @@ const useDocumentsEnterprise = (enterprise) => {
 
 const useDocumentsOperators = (enterprise, operator) => {
   const isLoading = ref(true);
-  const documents = ref(null);"The route api/v1/job/7/documents/16907 could not be found."
+  const documents = ref(null);
+  ("The route api/v1/job/7/documents/16907 could not be found.");
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
@@ -246,7 +246,7 @@ const useDeleteDocumentOperator = async (enterprise, operator, pk) => {
   );
 };
 
-const useDeleteDocumentEnterprise = async (enterprise, pk,) => {
+const useDeleteDocumentEnterprise = async (enterprise, pk) => {
   return await api.delete(`enterprises/${enterprise}/documents/${pk}`);
 };
 
@@ -277,7 +277,6 @@ const useEditDocumentJob = async (job, pk, data) => {
 
   const formData = new FormData();
 
-  formData.append("_method", "PUT");
   formData.append("title", data.title);
   formData.append("expire", data.expire);
   formData.append("is_valid", data.is_valid ? "1" : "0");
@@ -287,7 +286,7 @@ const useEditDocumentJob = async (job, pk, data) => {
   }
 
   await api
-    .post(`jobs/${job}/documents/${pk}`, formData, {
+    .put(`jobs/${job}/documents/${pk}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
@@ -315,7 +314,6 @@ const useEditDocumentOperator = async (enterprise, operator, pk, data) => {
 
   const formData = new FormData();
 
-  formData.append("_method", "PUT");
   formData.append("title", data.title);
   formData.append("expire", data.expire);
   formData.append("is_valid", data.is_valid ? "1" : "0");
@@ -325,7 +323,7 @@ const useEditDocumentOperator = async (enterprise, operator, pk, data) => {
   }
 
   await api
-    .post(
+    .put(
       `enterprises/${enterprise}/operators/${operator}/documents/${pk}`,
       formData,
       {
@@ -357,7 +355,6 @@ const useEditDocumentEnterprise = async (enterprise, pk, data) => {
 
   const formData = new FormData();
 
-  formData.append("_method", "PUT");
   formData.append("title", data.title);
   formData.append("expire", data.expire);
   formData.append("is_valid", data.is_valid ? "1" : "0");
@@ -367,13 +364,14 @@ const useEditDocumentEnterprise = async (enterprise, pk, data) => {
   }
 
   await api
-    .post(`enterprises/${enterprise}/documents/${pk}`, formData, {
+    .put(`enterprises/${enterprise}/documents/${pk}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     })
     .then((response) => {
       doc.value = response.data.document;
     })
     .catch((err) => {
+      console.error(err)
       if (err.response.status === 422) {
         const messages = err.response.data.errors;
         isError.value = true;

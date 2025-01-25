@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import User from "../Database/Esquemas/Usuario.js";
+import User from "../database/Models/User.js";
 
 //const data = {
 //name: faker.name.findName(),

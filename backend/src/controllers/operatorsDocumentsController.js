@@ -1,20 +1,20 @@
-import enterpriseDocumentDao from "../database/dao/enterpriseDocumentDao.js";
+import operatorDocumentDao from "../database/dao/operatorDocumentDao.js";
 
 export const index = async (req, res) => {
-  const { enterprise } = req.params;
+  const { operator } = req.params;
   const { search, page } = req.query;
 
   const current_page = Number(page ? page : 1);
   const limit = 5;
   const skip = (page - 1) * limit;
 
+  const query = {};
   try {
-    const query = {};
 
     if (search) query.title = { $regex: search, $options: "i" };
 
-    const { documents, total } = await enterpriseDocumentDao.index(
-      enterprise,
+    const { documents, total } = await operatorDocumentDao.index(
+      operator,
       skip,
       limit,
       query
@@ -35,7 +35,7 @@ export const show = async (req, res) => {
   const params = req.params;
 
   try {
-    const document = await enterpriseDocumentDao.show(params.document);
+    const document = await operatorDocumentDao.show(params.document);
 
     res.json({
       document,
@@ -50,8 +50,8 @@ export const create = async (req, res) => {
   const data = req.body;
 
   try {
-    const document = await enterpriseDocumentDao.create(
-      params.enterprise,
+    const document = await operatorDocumentDao.create(
+      params.operator,
       data
     );
 
@@ -68,7 +68,7 @@ export const update = async (req, res) => {
   const data = req.body;
 
   try {
-    const document = await enterpriseDocumentDao.update(params.document, data);
+    const document = await operatorDocumentDao.update(params.document, data);
 
     res.json({
       document,
@@ -82,7 +82,7 @@ export const destroy = async (req, res) => {
   const { document } = req.params;
 
   try {
-    await enterpriseDocumentDao.destroy(document);
+    await operatorDocumentDao.destroy(document);
 
     res.json({
       message: "OK",

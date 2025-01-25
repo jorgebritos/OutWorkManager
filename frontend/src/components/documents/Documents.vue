@@ -24,7 +24,12 @@
         <document-item :entity="entity" :params="params" :document="document" @refetch="refetch" />
       </tbody>
     </q-markup-table>
-    <Pagination :currentPage="paginate.current_page" :maxPages="paginate.last_page" @handleRefetchPage="handleRefetchPage" />
+    <Pagination
+      v-if="paginate"
+      :currentPage="paginate.current_page"
+      :maxPages="paginate.last_page"
+      @handleRefetchPage="handleRefetchPage"
+    />
   </div>
 </template>
 
@@ -53,7 +58,8 @@ export default {
     },
   },
   setup(props) {
-    const { documents, paginate, isLoading, refetch } = handleToggleFetchDocuments(props.entity, props.params);
+    const { documents, paginate, isLoading, refetch } =
+      handleToggleFetchDocuments(props.entity, props.params);
 
     const page = ref(null);
     const search = ref(null);

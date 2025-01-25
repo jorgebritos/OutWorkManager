@@ -139,9 +139,9 @@ export default {
       role: "users_not_enterprise",
     });
 
-    const menu_users = ref(false)
-    const user_tag = ref(null)
-    
+    const menu_users = ref(false);
+    const user_tag = ref(null);
+
     let users_old = null;
     
     const handleUserScroll = () => {
@@ -175,9 +175,9 @@ export default {
       });
 
       if (!isError.value) {
-        console.log(data.value)
-        enterprise.value.imagen = data.value.imagen;
-        handleClose();
+        enterprise.value.image = data.value.image;
+        handleClose()
+        router.push(`/enterprises`);
       } else {
         error_edit.value = error.value;
       }

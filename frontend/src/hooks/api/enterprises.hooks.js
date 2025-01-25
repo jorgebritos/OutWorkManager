@@ -7,7 +7,6 @@ export const useEnterprises = (params = { filter: true }) => {
   const enterprises = ref(null);
   const paginate = ref(null);
 
-  
   const refetch = (params = {}) => {
     filter.value = params
 
@@ -96,7 +95,7 @@ export const useCreateEnterprise = async (data) => {
   if (data.image) {
     formData.append("image", data.image);
   }
-  
+
   await api
     .post("enterprises", formData, {
       headers: { "Content-Type": "multipart/form-data" },

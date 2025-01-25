@@ -23,7 +23,6 @@ export const useOperators = (slug) => {
     paginate.value = response.data.meta;
   });
 
-  console.log(paginate)
   useAutoRefetch(refetch)
 
   return {
@@ -55,6 +54,23 @@ export const useOperator = (enterprise, pk) => {
     isLoading,
     refetch,
   };
+};
+
+export const useUpdateOperator = async (enterprise, operator, data) => {
+  const error = ref(null);
+  const isError = ref(false);
+
+  await api
+    .put(`enterprises/${enterprise}/operators/${operator}`, data)
+    .catch((err) => {
+      if (err.response.status === 422) {
+        isError.value = true;
+        const messages = err.response.data.errors;
+        error.value = messages;
+      }
+    });
+
+  return {error, isError}
 };
 
 export const useDeleteOperator = async (ci) => {

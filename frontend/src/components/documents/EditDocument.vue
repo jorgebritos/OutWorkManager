@@ -144,7 +144,6 @@ export default {
       );
       if (isError.value) {
         error_edit.value = error.value;
-        console.log(error_edit.value);
       } else {
         show.value = false;
         emit("refetch");

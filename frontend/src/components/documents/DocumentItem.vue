@@ -25,7 +25,7 @@
         :entity="entity"
         :params="{
           ...params,
-          pk: document.id,
+          pk: document._id,
         }"
         @refetch="refetch"
         :doc="document"
@@ -123,7 +123,7 @@ export default {
         props.entity,
         {
           ...props.params,
-          pk: props.document.id,
+          pk: props.document._id,
         },
         {
           ...props.document,

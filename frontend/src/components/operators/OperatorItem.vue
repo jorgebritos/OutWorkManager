@@ -72,7 +72,7 @@ export default {
       router.push({
         name: "operators-detail",
         params: {
-          pk: props.operator.ci,
+          pk: props.operator._id,
           enterprise: params.slug,
         },
       });
