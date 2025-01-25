@@ -223,6 +223,7 @@ export const useCreateJob = async (data) => {
   const isError = ref(false);
   const error = ref(null);
 
+  console.log(data)
   await api
     .post("jobs", data)
     .then((response) => {

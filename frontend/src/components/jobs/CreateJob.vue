@@ -106,13 +106,13 @@
                         <q-btn
                           @click="
                             () => {
-                              data.enterprise_id = enterprise.id;
+                              data.enterprise_id = enterprise._id;
                               menu_enterprises = false;
                               enterprise_tag = enterprise.name;
                             }
                           "
                         >
-                          {{ enterprise.nombre }}
+                          {{ enterprise.name }}
                         </q-btn>
                       </q-item-section>
                     </q-item>
