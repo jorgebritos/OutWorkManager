@@ -1,10 +1,10 @@
-import Operator from "../Database/Esquemas/Operator.js"
-import Enterprise from "../Database/Esquemas/Empresa.js"
+import Operator from "../database/Models/Operator.js"
+import Enterprise from "../database/Models/Enterprise.js"
 export const fetch = async (req, res) => {
     const { filter, search, page } = req.query;
 
     const current_page = Number(page ? page : 1);
-    const limit = 15;
+    const limit = 5;
     const skip = (page - 1) * limit;
     try {
         const query = {};

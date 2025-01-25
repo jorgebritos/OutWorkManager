@@ -1,6 +1,7 @@
 import express from "express";
 import userRouter from "./routes/userRoute.js";
 import authRouter from "./routes/authRoute.js";
+import operatorsRoute from "./routes/operatorsRoute.js"
 import enterprisesRouter from "./routes/enterprisesRoute.js";
 import enterprisesDocumentsRouter from "./routes/enterpriseDocumentsRoute.js";
 import operatorRouter from "./routes/operatorRoute.js";
@@ -31,6 +32,7 @@ routes.use(
 );
 
 routes.use("/users", userRouter);
+routes.use("/operators", operatorsRoute)
 routes.use("/jobs", jobRouter);
 
 export default routes;

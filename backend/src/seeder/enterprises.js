@@ -25,7 +25,7 @@ export const generate_enterprise = async () => {
 
       const randomDate = faker.date.between({ from: startDate, to: endDate });
       const data_document = {
-        url_document: "no ahi documento",
+        url_document: "no hay documento",
         title: faker.person.fullName(),
         expire: randomDate,
         type: null,
@@ -57,7 +57,7 @@ export const generate_enterprise = async () => {
 
         const randomDate = faker.date.between({ from: startDate, to: endDate });
         const data_document_operator = {
-          url_document: "no ahi documento",
+          url_document: "no hay documento",
           title: faker.person.fullName(),
           expire: randomDate,
           type: null,

@@ -1,10 +1,10 @@
 import Job from "../database/Models/Job.js"
 
 export const createJob = async (req, res) => {
-    console.log(req.body)
-
+    
     try {
         const jobData = new Job({ ...req.body });
+        console.log(jobData)
         const savedJob = await jobData.save();
         res.status(200).json(savedJob);
     } catch (error) {
