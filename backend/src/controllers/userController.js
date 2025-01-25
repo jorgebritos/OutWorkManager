@@ -5,7 +5,6 @@ export const index = async (req, res) => {
 
   const current_page = Number(page ? page : 1);
   const limit = 15;
-  console.log(page)  
   const skip = (page - 1) * limit;
 
   const query = {};

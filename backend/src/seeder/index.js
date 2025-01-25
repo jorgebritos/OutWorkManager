@@ -1,6 +1,5 @@
 import connect, { closeConnect } from "../config/bd.js";
 
-import { faker } from "@faker-js/faker";
 connect();
 
 import { generate_user } from "./users.js";
