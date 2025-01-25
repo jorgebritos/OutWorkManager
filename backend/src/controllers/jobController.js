@@ -1,8 +1,10 @@
 import Job from "../Database/Esquemas/Job.js"
 
 export const createJob = async (req, res) => {
+    console.log(req.body)
+
     try {
-        const jobData = new Job({...req});
+        const jobData = new Job({ ...req.body });
         const savedJob = await jobData.save();
         res.status(200).json(savedJob);
     } catch (error) {
@@ -78,22 +80,30 @@ export const updateDateInJob = async (req, res) => {
 
 export const getJobs = async (req, res) => {
     try {
-        const pagina = 1;
-        const limite = 15;
-        const saltar = (pagina - 1) * limite;
+        const { confirm, search, page } = req.query;
+        console.log(req.query)
+        const current_page = Number(page ? page : 1);
+        const limit = 15;
+        const skip = (page - 1) * limit;
 
-        const jobs = await Job.find()
-            .skip(saltar)
-            .limit(limite)
-            .populate("enterpriseId", "name") // Only populate the name field from Enterprise
+        const query = {};
+        if (confirm !== undefined && confirm !== null) {
+            query.is_check = confirm;
+        }
+
+        if (search) query.description = { $regex: search, $options: "i" };
+
+        const jobs = await Job.find(query)
+            .skip(skip)
+            .limit(limit)
             .exec();
 
 
         const totalJobs = await Job.countDocuments();
 
-        const last_page = Math.ceil(totalJobs / limite);
+        const last_page = Math.ceil(totalJobs / limit);
 
-        res.status(200).json({ jobs, meta: { last_page, current_page: pagina } });
+        res.status(200).json({ jobs, meta: { last_page, current_page } });
     } catch (error) {
         res.status(500).json({ error: "Internal Network Error" });
     }
@@ -102,7 +112,7 @@ export const getJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
     try {
         const { jobId } = req.params;
-        const job = await Job.findById(jobId).populate("enterpriseId", "name"); // Only populate the name field from Enterprise
+        const job = await Job.findById({ _id: jobId }); // Only populate the name field from Enterprise
         if (!job) {
             return res.status(404).json({ message: "Job not found" });
         }
@@ -111,3 +121,18 @@ export const getJobById = async (req, res) => {
         res.status(500).json({ error: "Internal Network Error" });
     }
 };
+
+
+export const updateJob = async (req, res) => {
+    const params = req.params;
+    console.log(req.body)
+    try {
+        var data = { ...req.body };
+        console.log(data)
+        const updatedJob = await Job.findOneAndUpdate({ _id: params.jobId }, data, { new: true });
+
+        res.status(200).json({ job: updatedJob });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}

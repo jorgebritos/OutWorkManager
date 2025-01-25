@@ -104,19 +104,9 @@
                     >
                       <q-item-section>
                         <q-btn
-<<<<<<< HEAD
-                          @click="
-                            () => {
-                              data.enterprise_id = enterprise.id;
-                              menu_enterprises = false;
-                              enterprise_tag = enterprise.name;
-                            }
-                          "
-=======
-                          @click="() => {data.enterprise_id = enterprise._id; menu_enterprises=false; enterprise_tag=enterprise.nombre}"
->>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
+                          @click="() => {data.enterprise_id = enterprise._id; menu_enterprises=false; enterprise_tag=enterprise.name}"
                         >
-                          {{ enterprise.nombre }}
+                          {{ enterprise.name }}
                         </q-btn>
                       </q-item-section>
                     </q-item>

@@ -7,14 +7,13 @@ export const index = async (req, res) => {
   const current_page = Number(page ? page : 1);
   const limit = 15;
   const skip = (page - 1) * limit;
-
   try {
     const query = {};
     if (filter !== undefined && filter !== null) {
       query.is_valid = filter === "true";
     }
 
-    if(search) query.name = { $regex: search, $options: "i" };
+    if (search) query.name = { $regex: search, $options: "i" };
 
     const enterprises = await Enterprise.find(query)
       .skip(skip)
@@ -75,15 +74,14 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   const params = req.params;
-
   try {
-    const data = { ...req.body, slug: slugify(req.body.name) };
-
-    const updatedEnterprise = await Enterprise.findOneAndUpdate(
-      { slug: params.enterprise },
-      { $set: data },
-      { new: true, runValidators: true }
-    );
+    if (req.body.name) {
+      var data = { ...req.body, slug: slugify(req.body.name) };
+    } else {
+      var data = { ...req.body };
+    }
+    console.log(data)
+    const updatedEnterprise = await Enterprise.findOneAndUpdate({ slug: params.enterprise }, data, { new: true });
 
     res.status(200).json({ enterprise: updatedEnterprise });
   } catch (error) {

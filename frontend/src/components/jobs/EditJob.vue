@@ -205,7 +205,7 @@ export default {
     };
 
     const handleEdit = async () => {
-      const { isError, error } = await useUpdateJob(job.value.id, {
+      const { isError, error } = await useUpdateJob(job.value._id, {
         ...job.value,
       });
 

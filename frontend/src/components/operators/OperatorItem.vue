@@ -57,7 +57,7 @@ export default {
 
     const handleDeleteMenuAccept = async () => {
       validDeleteMenu.value = false;
-      await useDeleteOperator(params.slug, props.operator.ci)
+      await useDeleteOperator(props.operator.ci)
       emit("refetch")
     };    
 

@@ -1,12 +1,6 @@
 <template>
   <div class="row items-center q-mt-xl">
-    <q-input
-      style="width: 100%"
-      filled
-      class="col"
-      v-model="search"
-      label="Busqueda"
-    >
+    <q-input style="width: 100%" filled class="col" v-model="search" label="Busqueda">
       <template v-slot:prepend>
         <q-btn flat round dense class="icono_de_busqueda" icon="search" />
       </template>
@@ -26,24 +20,11 @@
           <th class="text-center">Acciones</th>
         </tr>
       </thead>
-      <tbody
-        :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
-        v-for="document in documents"
-        :key="document.id"
-      >
-        <document-item
-          :entity="entity"
-          :params="params"
-          :document="document"
-          @refetch="refetch"
-        />
+      <tbody :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'" v-for="document in documents" :key="document.id">
+        <document-item :entity="entity" :params="params" :document="document" @refetch="refetch" />
       </tbody>
     </q-markup-table>
-    <Pagination
-      :currentPage="paginate.current_page"
-      :maxPages="paginate.last_page"
-      @handleRefetchPage="handleRefetchPage"
-    />
+    <Pagination :currentPage="paginate.current_page" :maxPages="paginate.last_page" @handleRefetchPage="handleRefetchPage" />
   </div>
 </template>
 
@@ -72,13 +53,9 @@ export default {
     },
   },
   setup(props) {
-    const { documents, paginate, isLoading, refetch } =
-      handleToggleFetchDocuments(props.entity, props.params);
-<<<<<<< HEAD
+    const { documents, paginate, isLoading, refetch } = handleToggleFetchDocuments(props.entity, props.params);
 
     const page = ref(null);
-=======
->>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
     const search = ref(null);
 
     watch(search, () => {
@@ -90,8 +67,8 @@ export default {
       refetch({ page: p, search: search.value });
     };
 
-    useAutoRefetch(()=>refetch({page: page.value}))
-  
+    useAutoRefetch(() => refetch({ page: page.value }))
+
     return {
       handleRefetchPage,
       documents,

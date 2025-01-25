@@ -1,14 +1,14 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
-import {useAutoRefetch} from "./autorefetchs.hooks";
+import { useAutoRefetch } from "./autorefetchs.hooks";
 
-export const useOperators = (enterprise) => {
+export const useOperators = (slug) => {
   const isLoading = ref(true);
   const operators = ref(null);
   const paginate = ref(null);
 
-  const refetch = (params={}) => {
-    api.get(`enterprises/${enterprise}/operators`, {
+  const refetch = (params = {}) => {
+    api.get(`operators/${slug}`, {
       params,
     }).then((response) => {
       isLoading.value = false;
@@ -17,19 +17,15 @@ export const useOperators = (enterprise) => {
     });
   };
 
-  api.get(`enterprises/${enterprise}/operators`).then((response) => {
+  api.get(`operators/${slug}`).then((response) => {
     isLoading.value = false;
-<<<<<<< HEAD
     operators.value = response.data.operators;
     paginate.value = response.data.meta;
-=======
-    operators.value = response.data.operators.operators;
-    paginate.value = response.data.operators.meta;
->>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
   });
 
+  console.log(paginate)
   useAutoRefetch(refetch)
-  
+
   return {
     operators,
     paginate,
@@ -61,6 +57,6 @@ export const useOperator = (enterprise, pk) => {
   };
 };
 
-export const useDeleteOperator = async (enterprise, pk) => {
-  return await api.put(`enterprises/${enterprise}/operators/${pk}`)
+export const useDeleteOperator = async (ci) => {
+  return await api.delete(`operators/${ci}`)
 };

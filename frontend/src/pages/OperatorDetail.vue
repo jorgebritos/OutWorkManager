@@ -93,7 +93,7 @@ export default {
 
     const handleDeleteMenuAccept = async () => {
       showDeleteMenu.value = false;
-      await useDeleteOperator(params.enterprise, params.pk);
+      await useDeleteOperator(params.pk);
       handleOutClick();
     };
 

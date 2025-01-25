@@ -19,7 +19,7 @@ export const useEnterpriseJobs = (enterprise, params = {}) => {
   };
 
   api
-    .get(`enterprises/${enterprise}/jobs`, {params})
+    .get(`enterprises/${enterprise}/jobs`, { params })
     .then((response) => {
       isLoading.value = false;
       jobs.value = response.data.jobs;
@@ -34,7 +34,7 @@ export const useEnterpriseJobs = (enterprise, params = {}) => {
   };
 };
 
-export const useJobs = (params = { valid: true }) => {
+export const useJobs = (params = { is_check: true }) => {
   const filter = ref(params);
   const isLoading = ref(true);
   const jobs = ref(null);
@@ -50,7 +50,7 @@ export const useJobs = (params = { valid: true }) => {
         isLoading.value = false;
         jobs.value = response.data.jobs;
         paginate.value = response.data.meta;
-      });"The route api/v1/enterprise/odell-kreiger-iii-6761ff4c6370f/jobs/6 could not be found."
+      }); "The route api/v1/enterprise/odell-kreiger-iii-6761ff4c6370f/jobs/6 could not be found."
   };
 
   api
@@ -101,28 +101,28 @@ export const useEnterpriseJob = (enterprise, pk) => {
   };
 };
 
-export const useJob = (pk) => {
+export const useJob = (id) => {
   const isLoading = ref(true);
   const job = ref(null);
 
   const refetch = (params = {}) => {
     api
-      .get(`jobs/${pk}`, {
+      .get(`jobs/${id}`, {
         params,
       })
       .then((response) => {
         isLoading.value = false;
-        job.value = response.data.job;
+        job.value = response.data;
       });
   };
 
   api
-    .get(`jobs/${pk}`)
+    .get(`jobs/${id}`)
     .then((response) => {
       isLoading.value = false;
-      job.value = response.data.job;
+      job.value = response.data;
     });
-
+    console.log(job)
   return {
     job,
     isLoading,
@@ -173,6 +173,7 @@ export const useUpdateJob = async (pk, data) => {
       if (response.status === 200) {
         job.value = response.data.job;
       }
+      console.log(job)
     })
     .catch((err) => {
       if (err?.response?.status === 422) {

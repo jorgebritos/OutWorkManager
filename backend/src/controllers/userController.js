@@ -3,8 +3,8 @@ import User from "../Database/Esquemas/Usuario.js"
 export const create = async (req, res) => {
     try {
         const userData = new User(req.body);
-        const { correo } = userData;
-        const userExist = await User.findOne({ correo })
+        const { email } = userData;
+        const userExist = await User.findOne({ email })
 
 
         if (userExist) {
@@ -21,22 +21,29 @@ export const create = async (req, res) => {
 }
 
 export const fetch = async (req, res) => {
+    const { role, search, page } = req.query
     try {
-        const pagina = 1;
-        const limite = 20;
-        const saltar = (pagina - 1) * limite;
+        const current_page = Number(page ? page : 1);
+        const limit = 15;
+        const skip = (page - 1) * limit;
+        const query = {};
+        if (role !== undefined && role !== null) {
+            query.rol = role
+        }
 
-        const users = await User.find()
-            .skip(saltar)
-            .limit(limite)
+        if (search) query.name = { $regex: search, $options: "i" };
+
+        const users = await User.find(query)
+            .skip(skip)
+            .limit(limit)
             .exec();
 
 
         const totalUsers = await User.countDocuments();
 
-        const last_page = Math.ceil(totalUsers / limite);
+        const last_page = Math.ceil(totalUsers / limit);
 
-        res.status(200).json({ users, meta: { last_page, current_page: pagina } });
+        res.status(200).json({ users, meta: { last_page, current_page } });
     } catch (error) {
         res.status(500).json({ error: "Internal Network error" })
     }
@@ -66,7 +73,7 @@ export const deleteUser = async (req, res) => {
         if (!userExist) {
             return res.status(404).json({ message: "User not found" });
         }
-        await User.findOneAndDelete({_id: id});
+        await User.findOneAndDelete({ _id: id });
 
         res.status(201).json({ message: "User deleted successfully." });
 
