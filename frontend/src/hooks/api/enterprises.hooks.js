@@ -96,10 +96,7 @@ export const useCreateEnterprise = async (data) => {
   if (data.image) {
     formData.append("image", data.image);
   }
-<<<<<<< HEAD
-
-=======
->>>>>>> 9a2d138f7cf91a9dfc7954ca8676fea046af4e4b
+  
   await api
     .post("enterprises", formData, {
       headers: { "Content-Type": "multipart/form-data" },

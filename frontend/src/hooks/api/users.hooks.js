@@ -43,7 +43,7 @@ export const useEditUser = async (id, data) => {
   const error = ref(null);
 
   await api
-    .patch("users/" + id, data, {
+    .put("users/" + id, data, {
       headers: { "Content-Type": "application/json" },
     })
     .then((response) => {
