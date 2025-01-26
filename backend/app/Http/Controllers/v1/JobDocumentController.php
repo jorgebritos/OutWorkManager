@@ -43,10 +43,10 @@ class JobDocumentController extends Controller
 
         $request->validated();
 
-        $path = "storage/" . $request->file('document')->store('documents', 'public');
+        $path = null;
 
         if ($request->hasFile('document')) {
-            $data['document'] = "storage/" . $request->file('document')->store('documents', 'public');
+            $path = "storage/" . $request->file('document')->store('documents', 'public');
         }
 
         $document = $job->documents()->create([
@@ -66,7 +66,7 @@ class JobDocumentController extends Controller
     {
         Gate::authorize("view", $job);
         Gate::authorize("view", $document);
-        
+
         return response()->json(["document" => JobDocumentResource::make($document)]);
     }
 
@@ -77,14 +77,11 @@ class JobDocumentController extends Controller
     {
         Gate::authorize("view", $job);
         Gate::authorize("update", $document);
-    
+
         $data = $request->validated();
 
-        $path = null;
-
-        if ($request->file("document")) {
-            $path = $request->file('document')->store('documents', 'public');
-            $data["document_url"] = $path;
+        if ($request->hasFile('document')) {
+            $data["url_document"] = "storage/" . $request->file('document')->store('documents', 'public');
         }
 
         $document->update($data);
@@ -99,7 +96,7 @@ class JobDocumentController extends Controller
     {
         Gate::authorize("view", $job);
         Gate::authorize("delete", $document);
-        
+
         $document->delete();
 
         return response()->json();

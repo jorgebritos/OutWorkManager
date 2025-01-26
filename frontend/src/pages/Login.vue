@@ -34,6 +34,16 @@
               </q-input>
             </div>
 
+            <div v-if="isError">
+              <div
+                class="q-mt-sm"
+              >
+                <span class="q-pa-xs bg-negative text-white">
+                  {{ error }}
+                </span>
+              </div>
+            </div>
+
             <div class="flex flex-end">
               <q-btn
                 label="Entrar"
@@ -45,7 +55,12 @@
               />
             </div>
             <div class="q-mt-md">
-              <q-btn flat label="Registrese aquí" href="/#/register" class="text-white"/>
+              <q-btn
+                flat
+                label="Registrese aquí"
+                href="/#/register"
+                class="text-white"
+              />
             </div>
           </q-form>
         </q-card-section>
@@ -75,6 +90,9 @@ export default {
     const password = ref("");
     const isPwd = ref(true);
 
+    const isError = ref(false);
+    const error = ref(null);
+
     const send = async () => {
       api
         .post("auth/login", {
@@ -89,18 +107,34 @@ export default {
             enterprise: response.data.enterprise,
           });
 
-          if(response.data.user.rol === 'Admin'){
+          if (response.data.user.rol === "Admin") {
             router.push("/");
-          }else if (response.data.user.rol === "Enterprise") {
-            router.push({name: 'enterprise_home'});
+          } else if (response.data.user.rol === "Enterprise") {
+            router.push({ name: "enterprise_home" });
           }
         })
-        .catch(function (error) {
-          console.error(error);
+        .catch((err) => {
+          console.error(err)
+          if (err.response.status === 400) {
+            const messages = err.response.data.error;
+            isError.value = true;
+            error.value = messages;
+          }
         });
     };
 
-    return { ph, dense, licence, text, email, password, isPwd, send };
+    return {
+      ph,
+      dense,
+      licence,
+      text,
+      email,
+      password,
+      isPwd,
+      send,
+      isError,
+      error,
+    };
   },
 };
 </script>

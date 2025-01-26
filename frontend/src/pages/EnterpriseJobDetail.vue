@@ -88,7 +88,7 @@ export default {
     const userStore = useUserStore();
     const user = userStore.getUser;
 
-    const { job, isLoading } = useEnterpriseJob(user.enterprise.slug, params.pk);
+    const { job, isLoading, refetch } = useEnterpriseJob(user.enterprise.slug, params.pk);
 
     const handleOutClick = () => router.go(-1);
 
@@ -106,6 +106,8 @@ export default {
       handleOutClick();
     };
 
+    useAutoRefetch(()=>refetch())
+    
     return {
       isLoading,
       job,

@@ -104,7 +104,7 @@ export default {
       refetch();
     };
 
-    useAutoRefetch(()=>refetch({page: page.value}))
+    useAutoRefetch(()=>refetch({page: page.value, search: search.value}))
     
     return {
       handleRefetchPage,

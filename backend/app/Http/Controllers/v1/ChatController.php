@@ -22,7 +22,7 @@ class ChatController extends Controller
             'content' => $validated['content'],
         ]);
 
-        broadcast(new MessageEvent($message));
+        broadcast(new MessageEvent($message))->toOthers();
 
         return response()->json($message);
     }

@@ -84,6 +84,7 @@ import ValidDeleteOperatorMenu from "src/components/helpers/ValidDeleteMenu.vue"
 import { ref, watch } from "vue";
 import { useUserStore } from "src/store/user.store";
 import EditJob from "src/components/jobs/EditJob.vue";
+import { useAutoRefetch } from "src/hooks/api/autorefetchs.hooks";
 
 export default {
   components: {
@@ -119,6 +120,8 @@ export default {
       handleOutClick();
     };
 
+    useAutoRefetch(()=>refetch())
+    
     return {
       isLoading,
       job,

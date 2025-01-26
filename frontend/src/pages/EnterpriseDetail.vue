@@ -127,6 +127,7 @@ import {
 } from "src/hooks/api/enterprises.hooks";
 import ValidDeleteEnterpriseMenu from "src/components/helpers/ValidDeleteMenu.vue";
 import { useUserStore } from "src/store/user.store.js";
+import { useAutoRefetch } from "src/hooks/api/autorefetchs.hooks.js";
 
 export default {
   components: {
@@ -173,6 +174,8 @@ export default {
       refetch();
     };
 
+    useAutoRefetch(()=>refetch())
+    
     return {
       isLoading,
       user,
