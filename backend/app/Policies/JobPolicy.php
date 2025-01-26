@@ -7,6 +7,13 @@ use App\Models\User;
 
 class JobPolicy
 {
+
+    public function viewAdmin(User $user): bool
+    {
+        return $user->rol === 'Admin';
+    }
+
+
     public function viewGuard(User $user): bool
     {
         return $user->rol === 'Guard';

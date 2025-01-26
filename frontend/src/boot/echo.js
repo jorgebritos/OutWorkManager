@@ -4,7 +4,7 @@ import Pusher from "pusher-js";
 window.Pusher = Pusher;
 
 export default async ({ app, store, router }) => {
-  const echo = new Echo({
+  window.Echo = new Echo({
     broadcaster: "reverb",
     key: process.env.REVERB_APP_KEY,
     wsHost: process.env.REVERB_HOST,
@@ -21,5 +21,4 @@ export default async ({ app, store, router }) => {
     debug: true,
   });
 
-  app.config.globalProperties.$echo = echo;
 };

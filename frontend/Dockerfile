@@ -8,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 # Ejecutar la aplicación en modo desarrollo
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
 
 # Exponer el puerto en el que Quasar ejecuta la aplicación en desarrollo
 EXPOSE 9000

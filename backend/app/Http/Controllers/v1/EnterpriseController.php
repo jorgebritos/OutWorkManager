@@ -36,7 +36,7 @@ class EnterpriseController extends Controller
         if ($owner === 'true') {
             $query->where('user_id', '!=', null);
         } else if ($filter === 'false') {
-            $query->where('user_id', '=', null);
+            $query->where('user_id', '!=', null);
         }
 
         $search = $request->input('search', null);

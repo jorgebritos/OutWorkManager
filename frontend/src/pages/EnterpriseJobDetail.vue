@@ -5,7 +5,6 @@
     @handleDeleteMenuClose="handleDeleteMenuClose"
     @handleDeleteMenuAccept="handleDeleteMenuAccept"
   />
-
   <div class="q-pa-md" v-if="!isLoading">
     <div class="flex justify-between q-mb-md">
       <q-btn color="primary" flat @click="handleOutClick">salir</q-btn>
@@ -30,16 +29,8 @@
         </thead>
         <tbody>
           <tr>
-            <td class="text-center">
-              <p :class="job.is_check ? 'text-green' : 'text-red'">
-                {{ job.is_check ? "Autorizado" : "No Autorizado" }}
-              </p>
-            </td>
-            <td class="text-center">
-              <p :class="job.is_check_enterprise ? 'text-green' : 'text-red'">
-                {{ job.is_check_enterprise ? "Autorizado" : "No Autorizado" }}
-              </p>
-            </td>
+            <td class="text-center">{{ job.is_check }}</td>
+            <td class="text-center">{{ job.is_check_enterprise }}</td>
             <td class="text-right">{{ job.date }}</td>
             <td class="text-right">{{ job.in_time }}</td>
             <td class="text-right">{{ job.out_time }}</td>
@@ -77,14 +68,12 @@ import { useRoute, useRouter } from "vue-router";
 import {
   useDeleteJob,
   useDeleteEnterpriseJob,
-  useJob,
   useEnterpriseJob,
 } from "src/hooks/api/jobs.hooks";
 import ValidDeleteOperatorMenu from "src/components/helpers/ValidDeleteMenu.vue";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useUserStore } from "src/store/user.store";
-import EditJob from "src/components/jobs/EditJob.vue";
-import { useAutoRefetch } from "src/hooks/api/autorefetchs.hooks";
+import EditJob from "src/components/jobs/EditEnterpriseJob.vue";
 
 export default {
   components: {
@@ -99,10 +88,7 @@ export default {
     const userStore = useUserStore();
     const user = userStore.getUser;
 
-    const { job, isLoading, refetch } =
-      user.rol === "Admin"
-        ? useJob(params.pk)
-        : useEnterpriseJob(user.enterprise.slug, params.pk);
+    const { job, isLoading, refetch } = useEnterpriseJob(user.enterprise.slug, params.pk);
 
     const handleOutClick = () => router.go(-1);
 

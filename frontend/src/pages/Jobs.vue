@@ -55,7 +55,7 @@
       <thead class="bg-teal-5" style="position: sticky; top: 0; z-index: 1">
         <tr>
           <th class="text-left">Empresa</th>
-          <th class="text-left">Trabajos</th>
+          <th class="text-left">Trabajo</th>
           <th class="text-right">Fecha</th>
           <th class="text-right">Hora salida</th>
           <th class="text-right">Hora entrada</th>

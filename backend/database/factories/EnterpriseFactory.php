@@ -26,7 +26,6 @@ class EnterpriseFactory extends Factory
         $name = $this->faker->name();
 
         return [
-            "RUT" => $this->faker->uuid(),
             "nombre" => $name,
             "slug" => str($name." ".uniqid())->slug(),
             "image" => null,//"storage/enterprises/".$image,

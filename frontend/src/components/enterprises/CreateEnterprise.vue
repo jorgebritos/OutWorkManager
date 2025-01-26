@@ -7,16 +7,6 @@
 
       <q-card-section class="q-pt-none">
         <q-form @submit.prevent="handleCreateEnterprise">
-          <q-input name="RUT" required label="RUT" v-model="data.RUT" />
-          <div
-            v-for="(error, index) in error_create?.RUT"
-            :key="index"
-            class="q-mt-sm"
-          >
-            <span class="q-pa-xs bg-negative text-white">
-              {{ error }}
-            </span>
-          </div>
           <q-input name="name" required label="nombre" v-model="data.name" />
           <div
             v-for="(error, index) in error_create?.nombre"

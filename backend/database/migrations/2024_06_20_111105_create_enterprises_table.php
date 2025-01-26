@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('enterprises', function (Blueprint $table) {
             $table->id();
-            $table->string("RUT")->nullable()->default(null);
             $table->string("slug")->unique();
             $table->string("nombre");
             $table->string("image")->nullable();

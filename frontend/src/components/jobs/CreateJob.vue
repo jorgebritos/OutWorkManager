@@ -204,7 +204,14 @@ export default {
     const error_create = ref(null);
 
     const handleClose = () => {
+      data.description = null,
+      data.is_check_enterprise = true,
+      data.date = null,
+      data.in_time = null,
+      data.out_time = null,
+
       show.value = false;
+
       emit("refetch");
     };
 

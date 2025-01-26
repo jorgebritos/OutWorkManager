@@ -11,9 +11,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NotificationSent
+class NotificationSent implements ShouldBroadcast 
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use SerializesModels;
 
     public $notification;
 
@@ -32,6 +32,23 @@ class NotificationSent
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('jobs');
+        return new PrivateChannel('notification');
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'notification' => [ 
+                'id' => $this->notification->id,
+                'content' => $this->notification->content,
+                'created_at' => $this->notification->created_at,
+                'job' => $this->notification->job
+            ]
+        ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'NotificationSent';
     }
 }

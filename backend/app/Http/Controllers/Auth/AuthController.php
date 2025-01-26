@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\EnterpriseResource;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -66,15 +67,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,id',
-            'password' => 'required|string',
-        ]);
-
         $credentials = request(['email', 'password']);
 
         if (!$token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'Password invalid'], 402);
+            return response()->json(['error' => 'Credenciales Incorrectas'], 400);
         }
 
         $user = User::where('email', $request->email)->first();

@@ -20,6 +20,18 @@
                 </template>
               </q-input>
 
+              <div v-if="isError">
+                <div
+                  v-for="(error, index) in errors?.email"
+                  :key="index"
+                  class="q-mt-sm"
+                >
+                  <span class="q-pa-xs bg-negative text-white">
+                    {{ error }}
+                  </span>
+                </div>
+              </div>
+
               <q-input
                 filled
                 v-model="data.name"
@@ -32,6 +44,19 @@
                   <span class="mdi mdi-account"></span>
                 </template>
               </q-input>
+
+              <div v-if="isError">
+                <div
+                  v-for="(error, index) in errors?.name"
+                  :key="index"
+                  class="q-mt-sm"
+                >
+                  <span class="q-pa-xs bg-negative text-white">
+                    {{ error }}
+                  </span>
+                </div>
+              </div>
+
               <q-input
                 filled
                 v-model="data.password"
@@ -44,6 +69,19 @@
                   <q-icon name="mdi-lock-outline" />
                 </template>
               </q-input>
+
+              <div v-if="isError">
+                <div
+                  v-for="(error, index) in errors?.password"
+                  :key="index"
+                  class="q-mt-sm"
+                >
+                  <span class="q-pa-xs bg-negative text-white">
+                    {{ error }}
+                  </span>
+                </div>
+              </div>
+
               <q-input
                 filled
                 v-model="data.confirm_password"
@@ -56,6 +94,18 @@
                   <q-icon name="mdi-lock-outline" />
                 </template>
               </q-input>
+            </div>
+
+            <div v-if="isError">
+              <div
+                v-for="(error, index) in errors?.confirm_password"
+                :key="index"
+                class="q-mt-sm"
+              >
+                <span class="q-pa-xs bg-negative text-white">
+                  {{ error }}
+                </span>
+              </div>
             </div>
 
             <div class="flex flex-end q-mt-md">
@@ -86,7 +136,6 @@
 
 <script>
 import { reactive, ref } from "vue";
-import { useUserStore } from "../store/user.store";
 import { useRouter } from "vue-router";
 import { api } from "src/boot/axios";
 
@@ -106,7 +155,11 @@ export default {
       confirm_password: "",
     });
 
+
     const isPwd = ref(true);
+
+    const isError = ref(false);
+    const errors = ref(null);
 
     const send = async () => {
       api
@@ -115,16 +168,19 @@ export default {
         })
         .then(function (response) {
           if (response.status === 201) {
-            console.log("hola");
             router.push("/login");
           }
         })
-        .catch(function (error) {
-          console.error(error);
+        .catch((err) => {
+          if (err.response.status === 422) {
+            const messages = err.response.data.errors;
+            isError.value = true;
+            errors.value = messages;
+          }
         });
     };
 
-    return { ph, dense, licence, text, data, isPwd, send };
+    return { ph, dense, licence, text, data, isPwd, send, isError, errors };
   },
 };
 </script>
@@ -152,8 +208,7 @@ export default {
 .card_login {
   width: 100%;
   max-width: 500px;
-  height: 100%;
-  max-height: 600px;
+  padding: 20px 0;
   margin: 0 10px;
   backdrop-filter: blur(40px);
   background-color: rgba(255, 255, 255, 0.3);

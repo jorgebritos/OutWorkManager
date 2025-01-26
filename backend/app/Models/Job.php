@@ -26,6 +26,11 @@ class Job extends Model
     {
         return $this->hasMany(Document::class);
     }
+    
+    public function notification()
+    {
+        return $this->hasOne(Job::class);
+    }
 
     public function enterprise()
     {

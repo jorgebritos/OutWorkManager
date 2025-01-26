@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'content',
+        'enterprise_id',
+        'job_id',
+    ];
+
+    public function job() {
+        return $this->belongsTo(Job::class);
+    }
 }

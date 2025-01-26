@@ -15,7 +15,6 @@ class EnterpriseResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            "RUT" => $this->RUT,
             "id" => $this->id,
             "slug" => $this->slug,
             "name" => $this->nombre,

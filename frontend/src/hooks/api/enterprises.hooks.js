@@ -88,7 +88,6 @@ export const useCreateEnterprise = async (data) => {
 
   const formData = new FormData();
 
-  formData.append("RUT", data.RUT);
   formData.append("nombre", data.name);
   formData.append("is_valid", data.is_valid);
 

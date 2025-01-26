@@ -70,6 +70,12 @@ const routes = [
         name: "jobs-enterprise",
       },
       {
+        path: "enterprise/:pk/",
+        component: () => import("src/pages/EnterpriseJobDetail.vue"),
+        meta: { requiresAuth: true },
+        name: "enterprise-job-detail",
+      },
+      {
         path: "his.trabajos/",
         component: () => import("src/pages/HisJobs.vue"),
         meta: { requiresAuth: true },

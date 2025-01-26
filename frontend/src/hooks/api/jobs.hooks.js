@@ -1,14 +1,12 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
 
-export const useEnterpriseJobs = (enterprise, params = { valid: true }) => {
-  const filter = ref(params);
+export const useEnterpriseJobs = (enterprise, params = {}) => {
   const isLoading = ref(true);
   const jobs = ref(null);
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
-    filter.value = params
     api
       .get(`enterprises/${enterprise}/jobs`, {
         params,
@@ -21,9 +19,7 @@ export const useEnterpriseJobs = (enterprise, params = { valid: true }) => {
   };
 
   api
-    .get(`enterprises/${enterprise}/jobs`, {
-      params,
-    })
+    .get(`enterprises/${enterprise}/jobs`, {params})
     .then((response) => {
       isLoading.value = false;
       jobs.value = response.data.jobs;

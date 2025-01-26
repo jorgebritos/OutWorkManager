@@ -8,7 +8,7 @@
       class="q-ml-xl"
     />
     <div class="menu_toolbar">
-      <Notificaciones2 />
+      <Notification v-if="user.rol === 'Admin'" />
       <chat />
       <q-btn flat icon="person" class="q-mr-md">
         <q-menu>
@@ -56,18 +56,16 @@
   </q-page-container>
 </template>
 <script>
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref } from "vue";
 import Chat from "src/components/Chat.vue";
-import notificaciones from "src/components/Notificaciones.vue";
-import Notificaciones2 from "src/components/Notificaciones2.vue";
+import Notification from "src/components/Notification.vue";
 import { useUserStore } from "src/store/user.store";
 import { useRouter } from "vue-router";
 
 export default {
   components: {
     Chat,
-    notificaciones,
-    Notificaciones2,
+    Notification,
   },
   setup() {
     const search = ref("");
@@ -144,6 +142,7 @@ export default {
 
     return {
       drawer: ref(false),
+      user,
       search,
       menuList,
       handleLogout,

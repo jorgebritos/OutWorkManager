@@ -90,7 +90,7 @@
       <thead class="bg-red-4" style="position: sticky; top: 0; z-index: 1">
         <tr>
           <th class="text-left">Empresa</th>
-          <th class="text-left">Trabajos</th>
+          <th class="text-left">Trabajo</th>
           <th class="text-right">Fecha</th>
           <th class="text-right">Hora salida</th>
           <th class="text-right">Hora entrada</th>
@@ -118,6 +118,7 @@ import { useJobs } from "src/hooks/api/jobs.hooks";
 import { ref, watch } from "vue";
 import JobItem from "src/components/jobs/HisJobItem.vue";
 import Pagination from "src/components/helpers/Pagination.vue";
+import { useAutoRefetch } from "src/hooks/api/autorefetchs.hooks";
 
 export default {
   components: { JobItem, Pagination },
@@ -141,6 +142,15 @@ export default {
     const handleRefetchPage = (page_params) => {
       page.value = page_params;
     };
+
+    useAutoRefetch(() =>
+      refetch({
+        search: search.value,
+        confirm: filter.value,
+        valid: valid.value,
+        page: page.value,
+      })
+    );
 
     return {
       isLoading,

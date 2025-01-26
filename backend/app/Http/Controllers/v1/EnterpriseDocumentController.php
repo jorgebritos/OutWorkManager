@@ -43,7 +43,7 @@ class EnterpriseDocumentController extends Controller
 
         $request->validated();
 
-        $path = $request->file('document')->store('documents', 'public');
+        $path = "storage/" . $request->file('document')->store('documents', 'public');
 
         if ($request->hasFile('document')) {
             $data['document'] = "storage/" . $request->file('document')->store('documents', 'public');
@@ -80,11 +80,8 @@ class EnterpriseDocumentController extends Controller
 
         $data = $request->validated();
 
-        $path = null;
-
-        if ($request->file("document")) {
-            $path = $request->file('document')->store('documents', 'public');
-            $data["document_url"] = $path;
+        if ($request->hasFile('document')) {
+            $data["url_document"] = "storage/" . $request->file('document')->store('documents', 'public');
         }
 
         $document->update($data);
