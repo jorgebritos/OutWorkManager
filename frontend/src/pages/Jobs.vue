@@ -118,7 +118,7 @@ export default {
         filter: filter.value,
         search: search.value,
         page: page.value,
-        valid: true,
+        is_check: true,
       })
     );
 

@@ -10,7 +10,7 @@ class operatorDocumentDao {
     })
       .skip(skip)
       .limit(limit)
-      .exec();
+      .sort({ createdAt: -1 })
 
     const total = await Document.countDocuments({
       operator_id: operator,

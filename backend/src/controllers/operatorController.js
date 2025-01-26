@@ -54,13 +54,14 @@ export const show = async (req, res) => {
 };
 
 export const create = async (req, res) => {
+  const { enterprise } = req.params;
   const data = req.body;
 
   try {
-    const enterprise = await operatorDao.create(data);
+    const operator = await operatorDao.create(enterprise, data);
 
     res.status(200).json({
-      enterprise,
+      operator,
     });
   } catch (error) {
     res.status(500).json({ error: error.message });

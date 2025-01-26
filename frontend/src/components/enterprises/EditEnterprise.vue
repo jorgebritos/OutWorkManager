@@ -70,11 +70,11 @@
                             () => {
                               user_id = user._id;
                               menu_users = false;
-                              user_tag = user.correo;
+                              user_tag = user.email;
                             }
                           "
                         >
-                          {{ user.correo }}
+                          {{ user.email }}
                         </q-btn>
                       </q-item-section>
                     </q-item>

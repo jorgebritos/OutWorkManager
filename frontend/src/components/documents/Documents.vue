@@ -1,12 +1,6 @@
 <template>
   <div class="row items-center q-mt-xl">
-    <q-input
-      style="width: 100%"
-      filled
-      class="col"
-      v-model="search"
-      label="Busqueda"
-    >
+    <q-input style="width: 100%" filled class="col" v-model="search" label="Busqueda">
       <template v-slot:prepend>
         <q-btn flat round dense class="icono_de_busqueda" icon="search" />
       </template>
@@ -26,17 +20,8 @@
           <th class="text-center">Acciones</th>
         </tr>
       </thead>
-      <tbody
-        :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
-        v-for="document in documents"
-        :key="document.id"
-      >
-        <document-item
-          :entity="entity"
-          :params="params"
-          :document="document"
-          @refetch="refetch"
-        />
+      <tbody :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'" v-for="document in documents" :key="document.id">
+        <document-item :entity="entity" :params="params" :document="document" @refetch="refetch" />
       </tbody>
     </q-markup-table>
     <Pagination
@@ -88,8 +73,8 @@ export default {
       refetch({ page: p, search: search.value });
     };
 
-    useAutoRefetch(()=>refetch({page: page.value}))
-  
+    useAutoRefetch(() => refetch({ page: page.value }))
+
     return {
       handleRefetchPage,
       documents,

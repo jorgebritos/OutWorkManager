@@ -37,7 +37,7 @@ const JobSchema = new Schema({
   },
   enterprise_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Empresa',
+    ref: 'Enterprise',
     required: true
   }
 }, { timestamps: true });

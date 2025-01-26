@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { api } from "src/boot/axios";
+import { useAutoRefetch } from "./autorefetchs.hooks";
 
 export const useOperators = (enterprise) => {
   const isLoading = ref(true);
@@ -7,15 +8,13 @@ export const useOperators = (enterprise) => {
   const paginate = ref(null);
 
   const refetch = (params = {}) => {
-    api
-      .get(`enterprises/${enterprise}/operators`, {
-        params,
-      })
-      .then((response) => {
-        isLoading.value = false;
-        operators.value = response.data.operators;
-        paginate.value = response.data.meta;
-      });
+    api.get(`enterprises/${enterprise}/operators`, {
+      params,
+    }).then((response) => {
+      isLoading.value = false;
+      operators.value = response.data.operators;
+      paginate.value = response.data.meta;
+    });
   };
 
   api.get(`enterprises/${enterprise}/operators`).then((response) => {
@@ -23,6 +22,8 @@ export const useOperators = (enterprise) => {
     operators.value = response.data.operators;
     paginate.value = response.data.meta;
   });
+
+  useAutoRefetch(refetch)
 
   return {
     operators,
@@ -73,5 +74,5 @@ export const useUpdateOperator = async (enterprise, operator, data) => {
 };
 
 export const useDeleteOperator = async (enterprise, pk) => {
-  return await api.delete(`enterprises/${enterprise}/operators/${pk}`);
+  return await api.delete(`enterprises/${enterprise}/operators/${pk}`)
 };

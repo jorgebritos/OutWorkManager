@@ -5,7 +5,8 @@ import {
     removeDateFromJob,
     updateDateInJob,
     getJobs,
-    getJobById
+    getJobById,
+    updateJob
 } from '../../controllers/jobController.js'
 
 const router = express.Router();
@@ -21,11 +22,12 @@ router.delete('/:jobId/dates/:dateId', removeDateFromJob);
 
 // Actualizar una fecha de un trabajo
 router.put('/:jobId/dates/:dateId', updateDateInJob);
+router.put('/:jobId', updateJob);
 
 // Obtener todos los trabajos
 router.get('/', getJobs);
 
 // Obtener un trabajo por ID
-router.get('/jobs/:jobId', getJobById);
+router.get('/:jobId', getJobById);
 
 export default router;

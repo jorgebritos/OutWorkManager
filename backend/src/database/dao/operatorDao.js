@@ -11,7 +11,7 @@ class operatorDao {
     })
       .skip(skip)
       .limit(limit)
-      .exec();
+      .sort({ createdAt: -1 })
 
     const total = await Operator.countDocuments({
       enterprise_id: current_enterprise._id,
@@ -40,9 +40,8 @@ class operatorDao {
       enterprise_id: current_enterprise._id,
     });
 
-    await operator.save();
+    return await operator.save();
 
-    return await enterprise.save();
   }
 
   async destroy(_id) {

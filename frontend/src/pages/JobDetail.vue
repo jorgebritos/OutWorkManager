@@ -89,7 +89,7 @@ export default {
 
     const userStore = useUserStore();
     const user = userStore.getUser;
-
+    console.log(user.rol)
     const { job, isLoading } =
       user.rol === "Admin"
         ? useJob(params.pk)

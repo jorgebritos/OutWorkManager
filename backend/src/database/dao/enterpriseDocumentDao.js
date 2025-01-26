@@ -11,7 +11,7 @@ class enterpriseDocumentDao {
     })
       .skip(skip)
       .limit(limit)
-      .exec();
+      .sort({ createdAt: -1 })
 
     const total = await Document.countDocuments({
       enterprise_id: current_enterprise._id,

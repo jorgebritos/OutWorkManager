@@ -25,7 +25,6 @@ export const index = async (req, res) => {
 
 export const create = async (req, res) => {
   const data = req.body;
-
   try {
     const user = await userDao.create(data);
 
@@ -33,7 +32,7 @@ export const create = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 export const update = async (req, res) => {
   const pk = req.params.user;
@@ -58,3 +57,4 @@ export const destroy = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+

@@ -42,7 +42,7 @@ export default {
     const check = ref(props.job.is_check);
 
     const handleToggleCheck = async () => {
-      await useUpdateJob(props.job.id, {
+      await useUpdateJob(props.job._id, {
         is_check: check.value,
       });
     };
@@ -50,7 +50,7 @@ export default {
     const handleOutClick = () =>
       router.push({
         name: 'job-detail',
-        params: {pk: props.job.id}
+        params: {pk: props.job._id}
       });
 
     return { check, handleToggleCheck, handleOutClick };

@@ -6,7 +6,6 @@ export const index = async (req, res) => {
   const current_page = Number(page ? page : 1);
   const limit = 15;
   const skip = (page - 1) * limit;
-
   try {
     const query = {};
     if (filter !== undefined && filter !== null) {
@@ -70,7 +69,6 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   const params = req.params;
-
   try {
     const data = req.body;
 

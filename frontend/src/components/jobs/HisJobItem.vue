@@ -47,7 +47,7 @@ export default {
     const handleOutClick = () =>
       router.push({
         name: "job-detail",
-        params: { pk: props.job.id },
+        params: { pk: props.job._id },
       });
 
     return { check, handleOutClick };

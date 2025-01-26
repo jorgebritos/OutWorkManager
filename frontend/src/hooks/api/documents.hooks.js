@@ -93,12 +93,13 @@ const useDocumentsOperators = (enterprise, operator) => {
   };
 };
 
-export const handleToggleFetchDocuments = (entity = null, props = {}) => {
+export const handleToggleFetchDocuments = (entity, props = {}) => {
   if (entity === "enterprise") {
     return useDocumentsEnterprise(props.enterprise);
   }
-
+  
   if (entity === "job") {
+    console.log(entity === "job")
     return useDocumentsJob(props.job);
   }
 

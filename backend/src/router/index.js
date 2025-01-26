@@ -4,7 +4,7 @@ import authRouter from "./routes/authRoute.js";
 import enterprisesRouter from "./routes/enterprisesRoute.js";
 import enterprisesDocumentsRouter from "./routes/enterpriseDocumentsRoute.js";
 import operatorRouter from "./routes/operatorRoute.js";
-import jobRouter from "./routes/jobRoute.js";
+import jobRouter from "./routes/adminJobRoute.js";
 import { enterprise_not_found } from "../middleware/enterprise_not_found.js";
 import { operator_not_found } from "../middleware/operator_not_found.js";
 import operatorsDocumentsRouter from "./routes/operatorDocumentRoute.js";

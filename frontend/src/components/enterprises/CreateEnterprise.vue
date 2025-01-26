@@ -123,7 +123,7 @@ export default {
         paginate.value.current_page !== paginate.value.last_page
           ? paginate.value.current_page + 1
           : null;
-
+      console.log(users)
       if (next_page) {
         users_old = users.value;
         
