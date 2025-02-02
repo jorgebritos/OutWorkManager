@@ -39,45 +39,32 @@
           </div>
 
           <p class="q-mt-md">Horarios:</p>
-          <div class="flex gap-md">
-            <q-input
-              v-model="job.in_time"
-              required
-              type="time"
-              class="q-mr-xl"
-              label="Entrada"
-            />
-
-            <div
-              v-for="(error, index) in error_edit?.in_time"
-              :key="index"
-              class="q-mt-sm"
-            >
-              <span class="q-pa-xs bg-negative text-white">
-                {{ error }}
-              </span>
-            </div>
-
-            <q-input
-              v-model="job.out_time"
-              type="time"
-              label="Salida"
-              required
-            />
-
-            <div
-              v-for="(error, index) in error_edit?.out_time"
-              :key="index"
-              class="q-mt-sm"
-            >
-              <span class="q-pa-xs bg-negative text-white">
-                {{ error }}
-              </span>
-            </div>
-          </div>
+          <q-input
+            v-model="job.in_datetime"
+            required
+            type="datetime-local"
+            label="Entrada"
+          />
 
           <div
-            v-for="(error, index) in error_edit?.enterprise_id"
+            v-for="(error, index) in error_edit?.in_datetime"
+            :key="index"
+            class="q-mt-sm"
+          >
+            <span class="q-pa-xs bg-negative text-white">
+              {{ error }}
+            </span>
+          </div>
+
+          <q-input
+            v-model="job.out_datetime"
+            type="datetime-local"
+            label="Salida"
+            required
+          />
+
+          <div
+            v-for="(error, index) in error_edit?.out_datetime"
             :key="index"
             class="q-mt-sm"
           >
@@ -137,9 +124,15 @@ export default {
       const userStore = useUserStore();
       const user = userStore.getUser;
 
-      const { isError, error } = await useUpdateEnterpriseJob(user.enterprise.slug, job.value.id, {
-        ...job.value,
-      });
+      const { isError, error } = await useUpdateEnterpriseJob(
+        user.enterprise.slug,
+        job.value.id,
+        {
+          ...job.value,
+          in_datetime: job.value.in_datetime.replace("T", " "),
+          out_datetime: job.value.out_datetime.replace("T", " "),
+        }
+      );
 
       if (!isError.value) {
         handleClose();

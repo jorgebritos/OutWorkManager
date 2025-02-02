@@ -25,38 +25,30 @@ class JobController extends Controller
     public function index(Request $request)
     {
         Gate::authorize('viewAdmin', Job::class);
-        
+
         $query = Job::query();
 
         $valid = $request->input('valid');
 
         if ($valid === 'true') {
             $now = Carbon::now();
-
-            $query->where(function ($q) use ($now) {
-                $q->where(DB::raw("CONCAT(date, ' ', in_time)"), '>', $now->toDateTimeString());
-            });
+            $query->where("in_datetime", '>', $now->toDateTimeString());
         } else if ($valid === 'false') {
             $now = Carbon::now();
-
             $query->where(function ($q) use ($now) {
-                $q->where(DB::raw("CONCAT(date, ' ', in_time)"), '<', $now->toDateTimeString());
+                $q->where(DB::raw("in_datetime"), '<', $now->toDateTimeString());
             });
         }
 
         $confirm = $request->input('confirm');
 
-        if ($confirm === 'true') {
-            $query->where('is_check', true);
-        } else if ($confirm === 'false') {
-            $query->where('is_check', false);
+        if ($confirm) {
+            $query->where('is_check', $confirm === 'true');
         }
 
         $search = $request->input('search', null);
 
-        if ($search !== null) {
-            $query->where('description', 'LIKE', "%{$search}%");
-        }
+        if ($search !== null) $query->where('description', 'LIKE', "%{$search}%");
 
         $jobs = $query->orderBy('created_at', 'desc')->paginate(15);
 
@@ -66,7 +58,7 @@ class JobController extends Controller
     public function show(Job $job)
     {
         Gate::authorize('viewAdmin', Job::class);
-        
+
         return response()->json(['job' => JobResource::make($job)]);
     }
     /**
@@ -75,7 +67,7 @@ class JobController extends Controller
     public function store(JobStoreRequest $request)
     {
         Gate::authorize('viewAdmin', Job::class);
-        
+
         $data =  $request->validated();
 
 
@@ -99,7 +91,7 @@ class JobController extends Controller
     public function update(JobUpdateRequest $request, Job $job)
     {
         Gate::authorize('viewAdmin', Job::class);
-        
+
         $data = $request->validated();
 
         $job->update($data);
@@ -113,7 +105,7 @@ class JobController extends Controller
     public function destroy(Job $job)
     {
         Gate::authorize('viewAdmin', Job::class);
-        
+
         $job->delete();
 
         return response()->json();

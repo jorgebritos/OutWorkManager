@@ -73,32 +73,27 @@
 
         <!-- Chat Messages Area -->
         <div class="bg-grey-5 chat-area">
-          <q-scroll-area
-            class="messages-area"
-            id="chatScroll"
-            :reverse="true"
-            style="scroll-behavior: smooth"
+          <div
+            ref="chatContainer"
+            class="q-mx-auto q-pa-md column col justify-end"
+            style="width: 100%; max-width: 800px"
           >
-            <div class="q-pa-md row justify-center">
-              <div style="width: 100%; max-width: 700px">
-                <q-chat-message
-                  v-for="(msg, index) in messages"
-                  :avatar="
-                    msg.sender_id !== user.id
-                      ? received.image
-                        ? `${api_base_backend}/${received.image}`
-                        : user_default
-                      : undefined
-                  "
-                  :key="index"
-                  :text="[msg.content]"
-                  :sent="msg.sender_id === user.id"
-                  class="text-subtitle1"
-                  :bg-color="msg.sender_id === user.id ? 'green-3' : 'white'"
-                />
-              </div>
-            </div>
-          </q-scroll-area>
+            <q-chat-message
+              v-for="(msg, index) in messages"
+              :avatar="
+                msg.sender_id !== user.id
+                  ? received.image
+                    ? `${api_base_backend}/${received.image}`
+                    : user_default
+                  : undefined
+              "
+              :key="index"
+              :text="[msg.content]"
+              :sent="msg.sender_id === user.id"
+              class="text-subtitle1"
+              :bg-color="msg.sender_id == user.id ? 'white' : 'light-green-2'"
+            />
+          </div>
         </div>
 
         <form @submit.prevent="sendMessage">
@@ -131,7 +126,14 @@
 </template>
 
 <script>
-import { nextTick, onMounted, ref, watch } from "vue";
+import {
+  nextTick,
+  onBeforeMount,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+} from "vue";
 import user_default from "../../public/imagenes/user.png";
 import { useEnterprises } from "src/hooks/api/enterprises.hooks";
 import { useUserStore } from "src/store/user.store";
@@ -145,6 +147,14 @@ export default {
     const userSotre = useUserStore();
     const user = userSotre.getUser;
 
+    const chatContainer = ref(null);
+
+    function scrollToBottom() {
+      nextTick(() => {
+        chatContainer.value?.scrollIntoView({ block: "end" });
+      });
+    }
+
     const toggleFetchUsers = () => {
       if (user.rol === "Admin") {
         const {
@@ -157,9 +167,16 @@ export default {
         return { users, isLoading, paginate, refetch };
       }
 
-      const { isLoading, users, paginate, refetch } = useUsers({
+      const {
+        isLoading,
+        users,
+        paginate,
+        refetch: refetching,
+      } = useUsers({
         role: "Admin",
       });
+
+      const refetch = () => refetching({ role: "Admin" });
 
       return { users, isLoading, paginate, refetch };
     };
@@ -201,6 +218,10 @@ export default {
       }
     });
 
+    watch(chatContainer, () => {
+      chatContainer.value?.scrollIntoView({ block: "end" });
+    });
+
     watch(received, async () => {
       const receiver_id =
         user.rol === "Admin" ? received.value.user.id : received.value.id;
@@ -212,12 +233,19 @@ export default {
         })
         .then((response) => {
           messages.value = response.data;
+          scrollToBottom();
         });
     });
 
     window.Echo.private("chat." + user.id)
       .listen(".MessageEvent", (event) => {
-        messages.value.push(event.message);
+        const receiver_id =
+          user.rol === "Admin" ? received.value.user.id : received.value.id;
+
+        if(receiver_id === event.message.sender_id){
+          messages.value.push(event.message);
+          scrollToBottom();
+        };
       })
       .error((error) => {
         console.error("Error en la suscripción:", error);
@@ -244,6 +272,7 @@ export default {
           })
           .then((response) => {
             messages.value.push(response.data);
+            scrollToBottom();
           });
 
         message.value = "";
@@ -262,18 +291,8 @@ export default {
       message.value += event.detail.unicode;
     }
 
-    const scrollToBottom = () => {
-      const chat = document.getElementById('chatScroll')
-      console.log(chat)
-    };
-
-    onMounted(() => {
-      nextTick(() => {
-        scrollToBottom();
-      });
-    });
-
     return {
+      chatContainer,
       user,
       message,
       handleUserScroll,

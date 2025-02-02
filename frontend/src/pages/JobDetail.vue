@@ -23,9 +23,11 @@
           <tr>
             <th class="text-center">Authorizado</th>
             <th class="text-center">Authorizacion de la empresa</th>
-            <th class="text-right">Fecha</th>
-            <th class="text-right">Hora Entrada</th>
-            <th class="text-right">Hora Salida</th>
+            <th class="text-left">Empresa</th>
+            <th class="text-right">Hora entrada</th>
+            <th class="text-right">Hora entrada confirmada</th>
+            <th class="text-right">Hora salida</th>
+            <th class="text-right">Hora salida confirmada</th>
           </tr>
         </thead>
         <tbody>
@@ -40,9 +42,23 @@
                 {{ job.is_check_enterprise ? "Autorizado" : "No Autorizado" }}
               </p>
             </td>
-            <td class="text-right">{{ job.date }}</td>
-            <td class="text-right">{{ job.in_time }}</td>
-            <td class="text-right">{{ job.out_time }}</td>
+            <td class="text-right">{{ job.enterprise }}</td>
+            <td class="text-right">{{ job.in_datetime }}</td>
+            <td class="text-right">
+              {{
+                job.in_datetime_confirm
+                  ? job.in_datetime_confirm
+                  : "no confirmado"
+              }}
+            </td>
+            <td class="text-right">{{ job.out_datetime }}</td>
+            <td class="text-right">
+              {{
+                job.out_datetime_confirm
+                  ? job.out_datetime_confirm
+                  : "no confirmado"
+              }}
+            </td>
           </tr>
         </tbody>
       </q-markup-table>
@@ -120,8 +136,8 @@ export default {
       handleOutClick();
     };
 
-    useAutoRefetch(()=>refetch())
-    
+    useAutoRefetch(() => refetch());
+
     return {
       isLoading,
       job,

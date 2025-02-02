@@ -24,7 +24,7 @@ class JobGuardController  extends Controller
         $now = Carbon::now();
 
         $query->where(function ($q) use ($now) {
-            $q->where(DB::raw("CONCAT(date, ' ', in_time)"), '>', $now->toDateTimeString());
+            $q->where(DB::raw("in_datetime"), '>', $now->toDateTimeString());
         });
         
         $query->where('is_check', true);

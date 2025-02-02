@@ -2,9 +2,10 @@
   <tr>
     <td class="text-left">{{ job.enterprise }}</td>
     <td class="text-left">{{ job.description.slice(0, 40) }}...</td>
-    <td class="text-right">{{ job.date }}</td>
-    <td class="text-right">{{ job.in_time }}</td>
-    <td class="text-right">{{ job.out_time }}</td>
+    <td class="text-right">{{ job.in_datetime }}</td>
+    <td class="text-right">{{ job.in_datetime_confirm? job.in_datetime_confirm: 'no confirmado' }}</td>
+    <td class="text-right">{{ job.out_datetime }}</td>
+    <td class="text-right">{{ job.out_datetime_confirm? job.out_datetime_confirm: 'no confirmado' }}</td>
     <td class="text-right">
       <q-checkbox v-model="check" @click="handleToggleCheck" />
     </td>

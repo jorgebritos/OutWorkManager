@@ -63,8 +63,6 @@ export const useJobs = (params = { valid: true }) => {
       paginate.value = response.data.meta;
     });
 
-  useAutoRefetch(() => refetch(params));
-
   return {
     jobs,
     paginate,

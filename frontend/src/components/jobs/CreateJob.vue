@@ -27,10 +27,16 @@
 
           <q-checkbox v-model="data.is_check" label="Confirmarcion" />
 
-          <q-input v-model="data.date" type="date" label="Fecha" required />
+          <p class="q-mt-md">Horarios:</p>
+          <q-input
+            v-model="data.in_datetime"
+            required
+            type="datetime-local"
+            label="Entrada"
+          />
 
           <div
-            v-for="(error, index) in error_create?.date"
+            v-for="(error, index) in error_create?.in_datetime"
             :key="index"
             class="q-mt-sm"
           >
@@ -39,42 +45,21 @@
             </span>
           </div>
 
-          <p class="q-mt-md">Horarios:</p>
-          <div class="flex gap-md">
-            <q-input
-              v-model="data.in_time"
-              required
-              type="time"
-              class="q-mr-xl"
-              label="Entrada"
-            />
+          <q-input
+            v-model="data.out_datetime"
+            type="datetime-local"
+            label="Salida"
+            required
+          />
 
-            <div
-              v-for="(error, index) in error_create?.in_time"
-              :key="index"
-              class="q-mt-sm"
-            >
-              <span class="q-pa-xs bg-negative text-white">
-                {{ error }}
-              </span>
-            </div>
-
-            <q-input
-              v-model="data.out_time"
-              type="time"
-              label="Salida"
-              required
-            />
-
-            <div
-              v-for="(error, index) in error_create?.out_time"
-              :key="index"
-              class="q-mt-sm"
-            >
-              <span class="q-pa-xs bg-negative text-white">
-                {{ error }}
-              </span>
-            </div>
+          <div
+            v-for="(error, index) in error_create?.out_datetime"
+            :key="index"
+            class="q-mt-sm"
+          >
+            <span class="q-pa-xs bg-negative text-white">
+              {{ error }}
+            </span>
           </div>
 
           <div v-if="!isLoading" class="w-full">
@@ -186,8 +171,8 @@ export default {
         refetch({ filter: true, page: next_page }).then((response) => {
           enterprises.value = [
             ...enterprises_old,
-            ...response.data.enterprises
-          ]
+            ...response.data.enterprises,
+          ];
         });
       }
     };
@@ -195,29 +180,34 @@ export default {
     const data = reactive({
       description: null,
       is_check: true,
-      date: null,
-      in_time: null,
-      out_time: null,
+      in_datetime: null,
+      out_datetime: null,
       enterprise_id: null,
     });
 
     const error_create = ref(null);
 
     const handleClose = () => {
-      data.description = null,
-      data.is_check_enterprise = true,
-      data.date = null,
-      data.in_time = null,
-      data.out_time = null,
-
-      show.value = false;
+      (data.description = null),
+        (data.is_check_enterprise = true),
+        (data.date = null),
+        (data.in_time = null),
+        (data.out_time = null),
+        (show.value = false);
 
       emit("refetch");
     };
 
     const handleCreate = async () => {
+      console.log({
+        ...data,
+        in_datetime: data.in_datetime.replace("T", " "),
+        out_datetime: data.out_datetime.replace("T", " "),
+      })
       const { isError, error } = await useCreateJob({
         ...data,
+        in_datetime: data.in_datetime.replace("T", " "),
+        out_datetime: data.out_datetime.replace("T", " "),
       });
 
       if (!isError.value) {

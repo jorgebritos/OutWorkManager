@@ -17,13 +17,11 @@ return new class extends Migration
             $table->boolean("is_check")->default(false);
             $table->boolean("is_check_enterprise")->default(false);
 
-            $table->date('date');
+            $table->dateTime('in_datetime');
+            $table->dateTime('in_datetime_confirm')->nullable()->default(null);
 
-            $table->time('in_time');
-            $table->boolean('in_time_confirm')->default(false);
-
-            $table->time('out_time');
-            $table->boolean('out_time_confirm')->default(false);
+            $table->dateTime('out_datetime');
+            $table->dateTime('out_datetime_confirm')->nullable()->default(null);
 
             $table->unsignedBigInteger('enterprise_id');
             $table->foreign('enterprise_id')

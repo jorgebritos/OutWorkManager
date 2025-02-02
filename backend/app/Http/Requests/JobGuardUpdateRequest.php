@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class JobGuardUpdateRequest extends FormRequest
@@ -22,8 +23,19 @@ class JobGuardUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "in_time_confirm" => ['boolean'],
-            "out_time_confirm" => ['boolean']
+            "in_datetime_confirm" => ["date_format:Y-m-d H:i"],
+            "out_datetime_confirm" => ["date_format:Y-m-d H:i"]
         ];
+    }
+
+ 
+    public function prepareForValidation()
+    {
+        if ($this->has('in_datetime_confirm') || $this->has('out_datetime_confirm')) {
+            $this->merge([
+                'in_datetime_confirm' => Carbon::parse($this->input('in_datetime_confirm'))->format('Y-m-d H:i'),
+                'out_datetime_confirm' => Carbon::parse($this->input('out_datetime_confirm'))->format('Y-m-d H:i'),
+            ]);
+        }
     }
 }

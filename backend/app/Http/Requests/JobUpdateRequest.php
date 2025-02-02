@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class JobUpdateRequest extends FormRequest
@@ -24,10 +25,19 @@ class JobUpdateRequest extends FormRequest
         return [
             "description" => ["string"],
             "is_check" => ["boolean"],
-            "date" => ["date", 'date_format:Y-m-d'],
-            "in_time" => ['date_format:H:i'],
-            "out_time" => ['date_format:H:i'],
+            "in_datetime" => ["required", "date_format:Y-m-d H:i"],
+            "out_datetime" => ["required", "date_format:Y-m-d H:i"],
             'enterprise_id' => ["exists:enterprises,id"],
         ];
+    }
+    
+    public function prepareForValidation()
+    {
+        if ($this->has('in_datetime') || $this->has('out_datetime')) {
+            $this->merge([
+                'in_datetime' => Carbon::parse($this->input('in_datetime'))->format('Y-m-d H:i'),
+                'out_datetime' => Carbon::parse($this->input('out_datetime'))->format('Y-m-d H:i'),
+            ]);
+        }
     }
 }

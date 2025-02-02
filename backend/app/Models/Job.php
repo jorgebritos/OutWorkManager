@@ -12,11 +12,10 @@ class Job extends Model
     protected $fillable = [
         'id',
         'description',
-        'date',
-        'in_time',
-        'in_time_confirm',
-        'out_time',
-        'out_time_confirm',
+        'in_datetime',
+        'in_datetime_confirm',
+        'out_datetime',
+        'out_datetime_confirm',
         'is_check',
         'is_check_enterprise',
         "enterprise_id"

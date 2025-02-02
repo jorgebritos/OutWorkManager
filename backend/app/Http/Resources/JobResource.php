@@ -19,11 +19,10 @@ class JobResource extends JsonResource
             "description" => $this->description,
             "is_check" => !!($this->is_check),
             "is_check_enterprise" => !!($this->is_check_enterprise),
-            "date" => $this->date,
-            "in_time" => substr($this->in_time, 0, 5),
-            "in_time_confirm" => !! $this->in_time_confirm,
-            "out_time" => substr($this->out_time, 0, 5),
-            "out_time_confirm" => !! $this->out_time_confirm,
+            "in_datetime" => $this->in_datetime,
+            "in_datetime_confirm" => $this->in_datetime_confirm,
+            "out_datetime" => $this->out_datetime,
+            "out_datetime_confirm" => $this->out_datetime_confirm,
             'enterprise' => $this->enterprise->nombre,
         ];
     }
