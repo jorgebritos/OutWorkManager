@@ -4,7 +4,7 @@ class enterpriseDao {
   async index(skip, limit, query) {
     const total = await Job.countDocuments(query);
     let jobs = await Job.find(query)
-      .populate('enterprise_id')
+      .populate("enterprise_id")
       .lean()
       .skip(skip)
       .limit(limit)
@@ -13,15 +13,24 @@ class enterpriseDao {
     jobs = jobs.map((item) => ({
       ...item,
       enterprise_id: undefined,
-      enterprise: item.enterprise_id.name
-    }))
+      enterprise: item.enterprise_id.name,
+      date: item.date ? new Date(item.date).toISOString().split("T")[0] : null,
+    }));
 
     return { jobs, total };
   }
 
+  async show(pk) {
+    const job = await Job.findOne({ _id: pk }).populate("enterprise_id");
 
-  async show(job) {
-    return await Job.findOne({ _id: job });
+    const jobObject = job.toObject();
+
+    console.log(jobObject.enterprise_id)
+    return {
+      ...jobObject,
+      enterprise: jobObject.enterprise_id.name || null,
+      enterprise_id: undefined,
+    };
   }
 
   async create(data) {
@@ -35,7 +44,7 @@ class enterpriseDao {
   async update(job, data) {
     return await Job.findOneAndUpdate(
       { _id: job },
-      { $set: { ...data }},
+      { $set: { ...data } },
       { new: true, runValidators: true }
     );
   }

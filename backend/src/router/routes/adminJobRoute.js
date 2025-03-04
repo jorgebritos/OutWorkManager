@@ -9,7 +9,7 @@ const jobRouter = express.Router();
 jobRouter.get("/", index);
 jobRouter.get("/:job", job_not_found, show);
 jobRouter.post("/", createJobValidate, handleValidatorErrors, create);
-jobRouter.put("/:job", updateJobValidate, handleValidatorErrors, job_not_found, update);
+jobRouter.put("/:job", job_not_found, updateJobValidate, handleValidatorErrors, update);
 jobRouter.delete("/:job", job_not_found, destroy);
 
 export default jobRouter;

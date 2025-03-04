@@ -177,7 +177,6 @@ export default {
       if (!isError.value) {
         enterprise.value.image = data.value.image;
         handleClose()
-        router.push(`/enterprises`);
       } else {
         error_edit.value = error.value;
       }

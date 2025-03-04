@@ -31,7 +31,7 @@ class enterpriseDao {
   async update(slug, data) {
     return await Enterprise.findOneAndUpdate(
       { slug },
-      { $set: { ...data, slug: data.name ? slugify(data.name) : undefined } },
+      { $set: { ...data } },
       { new: true, runValidators: true }
     );
   }

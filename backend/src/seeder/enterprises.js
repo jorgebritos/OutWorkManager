@@ -18,6 +18,25 @@ const generate_user = async () => {
   return await user.save();
 };
 
+function getRandomDate() {
+  const startDate = new Date(2000, 0, 1);
+  const endDate = new Date(2026, 11, 31);
+
+  const randomDate = faker.date.between({ from: startDate, to: endDate });
+
+  return formatDateTime(randomDate);
+}
+
+function formatDateTime(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
 export const generate_enterprise = async () => {
   console.log("Creating Enterprises...");
   for (let i = 1; i <= 30; i++) {
@@ -40,14 +59,10 @@ export const generate_enterprise = async () => {
 
     await enterprise.save();
     for (let i = 1; i <= 15; i++) {
-      const startDate = new Date("2023-01-01");
-      const endDate = new Date("2024-12-31");
-
-      const randomDate = faker.date.between({ from: startDate, to: endDate });
       const data_document = {
         url_document: "no hay documento",
         title: faker.person.fullName(),
-        expire: randomDate,
+        expire: getRandomDate(),
         type: null,
         is_valid: faker.datatype.boolean(),
         enterprise_id: enterprise._id,
@@ -72,14 +87,10 @@ export const generate_enterprise = async () => {
       await operator.save();
 
       for (let i = 1; i <= 15; i++) {
-        const startDate = new Date("2023-01-01");
-        const endDate = new Date("2024-12-31");
-
-        const randomDate = faker.date.between({ from: startDate, to: endDate });
         const data_document_operator = {
           url_document: "no hay documento",
           title: faker.person.fullName(),
-          expire: randomDate,
+          expire: getRandomDate(),
           type: null,
           is_valid: faker.datatype.boolean(),
           operator_id: operator._id,
@@ -91,26 +102,35 @@ export const generate_enterprise = async () => {
       }
     }
     for (let i = 1; i <= 1; i++) {
-      const startDate = new Date("2022-01-01");
-      const endDate = new Date("2026-12-31");
-
-      const randomDate = faker.date.between({ from: startDate, to: endDate });
-
       const data_job = {
         description: faker.lorem.sentence(),
         is_check: faker.datatype.boolean(),
         is_check_enterprise: faker.datatype.boolean(),
-        date: randomDate,
-        in_time: "12:23",
-        in_time_confirm: faker.datatype.boolean(),
-        out_time: "14:24",
-        out_time_confirm: faker.datatype.boolean(),
+        in_datetime: getRandomDate(),
+        in_datetime_confirm: null,
+        out_datetime: getRandomDate(),
+        out_datetime_confirm: null,
         enterprise_id: enterprise._id,
       };
 
       const job = new Job(data_job);
 
       await job.save();
+
+      for (let i = 1; i <= 15; i++) {
+        const data_document_job = {
+          url_document: "no hay documento",
+          title: faker.person.fullName(),
+          expire: getRandomDate(),
+          type: null,
+          is_valid: faker.datatype.boolean(),
+          job_id: job._id,
+        };
+
+        const document = new Document(data_document_job);
+
+        await document.save();
+      }
     }
   }
   console.log("Create documents success");
@@ -118,5 +138,6 @@ export const generate_enterprise = async () => {
   console.log("Create operators success");
   console.log("Create documents form operators success");
   console.log("Create jobs success");
+  console.log("Create documents form jobs success");
   console.log(`Done`);
 };

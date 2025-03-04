@@ -1,5 +1,5 @@
-import { ref } from "vue";
 import { api } from "src/boot/axios";
+import {ref} from "vue";
 
 export const useEnterpriseJobs = (enterprise, params = {}) => {
   const isLoading = ref(true);
@@ -34,7 +34,7 @@ export const useEnterpriseJobs = (enterprise, params = {}) => {
   };
 };
 
-export const useJobs = (params = { is_check: true }) => {
+export const useJobs = (params = {}) => {
   const filter = ref(params);
   const isLoading = ref(true);
   const jobs = ref(null);
@@ -50,7 +50,7 @@ export const useJobs = (params = { is_check: true }) => {
         isLoading.value = false;
         jobs.value = response.data.jobs;
         paginate.value = response.data.meta;
-      }); "The route api/v1/enterprise/odell-kreiger-iii-6761ff4c6370f/jobs/6 could not be found."
+      }); 
   };
 
   api
@@ -112,7 +112,7 @@ export const useJob = (id) => {
       })
       .then((response) => {
         isLoading.value = false;
-        job.value = response.data;
+        job.value = response.data.job;
       });
   };
 
@@ -120,9 +120,9 @@ export const useJob = (id) => {
     .get(`jobs/${id}`)
     .then((response) => {
       isLoading.value = false;
-      job.value = response.data;
+      job.value = response.data.job;
     });
-    console.log(job)
+  
   return {
     job,
     isLoading,
@@ -137,7 +137,7 @@ export const useUpdateEnterpriseJob = async (enterprise, pk, data) => {
 
   await api
     .put(`enterprises/${enterprise}/jobs/${pk}`, data, {
-      headers: { "Content-Type": "content-type:application/json" },
+      headers: { "Content-Type": "application/json" },
     })
     .then((response) => {
       if (response.status === 200) {
@@ -145,7 +145,8 @@ export const useUpdateEnterpriseJob = async (enterprise, pk, data) => {
       }
     })
     .catch((err) => {
-      if (err?.response?.status === 422) {
+      console.log(err)
+      if (err?.response?.status === 400) {
         const messages = err.response.data.errors;
         isError.value = true;
         error.value = messages;
@@ -167,15 +168,15 @@ export const useUpdateJob = async (pk, data) => {
 
   await api
     .put(`jobs/${pk}`, data, {
-      headers: { "Content-Type": "content-type:application/json" },
+      headers: { "Content-Type": "application/json" },
     })
     .then((response) => {
       if (response.status === 200) {
         job.value = response.data.job;
       }
-      console.log(job)
     })
     .catch((err) => {
+      console.error(err)
       if (err?.response?.status === 422) {
         const messages = err.response.data.errors;
         isError.value = true;
@@ -197,7 +198,7 @@ export const useCreateEnterpriseJob = async (enterprise, data) => {
 
   await api
     .post(`enterprises/${enterprise}/jobs`, data, {
-      headers: { "Content-Type": "content-type:application/json" },
+      headers: { "Content-Type": "application/json" },
     })
     .then((response) => {
       if (response.status === 200) {

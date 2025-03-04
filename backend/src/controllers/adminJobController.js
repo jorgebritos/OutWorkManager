@@ -1,4 +1,4 @@
-import jobDao from "../database/dao/adminJobDao.js";
+import jobDao from "../database/dao/jobDao.js";
 
 export const index = async (req, res) => {
   const { is_check, valid, confirm, search, page } = req.query;
@@ -11,46 +11,37 @@ export const index = async (req, res) => {
   if (search) query.description = { $regex: search, $options: "i" };
 
   if (is_check) {
-    query.is_check_enterprise = is_check === "true";
+    query.is_check = is_check === "true";
   }
 
   if (confirm) {
-    query.is_check = confirm === "true";
+    query.is_check_enterprise = confirm === "true";
   }
 
-  if (valid === "true") {
-    const now = new Date();
+  const now = new Date().toISOString();
+
+  if (valid) {
     query.$expr = {
-      $lt: [
-        {
-          $dateFromString: {
-            dateString: {
-              $concat: [
-                { $substr: ["$date", 0, 10] },
-                "T",
-                "$in_time",
-                ":00.000Z",
-              ],
-            },
-          },
-        },
-        now,
-      ],
+      [valid === "true" ? "$gt" : "$lt"]: ["$in_datetime", now],
     };
   }
 
-  const { jobs, total } = await jobDao.index(skip, limit, query);
+  try {
+    const { jobs, total } = await jobDao.index(skip, limit, query);
 
-  const last_page = Math.ceil(total / limit);
+    const last_page = Math.ceil(total / limit);
 
-  res.status(200).json({
-    jobs,
-    meta: {
-      last_page,
-      total,
-      current_page,
-    },
-  });
+    res.status(200).json({
+      jobs,
+      meta: {
+        last_page,
+        total,
+        current_page,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 export const show = async (req, res) => {
@@ -83,9 +74,9 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   const params = req.params;
-  try {
-    const data = req.body;
+  const data = req.body;
 
+  try {
     const job = await jobDao.update(params.job, data);
 
     res.status(200).json({ job });

@@ -1,5 +1,4 @@
 import Document from "../Models/Document.js";
-import Operator from "../Models/Operator.js";
 
 class operatorDocumentDao {
   async index(operator, skip, limit, query) {

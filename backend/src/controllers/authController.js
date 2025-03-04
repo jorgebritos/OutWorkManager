@@ -7,7 +7,8 @@ export const login = async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  const enterprise = await Enterprise.find({ user: user.id }).populate("user");
+
+  const enterprise = await Enterprise.findOne({ user_id: user._id });
 
   const authorization = await user.compare_password(password);
 
@@ -28,7 +29,7 @@ export const login = async (req, res) => {
       name: user.name,
       rol: user.rol,
     },
-    enterprise: enterprise.length === 0 ? null : enterprise[0],
+    enterprise: enterprise,
     message: "OK",
   });
 };

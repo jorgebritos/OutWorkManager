@@ -15,24 +15,20 @@ const JobSchema = new Schema({
     type: Boolean,
     default: false
   },
-  date: {
-    type: Date,
-    required: true
-  },
-  in_time: {
+  in_datetime: {
     type: String,
     required: true
   },
-  in_time_confirm: {
-    type: Boolean,
+  in_datetime_confirm: {
+    type: String,
     default: false
   },
-  out_time: {
+  out_datetime: {
     type: String,
     required: true
   },
-  out_time_confirm: {
-    type: Boolean,
+  out_datetime_confirm: {
+    type: String,
     default: false
   },
   enterprise_id: {

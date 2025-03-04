@@ -99,7 +99,6 @@ export const handleToggleFetchDocuments = (entity, props = {}) => {
   }
   
   if (entity === "job") {
-    console.log(entity === "job")
     return useDocumentsJob(props.job);
   }
 

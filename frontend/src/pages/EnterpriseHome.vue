@@ -54,6 +54,7 @@ export default {
       RUT: "",
       name: "",
       image: null,
+      user_id: user.id
     });
 
     const handleCreate = async () => {

@@ -18,10 +18,9 @@ export const createEnterpriseValidate = [
       return true;
     }),
   body("is_valid")
+    .optional()
     .isBoolean()
-    .withMessage("El campo 'is_valid' debe ser un valor booleano.")
-    .notEmpty()
-    .withMessage("El campo 'is_valid' es obligatorio."),
+    .withMessage("El campo 'is_valid' debe ser un valor booleano."),
   body("image")
     .optional()
     .custom((value, { req }) => {
@@ -42,7 +41,7 @@ export const createEnterpriseValidate = [
       if (value === null) return true;
 
       if (!userExists) {
-        throw new Error("El 'user_id' debe existir en la base de datos.");
+        throw new Error("El usuario no existe.");
       }
       return true;
     })
@@ -51,8 +50,8 @@ export const createEnterpriseValidate = [
 
       if (value === null) return true;
 
-      if (isUnique || value !== null) {
-        throw new Error("El 'user_id' debe ser único en la tabla de empresas.");
+      if (isUnique) {
+        throw new Error("Este usuario ya tiene empresa registrada.");
       }
       return true;
     }),
@@ -96,8 +95,9 @@ export const updateEnterpriseValidate = [
       if (value === null) return true;
 
       if (!userExists) {
-        throw new Error("El 'user_id' debe existir en la base de datos.");
+        throw new Error("El usuario debe existir en la base de datos.");
       }
+
       return true;
     })
     .custom(async (value) => {
@@ -105,9 +105,10 @@ export const updateEnterpriseValidate = [
 
       if (value === null) return true;
 
-      if (isUnique || value !== null) {
-        throw new Error("El 'user_id' debe ser único en la tabla de empresas.");
+      if (isUnique) {
+        throw new Error("El usuario debe ser único en la tabla de empresas.");
       }
+
       return true;
     }),
 ];

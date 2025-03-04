@@ -10,7 +10,7 @@
     <h4 class="text-h4 q-my-none">Documentos :</h4>
     <add-document :entity="entity" :params="params" @refetch="refetch" />
   </div>
-  <div style="width: 100%; height: 100vh" v-if="!isLoading">
+  <div style="width: 100%" v-if="!isLoading">
     <q-markup-table flat bordered>
       <thead class="bg-teal text-white">
         <tr>

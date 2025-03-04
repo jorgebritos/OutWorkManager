@@ -90,10 +90,11 @@
       <thead class="bg-red-4" style="position: sticky; top: 0; z-index: 1">
         <tr>
           <th class="text-left">Empresa</th>
-          <th class="text-left">Trabajos</th>
-          <th class="text-right">Fecha</th>
-          <th class="text-right">Hora salida</th>
+          <th class="text-left">Trabajo</th>
           <th class="text-right">Hora entrada</th>
+          <th class="text-right">Hora entrada confirmada</th>
+          <th class="text-right">Hora salida</th>
+          <th class="text-right">Hora salida confirmada</th>
           <th class="text-right">Confirmación</th>
           <th class="text-right">Confirmación de la empresa</th>
           <th class="text-right">+Más Información</th>
@@ -118,6 +119,7 @@ import { useJobs } from "src/hooks/api/jobs.hooks";
 import { ref, watch } from "vue";
 import JobItem from "src/components/jobs/HisJobItem.vue";
 import Pagination from "src/components/helpers/Pagination.vue";
+import { useAutoRefetch } from "src/hooks/api/autorefetchs.hooks";
 
 export default {
   components: { JobItem, Pagination },
@@ -132,7 +134,7 @@ export default {
     watch([filter, search, valid, page], () => {
       refetch({
         search: search.value,
-        confirm: filter.value,
+        is_check: filter.value,
         valid: valid.value,
         page: page.value,
       });
@@ -141,6 +143,15 @@ export default {
     const handleRefetchPage = (page_params) => {
       page.value = page_params;
     };
+
+    useAutoRefetch(() =>
+      refetch({
+        search: search.value,
+        is_check: filter.value,
+        valid: valid.value,
+        page: page.value,
+      })
+    );
 
     return {
       isLoading,
